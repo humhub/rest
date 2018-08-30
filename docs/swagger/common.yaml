@@ -1,0 +1,43 @@
+swagger: '2.0'
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: key
+    description: Provides API Key access to the cheese
+    in: header
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+components:
+  parameters:
+    pageParam:
+      in: query
+      name: page
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+      description: The number of page of the result set.
+    limitParam:
+      in: query
+      name: limit
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        default: 20
+      description: The numbers of items to return per page.
+
+  properties:
+    totalProperty:
+      type: integer
+      format: int64
+      example: 76
+    pageProperty:
+      type: integer
+      format: int64
+      example: 1

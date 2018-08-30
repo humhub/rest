@@ -1,0 +1,291 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub user module API reference.
+
+  version: 1.0.0
+  title: HumHub - User API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: User
+    description: API to access and manage user information.
+    externalDocs:
+      description: Find out more
+      url: 'http://docs.humhub.org'
+  - name: Group
+    description: Group API
+  - name: Invite
+    description: Invite new users to the HumHub installation
+paths:
+  /user:
+    get:
+      tags:
+        - User
+      summary: Find all users
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+    post:
+      tags:
+        - User
+      summary: Add a new user to the installation
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: User object to be added to the installation
+          required: true
+          schema:
+            type: object
+            required:
+              - account
+              - profile
+              - password
+            properties:
+              account:
+                $ref: "#/definitions/Account"
+              profile:
+                $ref: "#/definitions/Profile"
+              password:
+                $ref: "#/definitions/Password"
+      responses:
+        default:
+          description: Successful operation
+
+  '/user/{id}':
+    get:
+      tags:
+        - User
+      summary: Get user by user id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: "#/definitions/User"
+        '400':
+          description: Invalid user id supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - User
+      summary: Update an existing user
+      description: ''
+      operationId: updateUser
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            type: object
+            properties:
+              account:
+                $ref: "#/definitions/Account"
+              profile:
+                $ref: "#/definitions/Profile"
+              password:
+                $ref: "#/definitions/Password"
+      responses:
+        '200':
+          description: successful operation, the updated user record
+          schema:
+            $ref: "#/definitions/User"
+        '400':
+          description: Invalid user supplied
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - User
+      summary: Deletes an user by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    hard-delete:
+      tags:
+        - User
+      summary: Deletes an user by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+
+
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+
+
+definitions:
+  UserShort:
+    description: a short representation of the user
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      guid:
+        type: string
+        readOnly: true
+        example: cd081891-d2e2-40d5-84a4-b47309e71c80
+      username:
+        type: string
+        example: john.doe
+
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      account:
+        $ref: "#/definitions/Account"
+      profile:
+        $ref: "#/definitions/Profile"
+
+  Account:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      guid:
+        type: string
+        readOnly: true
+        example: cd081891-d2e2-40d5-84a4-b47309e71c80
+      username:
+        type: string
+        example: john.doe
+      email:
+        type: string
+        example: john.doe@example.com
+      tags:
+        type: string
+        example: Administration, Support, HumHub
+        readOnly: true
+      language:
+        type: string
+        example: DE
+        readOnly: true
+      time_zone:
+        type: string
+        example: Europe/Paris
+        readOnly: true
+      visibility:
+        type: integer
+        format: int64
+        readOnly: true
+    xml:
+      name: Account
+
+  Profile:
+    type: object
+    properties:
+      firstname:
+        type: string
+        example: John
+      lastname:
+        type: string
+        example: Doe
+      title:
+        type: string
+        example: Test user
+      gender:
+        type: string
+        example: male
+      street:
+        type: string
+        example: New Street 5
+      city:
+        type: string
+        example: Munich
+      zip:
+        type: string
+        example: 80331
+    xml:
+      name: Profile
+
+  Password:
+    type: object
+    properties:
+      newPassword:
+        type: string
+        example: SuperSecretPassword
+    xml:
+      name: Password

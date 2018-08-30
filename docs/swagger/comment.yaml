@@ -1,0 +1,87 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub comment module API reference.
+
+  version: 1.0.0
+  title: HumHub - Content API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+
+paths:
+  '/comment/{id}':
+    get:
+      summary: Get comment by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the comment
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Comment"
+        '400':
+          description: Invalid comment id supplied
+        '404':
+          description: Comment not found
+    delete:
+      summary: Deletes a comment by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of comment
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Comment not found
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+
+  CommentsSummary:
+    type: object
+    properties:
+      total:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 55
+      latestComments:
+        type: array
+        items:
+          $ref: "#/definitions/Comment"
+
+  Comment:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      message:
+        type: string
+        example: "Calvin Klein – Between love and madness lies obsession."
+      createdBy:
+        $ref: "user.yaml#/definitions/UserShort"
+      createdAt:
+        type: string
+        readOnly: true
+        example: 2018-08-09 14:22:03

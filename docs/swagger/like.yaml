@@ -1,0 +1,120 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub like module API reference.
+
+  version: 1.0.0
+  title: HumHub - Like API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+
+paths:
+  '/like/{id}':
+    get:
+      summary: Get like by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the like
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Like"
+        '400':
+          description: Invalid like id supplied
+        '404':
+          description: Like not found
+    delete:
+      summary: Deletes a like by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the like
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Like not found
+
+  '/like/findByRecord':
+    get:
+      summary: Get all likes by content id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: model
+          in: query
+          description: The model record class
+          required: true
+          type: string
+        - name: pk
+          in: query
+          description: The primary key of the record
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Like'
+
+        '400':
+          description: Invalid like id supplied
+        '404':
+          description: Like not found
+
+
+
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+
+  LikesSummary:
+    type: object
+    properties:
+      total:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 35
+
+  Like:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 42
+      createdBy:
+        $ref: "user.yaml#/definitions/UserShort"
+      createdAt:
+        type: string
+        readOnly: true
+        example: 2018-08-09 14:22:03
