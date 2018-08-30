@@ -13,4 +13,10 @@ You can find Swagger documentation files in the `/docs/swagger` directory of thi
 
 `/docs/html` contains a rendered documentation for all available API endpoints.
 
+**Available APIs:**
 
+- [User API](http://htmlpreview.github.io/?https://github.com/humhub/humhub-modules-rest/blob/master/docs/html/user.html)
+- [Content API](http://htmlpreview.github.io/?https://github.com/humhub/humhub-modules-rest/blob/master/docs/html/content.html)
+- [Post API](http://htmlpreview.github.io/?https://github.com/humhub/humhub-modules-rest/blob/master/docs/html/post.html)
+- [Comment API](http://htmlpreview.github.io/?https://github.com/humhub/humhub-modules-rest/blob/master/docs/html/comment.html)
+- [Like API](http://htmlpreview.github.io/?https://github.com/humhub/humhub-modules-rest/blob/master/docs/html/like.html)
