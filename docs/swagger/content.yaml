@@ -173,7 +173,7 @@ definitions:
     properties:
       topic:
         type: array
-        $ref: "l#/definitions/Topic"
+        $ref: "#/definitions/Topic"
 
   Topic:
     type: object
