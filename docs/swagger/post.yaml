@@ -14,6 +14,34 @@ basePath: /api/v1
 
 paths:
   '/post/container/{id}':
+    get:
+      summary: Find all posts by container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: ID of content container
+          required: true
+          type: integer
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Post'
     post:
       summary: Creates a new post
       description: ''
@@ -45,6 +73,30 @@ paths:
           description: Invalid post id supplied
         '404':
           description: Post not found
+  '/post':
+    get:
+      summary: Find all posts
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Post'
 
   '/post/{id}':
     get:

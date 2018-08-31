@@ -33,14 +33,13 @@ class ContentDefinitions
 
     public static function getContentMetadata(Content $content)
     {
-
         return [
             'id' => $content->id,
             'guid' => $content->guid,
             'object_model' => $content->object_model,
             'object_id' => $content->object_id,
             'created_by' => UserDefinitions::getUserShort($content->createdBy),
-
+            'created_at' => $content->created_at,
         ];
     }
 

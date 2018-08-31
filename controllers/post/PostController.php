@@ -14,15 +14,34 @@ use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\post\models\Post;
 use Yii;
+use yii\base\Exception;
+use yii\db\IntegrityException;
 
 
 class PostController extends BaseController
 {
 
-    public function actionIndex()
+    public function actionFind()
     {
         $results = [];
-        $query = Post::find();
+        $query = Post::find()->joinWith('content')->orderBy(['content.created_at' => SORT_DESC]);
+
+        $this->handlePagination($query);
+        foreach ($query->all() as $post) {
+            $results[] = PostDefinitions::getPost($post);
+        }
+        return $this->returnPagination($query, $results);
+    }
+
+    public function actionFindByContainer($containerId)
+    {
+        $contentContainer = ContentContainer::findOne(['id' => $containerId]);
+        if ($contentContainer === null) {
+            return $this->returnError(404, 'Content container not found!');
+        }
+
+        $results = [];
+        $query = Post::find()->contentContainer($contentContainer->getPolymorphicRelation())->orderBy(['content.created_at' => SORT_DESC]);
 
         $this->handlePagination($query);
         foreach ($query->all() as $post) {
