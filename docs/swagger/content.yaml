@@ -27,8 +27,16 @@ tags:
       url: 'http://docs.humhub.org'
   - name: Tags
     description: Group API
-
-
+components:
+  parameters:
+    topicsParam:
+      in: query
+      name: topics
+      required: false
+      schema:
+        type: string
+      description: Coma separated list of topics to filter
+      example: "Music,Dancing"
 paths:
   /content/container:
     get:

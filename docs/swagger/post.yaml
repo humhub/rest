@@ -26,6 +26,7 @@ paths:
           description: ID of content container
           required: true
           type: integer
+        - $ref: 'content.yaml#/components/parameters/topicsParam'
         - $ref: 'common.yaml#/components/parameters/pageParam'
         - $ref: 'common.yaml#/components/parameters/limitParam'
       responses:

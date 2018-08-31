@@ -1,5 +1,8 @@
 # TODO
 
+- Login As (Remove hardcoded user id 1)
+
+
 
 
 ## To discuss
@@ -10,6 +13,7 @@
 - Scopes and Permissions
 - Core integration, structure of modules API pack
 - If integrated core, use also for common requests (via Session) for some AJAX calls?
+- Date Formats
 
 
 

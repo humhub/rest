@@ -6,9 +6,13 @@
  */
 
 namespace humhub\modules\rest\definitions;
+
+use humhub\modules\content\components\ActiveQueryContent;
+use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\models\Content;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\topic\models\Topic;
+use Yii;
 
 
 /**
@@ -53,7 +57,8 @@ class ContentDefinitions
         ];
     }
 
-    public static function getTopics(Content $content) {
+    public static function getTopics(Content $content)
+    {
 
         $topics = [];
 
@@ -64,11 +69,30 @@ class ContentDefinitions
         return $topics;
     }
 
-    public static function getTopic(Topic $topic) {
+    public static function getTopic(Topic $topic)
+    {
         return [
             'id' => $topic->id,
             'name' => $topic->name,
         ];
+    }
+
+
+    public static function handleTopicsParam(ActiveQueryContent $query, $contentContainerId)
+    {
+        $topicsParam = Yii::$app->request->get('topics');
+        if (!empty($topicsParam)) {
+            $topics = [];
+            foreach (explode(',', $topicsParam) as $topicName) {
+                $topic = Topic::findOne(['contentcontainer_id' => $contentContainerId, 'name' => $topicName]);
+                if ($topic !== null) {
+                    $topics[] = $topic;
+                }
+            }
+            if (!empty($topics)) {
+                $query->contentTag($topics, 'OR');
+            }
+        }
     }
 
 

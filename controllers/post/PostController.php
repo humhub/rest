@@ -7,15 +7,14 @@
 
 namespace humhub\modules\rest\controllers\post;
 
-use humhub\modules\rest\components\BaseController;
-use humhub\modules\rest\definitions\PostDefinitions;
 use humhub\modules\content\components\ContentActiveRecord;
-use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\post\models\Post;
+use humhub\modules\rest\components\BaseController;
+use humhub\modules\rest\definitions\ContentDefinitions;
+use humhub\modules\rest\definitions\PostDefinitions;
+use humhub\modules\topic\models\Topic;
 use Yii;
-use yii\base\Exception;
-use yii\db\IntegrityException;
 
 
 class PostController extends BaseController
@@ -25,6 +24,7 @@ class PostController extends BaseController
     {
         $results = [];
         $query = Post::find()->joinWith('content')->orderBy(['content.created_at' => SORT_DESC]);
+
 
         $this->handlePagination($query);
         foreach ($query->all() as $post) {
@@ -42,6 +42,8 @@ class PostController extends BaseController
 
         $results = [];
         $query = Post::find()->contentContainer($contentContainer->getPolymorphicRelation())->orderBy(['content.created_at' => SORT_DESC]);
+
+        ContentDefinitions::handleTopicsParam($query, $containerId);
 
         $this->handlePagination($query);
         foreach ($query->all() as $post) {
