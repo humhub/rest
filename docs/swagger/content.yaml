@@ -156,6 +156,9 @@ definitions:
       likes:
         type: object
         $ref: "like.yaml#/definitions/LikesSummary"
+      files:
+        type: object
+        $ref: "file.yaml#/definitions/Files"
       topics:
         type: object
         $ref: "#/definitions/Topics"
@@ -172,6 +175,10 @@ definitions:
         type: string
         readOnly: true
         example: cd081891-d2e2-40d5-84a4-b47309e71c80
+      url:
+        type: string
+        readOnly: true
+        example: "http://localhost/p/humhub/master/content/perma?id=109"
       created_by:
         $ref: "user.yaml#/definitions/UserShort"
       created_at:

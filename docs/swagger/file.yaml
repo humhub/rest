@@ -1,0 +1,50 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub comment module API reference.
+
+  version: 1.0.0
+  title: HumHub - Content API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+  Files:
+    type: array
+    $ref: "#/definitions/File"
+
+  File:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      guid:
+        type: string
+        readOnly: true
+        example: "bded6dc7-e6f4-417e-a638-b653525529ca"
+      mime_type:
+        type: string
+        readOnly: true
+        example: "text/plain"
+      size:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14353
+      file_name:
+        type: string
+        readOnly: true
+        example: "image.jpg"
+      url:
+        type: string
+        example: "http://localhost/p/humhub/master/file/file/download?guid=bded6dc7-e6f4-417e-a638-b653525529ca"

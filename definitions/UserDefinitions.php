@@ -9,6 +9,7 @@ namespace humhub\modules\rest\definitions;
 
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
+use yii\helpers\Url;
 
 
 /**
@@ -22,7 +23,8 @@ class UserDefinitions
         return [
             'id' => $user->id,
             'guid' => $user->guid,
-            'username' => $user->username
+            'display_name' => $user->displayName,
+            'url' => Url::to(['/', 'container' => $user], true)
         ];
     }
 
@@ -30,6 +32,9 @@ class UserDefinitions
     {
         return [
             'id' => $user->id,
+            'guid' => $user->guid,
+            'display_name' => $user->displayName,
+            'url' => Url::to(['/', 'container' => $user], true),
             'account' => static::getAccount($user),
             'profile' => static::getProfile($user->profile)
         ];

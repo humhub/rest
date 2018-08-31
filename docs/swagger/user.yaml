@@ -200,9 +200,12 @@ definitions:
         type: string
         readOnly: true
         example: cd081891-d2e2-40d5-84a4-b47309e71c80
-      username:
+      displayname:
         type: string
-        example: john.doe
+        example: John Doe
+      url:
+        type: string
+        example: http://localhost/p/humhub/master/u/j.doe/
 
   User:
     type: object
@@ -212,6 +215,16 @@ definitions:
         format: int64
         readOnly: true
         example: 14
+      guid:
+        type: string
+        readOnly: true
+        example: cd081891-d2e2-40d5-84a4-b47309e71c80
+      displayname:
+        type: string
+        example: John Doe
+      url:
+        type: string
+        example: http://localhost/p/humhub/master/u/j.doe/
       account:
         $ref: "#/definitions/Account"
       profile:

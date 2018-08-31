@@ -11,6 +11,7 @@ use humhub\modules\content\components\ActiveQueryContent;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\models\Content;
 use humhub\modules\content\models\ContentContainer;
+use humhub\modules\file\components\FileManager;
 use humhub\modules\topic\models\Topic;
 use Yii;
 
@@ -26,11 +27,11 @@ class ContentDefinitions
     {
         return [
             'id' => $content->id,
-            'content-metadata' => static::getContentMetadata($content),
+            'metadata' => static::getContentMetadata($content),
             'comments' => CommentDefinitions::getCommentsSummary($content),
             'likes' => LikeDefinitions::getLikesSummary($content),
             'topics' => static::getTopics($content),
-            'files' => [],
+            'files' => FileDefinitions::getFiles($content),
         ];
 
     }
@@ -44,6 +45,7 @@ class ContentDefinitions
             'object_id' => $content->object_id,
             'created_by' => UserDefinitions::getUserShort($content->createdBy),
             'created_at' => $content->created_at,
+            'url' => $content->getUrl(true)
         ];
     }
 
