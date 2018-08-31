@@ -27,11 +27,11 @@ class UserController extends BaseController
         $results = [];
         $query = User::find();
 
-        $this->handlePagination($query);
+        $pagination = $this->handlePagination($query);
         foreach ($query->all() as $user) {
             $results[] = UserDefinitions::getUser($user);
         }
-        return $this->returnPagination($query, $results);
+        return $this->returnPagination($query, $pagination, $results);
     }
 
 

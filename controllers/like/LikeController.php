@@ -23,13 +23,13 @@ class LikeController extends BaseController
         $query->andWhere(['object_model' => Yii::$app->request->get('model'), 'object_id' => (int)Yii::$app->request->get('pk')]);
         $query->orderBy(['created_at' => SORT_DESC]);
 
-        $this->handlePagination($query);
+        $pagination = $this->handlePagination($query);
 
         foreach ($query->all() as $like) {
             $results[] = LikeDefinitions::getLike($like);
         }
 
-        return $this->returnPagination($query, $results);
+        return $this->returnPagination($query, $pagination, $results);
     }
 
 

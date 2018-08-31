@@ -24,13 +24,13 @@ class ContentController extends BaseController
         $query->andWhere(['!=', 'object_model', Activity::class]);
         $query->orderBy(['created_at' => SORT_DESC]);
 
-        $this->handlePagination($query);
+        $pagination = $this->handlePagination($query);
 
         foreach ($query->all() as $content) {
             $results[] = ContentDefinitions::getContent($content);
         }
 
-        return $this->returnPagination($query, $results);
+        return $this->returnPagination($query, $pagination, $results);
     }
 
 

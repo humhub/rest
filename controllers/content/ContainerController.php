@@ -19,13 +19,13 @@ class ContainerController extends BaseController
     {
         $results = [];
         $query = ContentContainer::find();
-        $this->handlePagination($query);
+        $pagination = $this->handlePagination($query);
 
         foreach ($query->all() as $content) {
             $results[] = ContentDefinitions::getContentContainer($content);
         }
 
-        return $this->returnPagination($query, $results);
+        return $this->returnPagination($query, $pagination, $results);
     }
 
 

@@ -26,11 +26,11 @@ class PostController extends BaseController
         $query = Post::find()->joinWith('content')->orderBy(['content.created_at' => SORT_DESC]);
 
 
-        $this->handlePagination($query);
+        $pagination = $this->handlePagination($query);
         foreach ($query->all() as $post) {
             $results[] = PostDefinitions::getPost($post);
         }
-        return $this->returnPagination($query, $results);
+        return $this->returnPagination($query, $pagination, $results);
     }
 
     public function actionFindByContainer($containerId)
@@ -45,11 +45,11 @@ class PostController extends BaseController
 
         ContentDefinitions::handleTopicsParam($query, $containerId);
 
-        $this->handlePagination($query);
+        $pagination = $this->handlePagination($query);
         foreach ($query->all() as $post) {
             $results[] = PostDefinitions::getPost($post);
         }
-        return $this->returnPagination($query, $results);
+        return $this->returnPagination($query, $pagination, $results);
     }
 
 

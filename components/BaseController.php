@@ -111,12 +111,14 @@ abstract class BaseController extends Controller
 
         $query->offset($pagination->offset);
         $query->limit($pagination->limit);
+
+        return $pagination;
     }
 
-    protected function returnPagination(ActiveQuery $query, $data)
+    protected function returnPagination(ActiveQuery $query, Pagination $pagination, $data)
     {
         return [
-            'total' => $query->count(),
+            'total' => $pagination->totalCount,
             'page' => 1,
             'results' => $data,
         ];
