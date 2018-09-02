@@ -185,6 +185,14 @@ definitions:
         type: string
         readOnly: true
         example:
+      contentcontainer_id:
+        type: integer
+        format: int64
+        example: 5
+      stream_channel:
+        type: string
+        readOnly: true
+        example: default
 
   Topics:
     type: object
