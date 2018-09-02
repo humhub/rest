@@ -91,7 +91,7 @@ abstract class BaseController extends Controller
     /**
      * Handles pagination
      *
-     * @return string the API key
+     * @return Pagination the pagination
      */
     protected function handlePagination(ActiveQuery $query)
     {

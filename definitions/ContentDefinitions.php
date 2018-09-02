@@ -45,7 +45,9 @@ class ContentDefinitions
             'object_id' => $content->object_id,
             'created_by' => UserDefinitions::getUserShort($content->createdBy),
             'created_at' => $content->created_at,
-            'url' => $content->getUrl(true)
+            'url' => $content->getUrl(true),
+            'contentcontainer_id' => $content->contentcontainer_id,
+            'stream_channel' => $content->stream_channel
         ];
     }
 
