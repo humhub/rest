@@ -66,7 +66,7 @@ class Events
 
             // Wiki (temp)
             ['pattern' => 'api/v1/wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/post/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
             ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
 
