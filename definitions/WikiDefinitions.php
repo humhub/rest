@@ -39,7 +39,7 @@ class WikiDefinitions
             'is_latest' => $revision->is_latest,
             'wiki_page_id' => $revision->wiki_page_id,
             'created_by' => UserDefinitions::getUserShort($revision->author),
-            'content' => $revision->wiki_page_id,
+            'content' => $revision->content,
         ];
     }
 

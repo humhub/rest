@@ -136,6 +136,9 @@ definitions:
         type: integer
         format: int64
         example: null
+      latest_revision:
+        readOnly: true
+        $ref: "#/definitions/WikiPageRevision"
 
   WikiPageRevision:
     type: object
