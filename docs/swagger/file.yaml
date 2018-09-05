@@ -1,16 +1,39 @@
 swagger: '2.0'
 info:
   description: |
-    Welcome to the HumHub comment module API reference.
+    Welcome to the HumHub file module API reference.
 
   version: 1.0.0
-  title: HumHub - Content API
+  title: HumHub - File API
   contact:
     email: info@humhub.com
   license:
     name: AGPLv2
     url: 'https://www.humhub.org/en/licences'
 basePath: /api/v1
+
+
+paths:
+  '/file/download/{id}':
+    get:
+      summary: Downloads a file by id
+      description: ''
+      produces:
+        - 'application/octet-stream'
+      parameters:
+        - name: id
+          in: path
+          description: The id of the file to download
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: file
+        '404':
+          description: File not found
+
 
 securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
