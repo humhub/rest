@@ -24,6 +24,8 @@ tags:
     description: Group API
   - name: Invite
     description: Invite new users to the HumHub installation
+  - name: Session
+    description: User sessions
 paths:
   /user:
     get:
@@ -180,11 +182,33 @@ paths:
         '404':
           description: User not found
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin Session
+#-----------------------------------------------------------------------------------------------------------------------
+  '/user/session/all/{id}':
+    delete:
+      tags:
+        - Session
+      summary: Deletes all sessions for a particular user
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
 
 
 securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
-
 
 
 definitions:
