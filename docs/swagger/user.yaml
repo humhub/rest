@@ -143,7 +143,7 @@ paths:
     delete:
       tags:
         - User
-      summary: Deletes an user by id
+      summary: Soft deletes an user by id
       produces:
         - application/json
       parameters:
@@ -159,10 +159,11 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
-    hard-delete:
+  '/user/full/{id}':
+    delete:
       tags:
         - User
-      summary: Deletes an user by id
+      summary: Hard deletes an user by id
       produces:
         - application/json
       parameters:
@@ -291,6 +292,9 @@ definitions:
       zip:
         type: string
         example: 80331
+      country:
+        type: string
+        example: DE (ISO 3166 code)
     xml:
       name: Profile
 
