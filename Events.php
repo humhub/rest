@@ -41,6 +41,18 @@ class Events
             // User: Session Controller
             ['pattern' => 'api/v1/user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],
 
+
+            // Space: Default Controller
+            ['pattern' => 'api/v1/space/', 'route' => '/rest/space/space/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/space/', 'route' => '/rest/space/space/create', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/delete', 'verb' => 'DELETE'],
+
+            // Space: Archive Controller
+            ['pattern' => 'api/v1/space/<id:\d+>/archive', 'route' => '/rest/space/archive/archive', 'verb' => 'PATCH'],
+            ['pattern' => 'api/v1/space/<id:\d+>/unarchive', 'route' => '/rest/space/archive/unarchive', 'verb' => 'PATCH'],
+
             // Content
             ['pattern' => 'api/v1/content/find-by-container/<id:\d+>', 'route' => 'rest/content/content/find-by-container', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/content/container', 'route' => 'rest/content/container/list', 'verb' => 'GET'],

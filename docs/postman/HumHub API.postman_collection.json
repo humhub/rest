@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e9532e74-0b3e-4eab-bfa8-fc38861da36d",
+		"_postman_id": "32a2a07d-642a-4a36-93a9-8bfb254a2c6a",
 		"name": "EAN",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,11 +10,261 @@
 			"item": []
 		},
 		{
+			"name": "Space",
+			"item": [
+				{
+					"name": "Get all spaces",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get space by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space/1",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new space",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"First API space\",\n\t\"description\": \"test description\",\n\t\"visibility\": 1,\n\t\"join_policy\": 1\n}"
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update space by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"First API space upd\",\n\t\"description\": \"test description updated upd\",\n\t\"tags\": \"first, second, third\",\n\t\"color\": \"#eeeeee\",\n\t\"url\": \"first-api-space\",\n\t\"indexUrl\": \"/s/first-api-space23/tasks/list\",\n\t\"indexGuestUrl\": \"/s/first-api-space23/wiki/page\",\n\t\"visibility\": 1,\n\t\"join_policy\": 2,\n\t\"default_content_visibility\": 1\n}"
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space/1",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete space by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space/1",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archive space",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space/1/archive",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space",
+								"1",
+								"archive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unarchive space",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://humhub.localhost/api/v1/space/1/unarchive",
+							"protocol": "http",
+							"host": [
+								"humhub",
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"space",
+								"1",
+								"unarchive"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "EAN Delete User",
 			"request": {
 				"method": "DELETE",
-				"header": [],
-				"body": {},
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer:501e92d8e6220671abb419304db0d689",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "https://my.stage1.ean.org/ean/api/users/delete?id=70816&api_key=501e92d8e6220671abb419304db0d689",
 					"protocol": "https",
