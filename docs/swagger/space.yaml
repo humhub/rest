@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: |
-    Welcome to the HumHub user module API reference.
+    Welcome to the HumHub space module API reference.
 
   version: 1.0.0
   title: HumHub - Space API

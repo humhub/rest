@@ -7,6 +7,8 @@
 
 namespace humhub\modules\rest\components;
 
+use Exception;
+use Firebase\JWT\JWT;
 use humhub\components\Controller;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\user\models\User;
@@ -28,46 +30,36 @@ abstract class BaseController extends Controller
      */
     public $enableCsrfValidation = false;
 
-
     /**
      * @inheritdoc
      */
     public function beforeAction($action)
     {
-        if (!$this->auth()) {
-            throw new HttpException('401', 'Invalid API Key!');
+        $user = $this->authWithJwt();
+        if (! $user) {
+            throw new HttpException('401', 'Invalid Token!');
         }
 
-        Yii::$app->user->login(User::findOne(['id' => 1]));
+        Yii::$app->user->login(User::findOne(['id' => $user->id]));
 
         return parent::beforeAction($action);
     }
 
-
-    /**
-     * Simple authentication using the specified API key
-     *
-     * @return bool authenticated
-     * @throws HttpException
-     */
-    protected function auth()
+    protected function authWithJwt()
     {
-        $apiKey = $this->getApiKey();
-
         $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
 
-        // HttpBearer
-        if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches) && $matches[1] == $apiKey) {
-            return true;
+        if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            $token = $matches[1];
+            try{
+                $valid_data = JWT::decode($token, $this->getApiKey(), ['HS512']);
+                return $valid_data->data;
+            }catch(Exception $e){
+                throw new HttpException(401, $e->getMessage());
+            }
         }
 
-        // Api key as request parameter
-        $keyParam = Yii::$app->request->get('key', Yii::$app->request->post('key'));
-        if (!empty($keyParam) && $keyParam == $apiKey) {
-            return true;
-        }
-
-        return false;
+        return null;
     }
 
     /**
