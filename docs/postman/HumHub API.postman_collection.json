@@ -6,6 +6,105 @@
 	},
 	"item": [
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "de9c217c-597d-44e1-90fc-1785af7f4122",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable('AUTHORIZATION_ADMIN', 'Bearer ' + jsonData.auth_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "h5pqjdnq",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/auth/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tester login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "de9c217c-597d-44e1-90fc-1785af7f4122",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable('AUTHORIZATION_TEST', 'Bearer ' + jsonData.auth_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "test@test.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "h5pqjdnq",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/auth/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Post",
 			"item": []
 		},
@@ -19,8 +118,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689",
+								"value": "{{AUTHORIZATION_ADMIN}}",
 								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -28,15 +133,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space"
 							]
 						}
@@ -50,8 +151,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689",
+								"value": "{{AUTHORIZATION_ADMIN}}",
 								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -59,15 +166,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space/1",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space/1",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space",
 								"1"
 							]
@@ -83,7 +186,13 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							},
 							{
 								"key": "Content-Type",
@@ -94,18 +203,14 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"First API space\",\n\t\"description\": \"test description\",\n\t\"visibility\": 1,\n\t\"join_policy\": 1\n}"
+							"raw": "{\n\t\"name\": \"Second API space\",\n\t\"description\": \"test description\",\n\t\"visibility\": 1,\n\t\"join_policy\": 1\n}"
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space"
 							]
 						}
@@ -120,7 +225,13 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							},
 							{
 								"key": "Content-Type",
@@ -134,15 +245,11 @@
 							"raw": "{\n\t\"name\": \"First API space upd\",\n\t\"description\": \"test description updated upd\",\n\t\"tags\": \"first, second, third\",\n\t\"color\": \"#eeeeee\",\n\t\"url\": \"first-api-space\",\n\t\"indexUrl\": \"/s/first-api-space23/tasks/list\",\n\t\"indexGuestUrl\": \"/s/first-api-space23/wiki/page\",\n\t\"visibility\": 1,\n\t\"join_policy\": 2,\n\t\"default_content_visibility\": 1\n}"
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space/1",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space/1",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space",
 								"1"
 							]
@@ -158,7 +265,13 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -166,15 +279,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space/1",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space/1",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space",
 								"1"
 							]
@@ -190,7 +299,13 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -198,15 +313,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space/1/archive",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space/1/archive",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space",
 								"1",
 								"archive"
@@ -223,7 +334,13 @@
 							{
 								"key": "Authorization",
 								"type": "text",
-								"value": "Bearer 501e92d8e6220671abb419304db0d689"
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -231,18 +348,260 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://humhub.localhost/api/v1/space/1/unarchive",
-							"protocol": "http",
+							"raw": "{{API_URL}}/space/1/unarchive",
 							"host": [
-								"humhub",
-								"localhost"
+								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"space",
 								"1",
 								"unarchive"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Topic",
+			"item": [
+				{
+					"name": "Get all topics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"description": "admin",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"description": "test",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get topics by container",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/container/5",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"container",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get topic by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/14",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ef44de1-aa21-4d7c-80a5-032835718365",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"first api topic\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/container/2",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"container",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update topic by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"my topic\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/10",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete topic by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/21",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"21"
 							]
 						}
 					},

@@ -1,0 +1,314 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub topic module API reference.
+
+  version: 1.0.0
+  title: HumHub - Topic API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: Topic
+    description: API to access and manage topic information.
+    externalDocs:
+      description: Find out more
+      url: 'http://docs.humhub.org'
+paths:
+  /topic:
+    get:
+      tags:
+        - Topic
+      summary: Find all topics
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Topic'
+
+  '/topic/{id}':
+    get:
+      tags:
+        - Topic
+      summary: Get topic by id
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of topic
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Topic"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Topic not found
+
+    put:
+      tags:
+        - Topic
+      summary: Update existing topic
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: id
+          description: The id of topic
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Topic name
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Api topic
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Topic"
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: You are not allowed to manage this topic!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Topic not found
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while update topic!
+
+    delete:
+      tags:
+        - Topic
+      summary: Delete topic by id
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of topic
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Topic successfully deleted!
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: You are not allowed to delete this topic!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Topic not found
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while delete topic!
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin From container
+#-----------------------------------------------------------------------------------------------------------------------
+  /topic/container/{containerId}:
+    get:
+      tags:
+        - Topic
+      summary: Get all topics by container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+        - in: path
+          name: containerId
+          description: The id of container
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Topic'
+
+    post:
+      tags:
+        - Topic
+      summary: Create new topic
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: containerId
+          description: The id of container
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Topic info
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                example: Api topic
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Topic"
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: You are not allowed to create topic!
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while save topic!
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+  Topic:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 1
+      name:
+        type: string
+        readOnly: true
+        example: Api topic
