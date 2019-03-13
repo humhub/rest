@@ -45,6 +45,10 @@ paths:
                 $ref: 'common.yaml#/components/properties/totalProperty'
               page:
                 $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
               results:
                 type: array
                 items:
@@ -70,18 +74,18 @@ paths:
               - join_policy
             properties:
               name:
-                type: "string"
-                example: "Welcome space"
+                type: string
+                example: Welcome space
               description:
-                type: "string"
-                example: "Your first sample space to discover the platform."
+                type: string
+                example: Your first sample space to discover the platform.
               visibility:
-                type: "integer"
-                format: "int64"
+                type: integer
+                format: int64
                 example: 1
               join_policy:
-                type: "integer"
-                format: "int64"
+                type: integer
+                format: int64
                 example: 1
       responses:
         200:
@@ -178,37 +182,37 @@ paths:
             type: object
             properties:
               name:
-                type: "string"
-                example: "Welcome space"
+                type: string
+                example: Welcome space
               description:
-                type: "string"
-                example: "Your first sample space to discover the platform."
+                type: string
+                example: Your first sample space to discover the platform.
               tags:
-                type: "string"
-                example: "First tag, Second tag"
+                type: string
+                example: First tag, Second tag
               color:
-                type: "string"
+                type: string
                 example: "#eeeeee"
               url:
-                type: "string"
-                example: "welcome-space"
+                type: string
+                example: welcome-space
               indexUrl:
-                type: "string"
+                type: string
                 example: "/s/welcome-space/space/space/home"
               indexGuestUrl:
-                type: "string"
+                type: string
                 example: "/s/welcome-space/space/space/home"
               visibility:
-                type: "integer"
-                format: "int64"
+                type: integer
+                format: int64
                 example: 1
               join_policy:
-                type: "integer"
-                format: "int64"
+                type: integer
+                format: int64
                 example: 1
               default_content_visibility:
-                type: "integer"
-                format: "int64"
+                type: integer
+                format: int64
                 example: 1
       responses:
         200:

@@ -83,11 +83,13 @@ abstract class BaseController extends Controller
     /**
      * Handles pagination
      *
+     * @param ActiveQuery $query
+     * @param int $limit
      * @return Pagination the pagination
      */
-    protected function handlePagination(ActiveQuery $query)
+    protected function handlePagination(ActiveQuery $query, $limit = 100)
     {
-        $limit = (int) Yii::$app->request->get('limit', 100);
+        $limit = (int) Yii::$app->request->get('limit', $limit);
         $page = (int) Yii::$app->request->get('page', 1);
 
         if ($limit > 100) {
@@ -111,7 +113,9 @@ abstract class BaseController extends Controller
     {
         return [
             'total' => $pagination->totalCount,
-            'page' => 1,
+            'page' => $pagination->getPage() + 1,
+            'pages' => $pagination->getPageCount(),
+            'links' => $pagination->getLinks(),
             'results' => $data,
         ];
     }

@@ -91,6 +91,11 @@ class Events
             ['pattern' => 'api/v1/topic/container/<containerId:\d+>', 'route' => 'rest/topic/topic/create', 'verb' => 'POST'],
             ['pattern' => 'api/v1/topic/container/<containerId:\d+>', 'route' => 'rest/topic/topic/find-by-container', 'verb' => 'GET'],
 
+            // Activity
+            ['pattern' => 'api/v1/activity/', 'route' => 'rest/activity/activity/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/activity/<id:\d+>', 'route' => 'rest/activity/activity/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/activity/container/<containerId:\d+>', 'route' => 'rest/activity/activity/find-by-container', 'verb' => ['GET', 'HEAD']],
+
             // File
             ['pattern' => 'api/v1/file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
 

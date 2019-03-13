@@ -36,3 +36,19 @@ components:
       type: integer
       format: int64
       example: 1
+    pagesProperty:
+      type: integer
+      format: int64
+      example: 8
+    linksProperty:
+      type: object
+      properties:
+        self:
+          type: string
+          example: "{endpoint_path}?page=1&per-page=10"
+        next:
+          type: string
+          example: "{endpoint_path}?page=2&per-page=10"
+        last:
+          type: string
+          example: "{endpoint_path}?page=8&per-page=10"
