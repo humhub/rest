@@ -26,8 +26,6 @@ class Module extends \humhub\components\Module
      */
     public function beforeAction($action)
     {
-        Yii::$app->response->format = 'json';
-
         Yii::$app->request->setBodyParams(null);
         Yii::$app->request->parsers['application/json'] = JsonParser::class;
 

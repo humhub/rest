@@ -7,13 +7,15 @@
 
 namespace humhub\modules\rest\components;
 
-use humhub\components\Controller;
-use humhub\modules\rest\models\ConfigureForm;
-use humhub\modules\user\models\User;
 use Yii;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\HttpException;
+
+use humhub\components\Controller;
+use humhub\modules\user\models\User;
+use humhub\modules\rest\models\ApiUser;
+
 
 
 /**
@@ -52,41 +54,21 @@ abstract class BaseController extends Controller
      */
     protected function auth()
     {
-        $apiKey = $this->getApiKey();
-
-        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
-
-        // HttpBearer
-        if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches) && $matches[1] == $apiKey) {
+        $req = Yii::$app->request;
+        //parse_str($req->queryString);
+        /* grab header - custom DF */
+        $headers = $req->headers;
+        $access_token = $headers->get('Authorization');
+        $access_token = explode("Bearer ",$access_token)[1];
+        if (!isset($access_token)) {
+            throw new UnauthorizedHttpException('Access unavailable without access_token.', 401);
+        }
+        if (ApiUser::findIdentityByAccessToken($access_token)) {
             return true;
         }
-
-        // Api key as request parameter
-        $keyParam = Yii::$app->request->get('key', Yii::$app->request->post('key'));
-        if (!empty($keyParam) && $keyParam == $apiKey) {
-            return true;
-        }
-
         return false;
     }
 
-    /**
-     * Returns the configured API key
-     *
-     * @return string the API key
-     * @throws HttpException when no api key is configured
-     */
-    protected function getApiKey()
-    {
-        $config = new ConfigureForm();
-        $config->loadSettings();
-
-        if (empty($config->apiKey)) {
-            throw new HttpException('404', 'API disabled - No API KEY configured.');
-        }
-
-        return $config->apiKey;
-    }
 
     /**
      * Handles pagination

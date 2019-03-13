@@ -9,6 +9,7 @@ namespace humhub\modules\rest;
 
 use Yii;
 use yii\web\JsonParser;
+use yii\helpers\Url;
 
 class Events
 {
@@ -85,5 +86,22 @@ class Events
             ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound']
 
         ], true);
+    }
+
+    /**
+     * Adds an api administration item to the admin menu.
+     *
+     * @param type $event
+     */
+    public static function onAdminMenuInit($event)
+    {
+        $event->sender->addItem([
+            'label' => Yii::t('base', '<strong>HumHub</strong> API'),
+            'url' => Url::toRoute('/rest/admin/index'),
+            'group' => 'settings',
+            'icon' => '<i class="fa fa-object-group"></i>',
+            'isActive' => Yii::$app->controller->module && Yii::$app->controller->module->id == 'rest' && Yii::$app->controller->id == 'admin',
+            'sortOrder' => 650
+        ]);
     }
 }
