@@ -60,6 +60,7 @@ class UserDefinitions
             'language' => $user->language,
             'time_zone' => $user->time_zone,
             'contentcontainer_id' => $user->contentcontainer_id,
+            'status' => $user-> status
         ];
     }
 

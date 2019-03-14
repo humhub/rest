@@ -37,6 +37,10 @@ paths:
         - application/json
         - application/xml
       parameters:
+        - in: query
+          name: q
+          description: username, email, or tag to filter users with
+          type: string
         - $ref: 'common.yaml#/components/parameters/pageParam'
         - $ref: 'common.yaml#/components/parameters/limitParam'
       responses:

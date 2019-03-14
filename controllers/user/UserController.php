@@ -25,7 +25,16 @@ class UserController extends BaseController
     public function actionIndex()
     {
         $results = [];
-        $query = User::find();
+        $q = Yii::$app->request -> get('q');
+
+        if ($q == null){
+            $query = User::find();
+        } else{
+            $query = User::find()
+                ->where(['like', 'username', $q])
+                ->orWhere(['like', 'email', $q])
+                ->orWhere(['like', 'tags', $q]);
+        }
 
         $pagination = $this->handlePagination($query);
         foreach ($query->all() as $user) {
@@ -182,6 +191,4 @@ class UserController extends BaseController
 
         return $this->returnError(500, 'Internal error while soft delete user!');
     }
-
-
 }
