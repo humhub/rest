@@ -9,10 +9,6 @@ namespace humhub\modules\rest\definitions;
 
 use humhub\components\rendering\ViewPathRenderer;
 use humhub\modules\activity\models\Activity;
-use humhub\modules\comment\models\Comment;
-use humhub\modules\like\models\Like;
-use humhub\modules\post\models\Post;
-use humhub\modules\space\models\Space;
 use Yii;
 use yii\base\Exception;
 
@@ -27,7 +23,8 @@ class ActivityDefinitions
             'class' => $activity->class,
             'content' => static::getActivityContent($activity, $baseActivity),
             'originator' => UserDefinitions::getUserShort($baseActivity->originator),
-            'source' => static::getSourceDefinitions($baseActivity->source),
+            'source' => SourceDefinitions::getSource($baseActivity->source),
+            'createdAt' => $activity->content->created_at
         ];
     }
 
@@ -50,21 +47,5 @@ class ActivityDefinitions
             Yii::error('Could not render activity output. ' . $exception->getMessage(), 'api');
             return '';
         }
-    }
-
-    private function getSourceDefinitions($source)
-    {
-        switch (true) {
-            case $source instanceof Space :
-                return SpaceDefinitions::getSpaceShort($source);
-            case $source instanceof Post :
-                return PostDefinitions::getPost($source);
-            case $source instanceof Comment :
-                return CommentDefinitions::getComment($source);
-            case $source instanceof Like :
-                return LikeDefinitions::getLike($source);
-        }
-
-        return get_class($source) . ' definitions are not yet supported.';
     }
 }

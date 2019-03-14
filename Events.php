@@ -96,6 +96,12 @@ class Events
             ['pattern' => 'api/v1/activity/<id:\d+>', 'route' => 'rest/activity/activity/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/activity/container/<containerId:\d+>', 'route' => 'rest/activity/activity/find-by-container', 'verb' => ['GET', 'HEAD']],
 
+            // Notification
+            ['pattern' => 'api/v1/notification/', 'route' => 'rest/notification/notification/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/notification/unseen/', 'route' => 'rest/notification/notification/unseen', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/notification/mark-as-seen/', 'route' => 'rest/notification/notification/mark-as-seen', 'verb' => ['PATCH']],
+            ['pattern' => 'api/v1/notification/<id:\d+>', 'route' => 'rest/notification/notification/view', 'verb' => ['GET', 'HEAD']],
+
             // File
             ['pattern' => 'api/v1/file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
 

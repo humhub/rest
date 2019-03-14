@@ -151,14 +151,14 @@
 								"description": "admin",
 								"key": "Authorization",
 								"type": "text",
-								"value": "{{AUTHORIZATION_ADMIN}}"
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
 							},
 							{
 								"description": "test",
 								"key": "Authorization",
 								"type": "text",
-								"value": "{{AUTHORIZATION_TEST}}",
-								"disabled": true
+								"value": "{{AUTHORIZATION_TEST}}"
 							}
 						],
 						"body": {
@@ -210,6 +210,206 @@
 							"path": [
 								"activity",
 								"251"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Get notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification"
+							],
+							"query": [
+								{
+									"key": "excludeFilters[0]",
+									"value": "admin",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[1]",
+									"value": "calendar",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[2]",
+									"value": "task",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[3]",
+									"value": "task_reminder",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[4]",
+									"value": "comments",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[5]",
+									"value": "content_created",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[6]",
+									"value": "like",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[7]",
+									"value": "space_member",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[8]",
+									"value": "followed",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[9]",
+									"value": "mentioned",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get unseen notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification/unseen",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification",
+								"unseen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get notification by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification/251",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification",
+								"251"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as seen",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification/mark-as-seen",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification",
+								"mark-as-seen"
 							]
 						}
 					},
