@@ -21,6 +21,7 @@
         ];
         ```
     - Enable rewriting in Apache server
+        - Rename the file `.htaccess-dist` in humhub home dir to `.htaccess`
         - Edit the Apache configuration file **/etc/apache2/sites-available/000-default.conf** 
         ```editorconfig
           <VirtualHost *:80>
