@@ -72,6 +72,12 @@ class Events
             // File
             ['pattern' => 'api/v1/file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
 
+            // Space
+            ['pattern' => 'api/v1/space/', 'route' => 'rest/space/space/list', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/space/<containerId:\d+>', 'route' => 'rest/space/space/find-by-container', 'verb' => 'GET'],
+            ['pattern' => 'api/v1/space/<containerId:\d+>', 'route' => 'rest/space/space/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'api/v1/space/', 'route' => 'rest/space/space/create', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/space/<containerId:\d+>', 'route' => 'rest/space/space/update', 'verb' => ['PUT', 'PATCH']],
 
             // Wiki (temp)
             ['pattern' => 'api/v1/wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
