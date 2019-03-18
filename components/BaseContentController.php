@@ -74,7 +74,6 @@ abstract class BaseContentController extends BaseController
         return $this->returnPagination($query, $pagination, $results);
     }
 
-
     /**
      * Finds content by given container
      *
@@ -108,7 +107,6 @@ abstract class BaseContentController extends BaseController
         return $this->returnPagination($query, $pagination, $results);
     }
 
-
     /**
      * Creates a content in a content container
      *
@@ -140,7 +138,6 @@ abstract class BaseContentController extends BaseController
         return $this->returnError(400, 'Validation failed', ['post' => $contentRecord->getErrors()]);
     }
 
-
     public function actionUpdate($id)
     {
         $class = $this->getContentActiveRecordClass();
@@ -156,7 +153,6 @@ abstract class BaseContentController extends BaseController
 
         return $this->returnError(400, 'Validation failed', ['post' => $contentRecord->getErrors()]);
     }
-
 
     /**
      * Deletes the content record by given id
@@ -177,6 +173,33 @@ abstract class BaseContentController extends BaseController
             return $this->returnSuccess('Successfully deleted!');
         }
         return $this->returnError(500, 'Internal error while delete content!');
+    }
+
+    /**
+     * Deletes all content records by given container
+     *
+     * @param $containerId
+     * @return array
+     */
+    public function actionDeleteByContainer($containerId)
+    {
+        $contentContainer = ContentContainer::findOne(['id' => $containerId]);
+        if ($contentContainer === null) {
+            return $this->returnError(404, 'Content container not found!');
+        }
+
+        $class = $this->getContentActiveRecordClass();
+
+        /** @var ActiveQueryContent $query */
+        $records = $class::find()->contentContainer($contentContainer->getPolymorphicRelation())->all();
+
+        foreach ($records as $record) {
+            if (! $record->delete()) {
+                return $this->returnError(500, 'Internal error while delete content!');
+            }
+        }
+
+        return $this->returnSuccess('Records successfully deleted!');
     }
 
 }

@@ -923,6 +923,332 @@
 			]
 		},
 		{
+			"name": "Wiki",
+			"item": [
+				{
+					"name": "Get wiki pages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/wiki",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"wiki"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calendar",
+			"item": [
+				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get calendars entries by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete calendar entries by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Calendar entry",
+					"item": [
+						{
+							"name": "Get calendar entry by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/7",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create calendar entry",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\",\n\t\t\"color\": \"#6fdbe8\",\n\t\t\"all_day\": 1,\n\t\t\"participation_mode\": 2,\n\t\t\"max_participants\": \"\",\n\t\t\"allow_decline\": 1,\n\t\t\"allow_maybe\": 1,\n\t\t\"participant_info\": \"\"\n\t},\n\t\"CalendarEntryForm\": {\n\t\t\"is_public\": 0,\n\t\t\"start_date\": \"23/03/2019\",\n\t\t\"end_date\": \"25/03/2019\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"topics\": \"\"\n\t},\n\t\"hour\": \"23\",\n\t\"minute\": \"59\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/container/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"container",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update calendar entry by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/16",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete calendar entry by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/7",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"7"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get all calendars entries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/calendar",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"calendar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "EAN Delete User",
 			"request": {
 				"method": "DELETE",

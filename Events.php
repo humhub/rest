@@ -105,18 +105,57 @@ class Events
             // File
             ['pattern' => 'api/v1/file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
 
-            // Wiki (temp)
-            ['pattern' => 'api/v1/wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
-            ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
-
             // API Config
             ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
 
             // Catch all to ensure verbs
             ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound']
 
+        ], true);
+
+        static::addWikiModuleRules();
+        static::addCalendarModuleRules();
+    }
+
+    private static function addWikiModuleRules()
+    {
+        if (Yii::$app->getModule('wiki')) {
+            Yii::$app->urlManager->addRules([
+                ['pattern' => 'api/v1/wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
+                ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
+            ], true);
+        } else {
+            static::addModuleNotFoundRoutes('wiki');
+        }
+    }
+
+    private static function addCalendarModuleRules()
+    {
+        if (Yii::$app->getModule('calendar')) {
+            Yii::$app->urlManager->addRules([
+
+                ['pattern' => 'api/v1/calendar/', 'route' => 'rest/calendar/calendar/find', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/find-by-container', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/delete-by-container', 'verb' => 'DELETE'],
+
+                //Calendar entry CRUD
+                ['pattern' => 'api/v1/calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/create', 'verb' => 'POST'],
+                ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/update', 'verb' => 'PUT'],
+                ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/delete', 'verb' => 'DELETE'],
+            ], true);
+        } else {
+            static::addModuleNotFoundRoutes('calendar');
+        }
+    }
+
+    private static function addModuleNotFoundRoutes($moduleId)
+    {
+        Yii::$app->urlManager->addRules([
+            ['pattern' => "api/v1/{$moduleId}", 'route' => "rest/{$moduleId}/{$moduleId}/index"],
+            ['pattern' => "api/v1/{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/index"],
         ], true);
     }
 }

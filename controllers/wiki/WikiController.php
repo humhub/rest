@@ -15,6 +15,11 @@ use humhub\modules\wiki\models\WikiPage;
 
 class WikiController extends BaseContentController
 {
+    public function actionIndex()
+    {
+        return $this->returnError(404, 'Wiki module does not installed. Please install or enable Wiki module to use this API');
+    }
+
     /**
      * {@inheritdoc}
      */

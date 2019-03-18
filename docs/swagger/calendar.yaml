@@ -1,0 +1,523 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub calendar module API reference.
+
+  version: 1.0.0
+  title: HumHub - Calendar API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+
+components:
+  schemas:
+    CalendarEntry:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+          example: Api calendar event
+
+paths:
+  '/calendar':
+    get:
+      tags:
+        - Calendar
+      summary: Find all calendars entries
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/CalendarEntry'
+
+  '/calendar/container/{id}':
+    get:
+      tags:
+        - Calendar
+      summary: Find all calendar entries by container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: ID of content container
+          required: true
+          type: integer
+        - $ref: 'content.yaml#/components/parameters/topicsParam'
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/CalendarEntry'
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content container not found!
+
+    post:
+      tags:
+        - Calendar entry
+      summary: Create new calendar entry
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - $ref: "#/definitions/CalendarEntryPostParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/CalendarEntry"
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to create calendar entry!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content container not found!
+        422:
+          description: Validation failed
+
+    delete:
+      tags:
+        - Calendar
+      summary: Deletes a calendar entries by container
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of content container
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Records successfully deleted!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content container not found!
+
+  '/calendar/container/{containerId}':
+
+
+  '/calendar/entry/{id}':
+    get:
+      tags:
+        - Calendar entry
+      summary: Get calendar entry by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the calendar entry
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/CalendarEntry"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Calendar entry not found
+
+    put:
+      tags:
+        - Calendar entry
+      summary: Update calendar entry by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the calendar entry
+          required: true
+          type: integer
+        - $ref: "#/definitions/CalendarEntryPutParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/CalendarEntry"
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to edit this calendar entry!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Calendar entry not found
+        422:
+          description: Validation failed
+
+    delete:
+      tags:
+        - Calendar entry
+      summary: Delete the calendar entry by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of calendar entry
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Calendar entry successfully deleted!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Calendar entry not found
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+  CalendarEntry:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 6
+      title:
+        type: string
+        example: Space event by API
+      description:
+        type: string
+        example: Space event by API description
+      startDateTime:
+        type: string
+        example: 2019-02-27 00:00:00
+      endDateTime:
+        type: string
+        example: 2019-02-28 23:59:00
+      allDay:
+        type: integer
+        format: int64
+        example: 1
+      participationMode:
+        type: integer
+        format: int64
+        example: 2
+      recurring:
+        type: integer
+        format: int64
+        example: null
+      recurringType:
+        type: integer
+        format: int64
+        example: null
+      recurringInterval:
+        type: integer
+        format: int64
+        example: null
+      recurringEnd:
+        type: string
+        example: null
+      color:
+        type: string
+        example: "#6fdbe8"
+      allowDecline:
+        type: integer
+        format: int64
+        example: 1
+      allowMaybe:
+        type: integer
+        format: int64
+        example: 1
+      timeZone:
+        type: string
+        example: America/Los_Angeles
+      participant_info:
+        type: string
+        example: ""
+      closed:
+        type: integer
+        format: int64
+        example: 0
+      maxParticipants:
+        type: string
+        example: null
+      content:
+        $ref: "content.yaml#/definitions/Content"
+
+  CalendarEntryPostParams:
+    in: body
+    name: body
+    required: true
+    description: Calendar entry information
+    schema:
+      type: object
+      required:
+        - CalendarEntry
+        - CalendarEntryForm
+      properties:
+        CalendarEntry:
+          type: object
+          required:
+            - title
+          properties:
+            title:
+              type: string
+              example: Api calendar event
+            description:
+              type: string
+              example: Api calendar event description
+            color:
+              type: string
+              example: "#6fdbe8"
+            allDay:
+              type: integer
+              format: int64
+              example: 1
+            participationMode:
+              type: integer
+              format: int64
+              example: 2
+            max_participants:
+              type: integer
+              format: int64
+              example: null
+            allowDecline:
+              type: integer
+              format: int64
+              example: 1
+            allowMaybe:
+              type: integer
+              format: int64
+              example: 1
+            participant_info:
+              type: string
+              example: ""
+            forceJoin:
+              type: integer
+              format: int64
+              example: 0
+        CalendarEntryForm:
+          type: object
+          required:
+            - start_date
+            - end_date
+          properties:
+            is_public:
+              type: integer
+              format: int64
+              example: 1
+            start_date:
+              type: string
+              example: 2019-03-23
+            end_date:
+              type: string
+              example: 2019-03-25
+            timeZone:
+              type: string
+              example: America/Los_Angeles
+            topics:
+              type: array
+              items:
+                type: integer
+                format: int64
+                example: 3
+
+  CalendarEntryPutParams:
+    in: body
+    name: body
+    required: true
+    description: Calendar entry information
+    schema:
+      type: object
+      properties:
+        CalendarEntry:
+          type: object
+          properties:
+            title:
+              type: string
+              example: Api calendar event
+            description:
+              type: string
+              example: Api calendar event description
+            color:
+              type: string
+              example: "#6fdbe8"
+            allDay:
+              type: integer
+              format: int64
+              example: 1
+            participationMode:
+              type: integer
+              format: int64
+              example: 2
+            max_participants:
+              type: integer
+              format: int64
+              example: null
+            allowDecline:
+              type: integer
+              format: int64
+              example: 1
+            allowMaybe:
+              type: integer
+              format: int64
+              example: 1
+            participant_info:
+              type: string
+              example: ""
+            forceJoin:
+              type: integer
+              format: int64
+              example: 0
+            sendUpdateNotification:
+              type: integer
+              format: int64
+              example: 0
+        CalendarEntryForm:
+          type: object
+          properties:
+            is_public:
+              type: integer
+              format: int64
+              example: 1
+            start_date:
+              type: string
+              example: 2019-03-23
+            end_date:
+              type: string
+              example: 2019-03-25
+            timeZone:
+              type: string
+              example: America/Los_Angeles
+            topics:
+              type: array
+              items:
+                type: integer
+                format: int64
+                example: 3
