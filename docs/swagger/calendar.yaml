@@ -182,9 +182,6 @@ paths:
                 type: string
                 example: Content container not found!
 
-  '/calendar/container/{containerId}':
-
-
   '/calendar/entry/{id}':
     get:
       tags:
@@ -296,6 +293,65 @@ paths:
                 type: string
                 example: Calendar entry not found
 
+  '/calendar/entry/{id}/respond':
+    post:
+      tags:
+        - Participants
+      summary: Change the user participant
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of the calendar entry
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - type
+            properties:
+              type:
+                type: integer
+                format: int64
+                enum: [0,1,2,3]
+                example: 3
+                description: >
+                  Participant type:
+                   * 1 - decline.
+                   * 2 - maybe.
+                   * 3 - accept.
+                   * 0 - remove from participants.
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Participation successfully changed.
+        400:
+          description: Bad request
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Calendar entry not found
+
 securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
 
@@ -316,10 +372,12 @@ definitions:
         example: Space event by API description
       startDateTime:
         type: string
-        example: 2019-02-27 00:00:00
+        format: datetime
+        example: "2019-02-27 00:00:00"
       endDateTime:
         type: string
-        example: 2019-02-28 23:59:00
+        format: datetime
+        example: "2019-02-28 23:59:00"
       allDay:
         type: integer
         format: int64
@@ -395,11 +453,11 @@ definitions:
             color:
               type: string
               example: "#6fdbe8"
-            allDay:
+            all_day:
               type: integer
               format: int64
-              example: 1
-            participationMode:
+              example: 0
+            participation_mode:
               type: integer
               format: int64
               example: 2
@@ -407,11 +465,11 @@ definitions:
               type: integer
               format: int64
               example: null
-            allowDecline:
+            allow_decline:
               type: integer
               format: int64
               example: 1
-            allowMaybe:
+            allow_maybe:
               type: integer
               format: int64
               example: 1
@@ -434,10 +492,18 @@ definitions:
               example: 1
             start_date:
               type: string
-              example: 2019-03-23
+              format: date
+              example: "2019-03-23"
+            start_time:
+              type: string
+              example: "10:00"
             end_date:
               type: string
-              example: 2019-03-25
+              format: date
+              example: "2019-03-25"
+            end_time:
+              type: string
+              example: "20:30"
             timeZone:
               type: string
               example: America/Los_Angeles
@@ -468,11 +534,11 @@ definitions:
             color:
               type: string
               example: "#6fdbe8"
-            allDay:
+            all_day:
               type: integer
               format: int64
-              example: 1
-            participationMode:
+              example: 0
+            participation_mode:
               type: integer
               format: int64
               example: 2
@@ -480,11 +546,11 @@ definitions:
               type: integer
               format: int64
               example: null
-            allowDecline:
+            allow_decline:
               type: integer
               format: int64
               example: 1
-            allowMaybe:
+            allow_maybe:
               type: integer
               format: int64
               example: 1
@@ -508,10 +574,18 @@ definitions:
               example: 1
             start_date:
               type: string
-              example: 2019-03-23
+              format: date
+              example: "2019-03-23"
+            start_time:
+              type: string
+              example: "10:00"
             end_date:
               type: string
-              example: 2019-03-25
+              format: date
+              example: "2019-03-25"
+            end_time:
+              type: string
+              example: "20:30"
             timeZone:
               type: string
               example: America/Los_Angeles

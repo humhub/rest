@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\definitions;
 use humhub\modules\calendar\models\CalendarEntry;
+use humhub\modules\calendar\models\CalendarEntryParticipant;
 
 /**
  * Class CalendarDefinitions
@@ -37,18 +38,28 @@ class CalendarDefinitions
             'closed' => $entry->closed,
             'maxParticipants' => $entry->max_participants,
             'content' => ContentDefinitions::getContent($entry->content),
-            'participants' => static::getParticipantUsers($entry->participantUsers)
+            'participants' => static::getParticipantUsers($entry->getParticipants()->with('user')->all())
         ];
     }
 
-    private static function getParticipantUsers($users)
+    private static function getParticipantUsers($participants)
     {
-        $result = [];
+        $result = [
+            'attending' => [],
+            'maybe' => [],
+            'declined' => []
+        ];
 
-        foreach ($users as $user) {
-            $result[] = UserDefinitions::getUserShort($user);
+        foreach ($participants as $participant) {
+            if ($participant->participation_state === CalendarEntryParticipant::PARTICIPATION_STATE_ACCEPTED) {
+                $result['attending'][] = UserDefinitions::getUserShort($participant->user);
+            } elseif ($participant->participation_state === CalendarEntryParticipant::PARTICIPATION_STATE_MAYBE){
+                $result['maybe'][] = UserDefinitions::getUserShort($participant->user);
+            } elseif ($participant->participation_state === CalendarEntryParticipant::PARTICIPATION_STATE_DECLINED){
+                $result['declined'][] = UserDefinitions::getUserShort($participant->user);
+            }
         }
-        
+
         return $result;
     }
 }

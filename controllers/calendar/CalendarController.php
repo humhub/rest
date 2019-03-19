@@ -7,7 +7,9 @@
 
 namespace humhub\modules\rest\controllers\calendar;
 
+use humhub\libs\DbDateValidator;
 use humhub\modules\calendar\models\CalendarEntry;
+use humhub\modules\calendar\models\CalendarEntryParticipant;
 use humhub\modules\calendar\models\forms\CalendarEntryForm;
 use humhub\modules\calendar\permissions\CreateEntry;
 use humhub\modules\content\components\ContentActiveRecord;
@@ -16,14 +18,12 @@ use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseContentController;
 use humhub\modules\rest\definitions\CalendarDefinitions;
 use Yii;
+use yii\web\HttpException;
 
 
 class CalendarController extends BaseContentController
 {
-    public function actionIndex()
-    {
-        return $this->returnError(404, 'Calendar module does not installed. Please install or enable Calendar module to use this API');
-    }
+    public static $moduleId = 'Calendar';
 
     /**
      * {@inheritdoc}
@@ -54,10 +54,12 @@ class CalendarController extends BaseContentController
         if (! $container->permissionManager->can(CreateEntry::class)) {
             return $this->returnError(403, 'You are not allowed to create calendar entry!');
         }
+
+        $requestParams = $this->prepareRequestParams(Yii::$app->request->getBodyParams());
+
         $calendarEntryForm = new CalendarEntryForm();
         $calendarEntryForm->createNew($container);
-
-        $calendarEntryForm->load(Yii::$app->request->getBodyParams(), '');
+        $calendarEntryForm->load($requestParams, '');
 
         if ($calendarEntryForm->save()) {
             return CalendarDefinitions::getCalendarEntry($calendarEntryForm->entry);
@@ -103,6 +105,70 @@ class CalendarController extends BaseContentController
             Yii::error('Could not create validated calendar entry.', 'api');
             return $this->returnError(500, 'Internal error while save calendar entry!');
         }
+    }
+
+    public function actionRespond($id)
+    {
+        $calendarEntry = CalendarEntry::findOne(['id' => $id]);
+        if (! $calendarEntry) {
+            return $this->returnError(404, 'Calendar entry not found!');
+        }
+
+        $respondType = Yii::$app->request->post('type', null);
+
+        if (is_null($respondType)) {
+            return $this->returnError(400, 'Type field cannot be blank');
+        }
+
+        if (! in_array($respondType, [
+                CalendarEntryParticipant::PARTICIPATION_STATE_NONE,
+                CalendarEntryParticipant::PARTICIPATION_STATE_DECLINED,
+                CalendarEntryParticipant::PARTICIPATION_STATE_MAYBE,
+                CalendarEntryParticipant::PARTICIPATION_STATE_ACCEPTED,
+            ], true)) {
+            return $this->returnError(400, 'Invalid respond type');
+        }
+
+        $participationState = $calendarEntry->respond((int)$respondType);
+
+        if($participationState->hasErrors()) {
+            return $this->returnError(400, 'Bad request', ['errors' => $participationState->getErrors()]);
+        } else {
+            return $this->returnSuccess('Participation successfully changed.');
+        }
+    }
+
+    private function prepareRequestParams($requestParams)
+    {
+        if (empty($requestParams['CalendarEntryForm']['start_date']) || empty($requestParams['CalendarEntryForm']['end_date'])) {
+            $message = empty($requestParams['CalendarEntryForm']['start_date']) ? 'Start ' : 'End ';
+            $message .=  'date cannot be blank';
+            throw new HttpException(400, $message);
+        }
+
+        if (! empty($requestParams['CalendarEntryForm']['start_time'])) {
+            $requestParams['CalendarEntry']['all_day'] = 0;
+            $requestParams['CalendarEntryForm']['start_date'] .= ' ' . $requestParams['CalendarEntryForm']['start_time'] . ':00';
+            unset($requestParams['CalendarEntryForm']['start_time']);
+        } else {
+            $requestParams['CalendarEntryForm']['start_date'] .= ' 00:00:00';
+        }
+
+        if (! empty($requestParams['CalendarEntryForm']['end_time'])) {
+            $requestParams['CalendarEntry']['all_day'] = 0;
+            $requestParams['CalendarEntryForm']['end_date'] .= ' ' . $requestParams['CalendarEntryForm']['end_time'] . ':00';
+            unset($requestParams['CalendarEntryForm']['end_time']);
+        } else {
+            $requestParams['CalendarEntryForm']['end_date'] .= ' 23:59:00';
+        }
+
+        if (preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams['CalendarEntryForm']['start_date']) ||
+            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams['CalendarEntryForm']['start_date']) ||
+            preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams['CalendarEntryForm']['end_date']) ||
+            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams['CalendarEntryForm']['end_date'])) {
+            return $requestParams;
+        }
+        throw new HttpException(400, 'Wrong calendar entry date format.');
     }
 
     private function prepareFormDate($calendarEntryForm, $entryForm)

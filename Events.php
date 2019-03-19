@@ -145,6 +145,9 @@ class Events
                 ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/view', 'verb' => ['GET', 'HEAD']],
                 ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/update', 'verb' => 'PUT'],
                 ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/delete', 'verb' => 'DELETE'],
+
+                //Participate
+                ['pattern' => 'api/v1/calendar/entry/<id:\d+>/respond', 'route' => 'rest/calendar/calendar/respond', 'verb' => 'POST'],
             ], true);
         } else {
             static::addModuleNotFoundRoutes('calendar');
@@ -154,8 +157,8 @@ class Events
     private static function addModuleNotFoundRoutes($moduleId)
     {
         Yii::$app->urlManager->addRules([
-            ['pattern' => "api/v1/{$moduleId}", 'route' => "rest/{$moduleId}/{$moduleId}/index"],
-            ['pattern' => "api/v1/{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/index"],
+            ['pattern' => "api/v1/{$moduleId}", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
+            ['pattern' => "api/v1/{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
         ], true);
     }
 }

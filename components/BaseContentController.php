@@ -11,7 +11,6 @@ use humhub\modules\content\components\ActiveQueryContent;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\definitions\ContentDefinitions;
-
 use humhub\modules\content\components\ContentActiveRecord;
 use Yii;
 
@@ -23,6 +22,8 @@ use Yii;
  */
 abstract class BaseContentController extends BaseController
 {
+    public static $moduleId = '';
+    
     /**
      * @return string returns the class name of the active record
      */
@@ -202,4 +203,9 @@ abstract class BaseContentController extends BaseController
         return $this->returnSuccess('Records successfully deleted!');
     }
 
+    public function actionNotSupported()
+    {
+        $module = static::$moduleId;
+        return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
+    }
 }
