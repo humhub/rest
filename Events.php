@@ -115,6 +115,7 @@ class Events
 
         static::addWikiModuleRules();
         static::addCalendarModuleRules();
+        static::addTasksModuleRules();
     }
 
     private static function addWikiModuleRules()
@@ -146,11 +147,49 @@ class Events
                 ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/update', 'verb' => 'PUT'],
                 ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/delete', 'verb' => 'DELETE'],
 
+                //Calendar Entry Management
+                ['pattern' => 'api/v1/calendar/entry/<id:\d+>/upload-files', 'route' => 'rest/calendar/calendar/attach-files', 'verb' => 'POST'],
+                ['pattern' => 'api/v1/calendar/entry/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/calendar/calendar/remove-file', 'verb' => 'DELETE'],
+
                 //Participate
                 ['pattern' => 'api/v1/calendar/entry/<id:\d+>/respond', 'route' => 'rest/calendar/calendar/respond', 'verb' => 'POST'],
             ], true);
         } else {
             static::addModuleNotFoundRoutes('calendar');
+        }
+    }
+
+    private static function addTasksModuleRules()
+    {
+        if (Yii::$app->getModule('tasks')) {
+            Yii::$app->urlManager->addRules([
+
+                ['pattern' => 'api/v1/tasks/', 'route' => 'rest/task/task/find', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/tasks/container/<containerId:\d+>', 'route' => 'rest/task/task/find-by-container', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/tasks/container/<containerId:\d+>', 'route' => 'rest/task/task/delete-by-container', 'verb' => 'DELETE'],
+
+                //Task CRUD
+                ['pattern' => 'api/v1/tasks/container/<containerId:\d+>', 'route' => 'rest/task/task/create', 'verb' => 'POST'],
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>', 'route' => 'rest/task/task/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>', 'route' => 'rest/task/task/update', 'verb' => 'PUT'],
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>', 'route' => 'rest/task/task/delete', 'verb' => 'DELETE'],
+
+                //Task management
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>/processed', 'route' => 'rest/task/task/processed', 'verb' => 'PATCH'],
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>/revert', 'route' => 'rest/task/task/revert', 'verb' => 'PATCH'],
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>/upload-files', 'route' => 'rest/task/task/attach-files', 'verb' => 'POST'],
+                ['pattern' => 'api/v1/tasks/task/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/task/task/remove-file', 'verb' => 'DELETE'],
+
+                //Task List CRUD
+                ['pattern' => 'api/v1/tasks/lists/container/<containerId:\d+>', 'route' => 'rest/task/task-list/index', 'verb' => 'GET'],
+                ['pattern' => 'api/v1/tasks/lists/container/<containerId:\d+>', 'route' => 'rest/task/task-list/create', 'verb' => 'POST'],
+                ['pattern' => 'api/v1/tasks/list/<id:\d+>', 'route' => 'rest/task/task-list/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/tasks/list/<id:\d+>', 'route' => 'rest/task/task-list/update', 'verb' => 'PUT'],
+                ['pattern' => 'api/v1/tasks/list/<id:\d+>', 'route' => 'rest/task/task-list/delete', 'verb' => 'DELETE'],
+
+            ], true);
+        } else {
+            static::addModuleNotFoundRoutes('tasks');
         }
     }
 

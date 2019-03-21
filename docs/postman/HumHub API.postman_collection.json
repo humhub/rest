@@ -1014,14 +1014,14 @@
 										"description": "admin",
 										"key": "Authorization",
 										"type": "text",
-										"value": "{{AUTHORIZATION_ADMIN}}",
-										"disabled": true
+										"value": "{{AUTHORIZATION_ADMIN}}"
 									},
 									{
 										"description": "test",
 										"key": "Authorization",
 										"type": "text",
-										"value": "{{AUTHORIZATION_TEST}}"
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
 									}
 								],
 								"body": {
@@ -1029,14 +1029,14 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{API_URL}}/calendar/container/2",
+									"raw": "{{API_URL}}/calendar/container/1",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"calendar",
 										"container",
-										"2"
+										"1"
 									]
 								}
 							},
@@ -1057,14 +1057,14 @@
 										"description": "admin",
 										"key": "Authorization",
 										"type": "text",
-										"value": "{{AUTHORIZATION_ADMIN}}",
-										"disabled": true
+										"value": "{{AUTHORIZATION_ADMIN}}"
 									},
 									{
 										"description": "test",
 										"key": "Authorization",
 										"type": "text",
-										"value": "{{AUTHORIZATION_TEST}}"
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
 									}
 								],
 								"body": {
@@ -1072,14 +1072,14 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{API_URL}}/calendar/entry/7",
+									"raw": "{{API_URL}}/calendar/entry/2",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"calendar",
 										"entry",
-										"7"
+										"2"
 									]
 								}
 							},
@@ -1112,17 +1112,17 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\",\n\t\t\"color\": \"#6fdbe8\",\n\t\t\"all_day\": 1,\n\t\t\"participation_mode\": 2,\n\t\t\"max_participants\": \"\",\n\t\t\"allow_decline\": 1,\n\t\t\"allow_maybe\": 1,\n\t\t\"participant_info\": \"\"\n\t},\n\t\"CalendarEntryForm\": {\n\t\t\"is_public\": 0,\n\t\t\"start_date\": \"23/03/2019\",\n\t\t\"end_date\": \"25/03/2019\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"topics\": \"\"\n\t},\n\t\"hour\": \"23\",\n\t\"minute\": \"59\"\n}"
+									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\",\n\t\t\"color\": \"#6fdbe8\",\n\t\t\"all_day\": 1,\n\t\t\"participation_mode\": 2,\n\t\t\"max_participants\": \"\",\n\t\t\"allow_decline\": 1,\n\t\t\"allow_maybe\": 1,\n\t\t\"participant_info\": \"\"\n\t},\n\t\"CalendarEntryForm\": {\n\t\t\"is_public\": 0,\n\t\t\"start_date\": \"2019-03-19\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"forceJoin\": 1,\n\t\t\"topics\": \"\"\n\t}\n}"
 								},
 								"url": {
-									"raw": "{{API_URL}}/calendar/container/1",
+									"raw": "{{API_URL}}/calendar/container/19",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"calendar",
 										"container",
-										"1"
+										"19"
 									]
 								}
 							},
@@ -1155,17 +1155,17 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\"\n\t}\n}"
+									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\",\n\t\t\"color\": \"#6fdbe8\",\n\t\t\"all_day\": 1,\n\t\t\"participation_mode\": 2,\n\t\t\"max_participants\": \"\",\n\t\t\"allow_decline\": 1,\n\t\t\"allow_maybe\": 1,\n\t\t\"participant_info\": \"\"\n\t},\n\t\"CalendarEntryForm\": {\n\t\t\"is_public\": 0,\n\t\t\"start_date\": \"2019-03-19\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"forceJoin\": 1,\n\t\t\"topics\": \"\"\n\t}\n}"
 								},
 								"url": {
-									"raw": "{{API_URL}}/calendar/entry/16",
+									"raw": "{{API_URL}}/calendar/entry/60",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"calendar",
 										"entry",
-										"16"
+										"60"
 									]
 								}
 							},
@@ -1212,6 +1212,150 @@
 					"_postman_isSubFolder": true
 				},
 				{
+					"name": "Partisipation",
+					"item": [
+						{
+							"name": "Change participation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"type\": 3\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/2/respond",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"2",
+										"respond"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Calendar entry management",
+					"item": [
+						{
+							"name": "Upload files to calendar entry",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/9/upload-files",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"9",
+										"upload-files"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove file from calendar entry",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/9/remove-file/23",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"9",
+										"remove-file",
+										"23"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Get all calendars entries",
 					"request": {
 						"method": "GET",
@@ -1241,6 +1385,673 @@
 							],
 							"path": [
 								"calendar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get tasks by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete tasks by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Task",
+					"item": [
+						{
+							"name": "Get task by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new task",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Task\": {\n\t\t\"title\": \"First api task\",\n\t\t\"description\": \"First api task for test space 2\",\n\t\t\"task_list_id\": null,\n\t\t\"scheduling\": 1,\n\t\t\"all_day\": 0,\n\t\t\"selectedReminders\": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t8\n\t\t],\n\t\t\"cal_mode\": 1,\n\t\t\"assignedUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"responsibleUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"review\": 1\n\t},\n\t\"TaskForm\": {\n\t\t\"is_public\": 1,\n\t\t\"start_date\": \"2019-03-29\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"newItems\": [\n\t\t\t\"first\",\n\t\t\t\"second\",\n\t\t\t\"third\"\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update task by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Task\": {\n\t\t\"title\": \"First api task upd\",\n\t\t\"description\": \"First api task description\",\n\t\t\"task_list_id\": null,\n\t\t\"scheduling\": 1,\n\t\t\"all_day\": 1,\n\t\t\"selectedReminders\": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t8\n\t\t],\n\t\t\"cal_mode\": 1,\n\t\t\"assignedUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"responsibleUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"review\": 1\n\t},\n\t\"TaskForm\": {\n\t\t\"is_public\": 1,\n\t\t\"start_date\": \"2019-03-29\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"newItems\": [\n\t\t\t\"first\",\n\t\t\t\"second\",\n\t\t\t\"third\"\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete task by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/14",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"14"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Task List",
+					"item": [
+						{
+							"name": "Get task lists by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/lists/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"lists",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get task list by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/list/25",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"list",
+										"25"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new task list",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"TaskList\": {\n\t\t\"name\": \"First api task list\",\n\t\t\"color\": \"#7b9102\"\n\t},\n\t\"TaskListSettings\": {\n\t\t\"hide_if_completed\": 0\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/lists/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"lists",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update task list by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"TaskList\": {\n\t\t\"name\": \"First api task list\",\n\t\t\"color\": \"#7b9102\"\n\t},\n\t\"TaskListSettings\": {\n\t\t\"hide_if_completed\": 1\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/list/48",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"list",
+										"48"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete task list by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/list/37",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"list",
+										"37"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Task management",
+					"item": [
+						{
+							"name": "Revert task",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/21/revert",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"21",
+										"revert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload files to task",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29/upload-files",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29",
+										"upload-files"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove file from task",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29/remove-file/20",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29",
+										"remove-file",
+										"20"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change task status",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"status\": 5\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/21/processed",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"21",
+										"processed"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get all tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/tasks",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"tasks"
 							]
 						}
 					},

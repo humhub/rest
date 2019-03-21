@@ -7,12 +7,18 @@
 
 namespace humhub\modules\rest\components;
 
+use humhub\libs\DbDateValidator;
 use humhub\modules\content\components\ActiveQueryContent;
+use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
+use humhub\modules\file\models\File;
+use humhub\modules\file\models\FileUpload;
+use humhub\modules\rest\controllers\task\TaskController;
 use humhub\modules\rest\definitions\ContentDefinitions;
-use humhub\modules\content\components\ContentActiveRecord;
 use Yii;
+use yii\web\HttpException;
+use yii\web\UploadedFile;
 
 
 /**
@@ -23,7 +29,7 @@ use Yii;
 abstract class BaseContentController extends BaseController
 {
     public static $moduleId = '';
-    
+
     /**
      * @return string returns the class name of the active record
      */
@@ -195,7 +201,7 @@ abstract class BaseContentController extends BaseController
         $records = $class::find()->contentContainer($contentContainer->getPolymorphicRelation())->all();
 
         foreach ($records as $record) {
-            if (! $record->delete()) {
+            if (!$record->delete()) {
                 return $this->returnError(500, 'Internal error while delete content!');
             }
         }
@@ -203,9 +209,112 @@ abstract class BaseContentController extends BaseController
         return $this->returnSuccess('Records successfully deleted!');
     }
 
+    public function actionAttachFiles($id)
+    {
+        $class = $this->getContentActiveRecordClass();
+        $contentRecord = $class::findOne(['id' => $id]);
+        if ($contentRecord === null) {
+            return $this->returnError(404, 'Content record not found!');
+        }
+        $uploadedFiles = UploadedFile::getInstancesByName('files');
+
+        if (empty($uploadedFiles)) {
+            return $this->returnError(400, 'No files to upload.');
+        }
+
+        $files = [];
+        File::getDb()->transaction(function ($db) use ($uploadedFiles, & $files) {
+            foreach ($uploadedFiles as $cFile) {
+                $file = Yii::createObject(FileUpload::class);
+                $file->setUploadedFile($cFile);
+                if (! $file->save()) {
+                    return false;
+                }
+                $files[] = $file->guid;
+            }
+            return true;
+        });
+
+        if (! empty($files)) {
+            $contentRecord->fileManager->attach($files);
+            return $this->returnSuccess('Files successfully uploaded.');
+        } else {
+            return $this->returnError(500, 'Internal error while saving file.');
+        }
+    }
+
+    public function actionRemoveFile($id, $fileId)
+    {
+        $class = $this->getContentActiveRecordClass();
+        $file = File::findOne(['id' => $fileId]);
+        $contentRecord = $class::findOne(['id' => $id]);
+
+        if ($file == null || $contentRecord == null) {
+            return $this->returnError(404, 'Could not find requested content record or file!');
+        }
+
+        $isAssignedTo = $file->object_model === $class && $file->object_id == $contentRecord->getPrimaryKey();
+
+        if (! $isAssignedTo || ! $file->canDelete()) {
+            return $this->returnError(403, 'Insufficient permissions!');
+        }
+        if ($file->delete()) {
+            return $this->returnSuccess('File successfully removed.');
+        } else {
+            return $this->returnError(500, 'Internal error while removing file.');
+        }
+
+    }
+
     public function actionNotSupported()
     {
         $module = static::$moduleId;
         return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
+    }
+
+    /**********************************************************************************
+     * Helpers
+     *********************************************************************************
+     *
+     * /*
+     * @param $requestParams
+     * @param $formName
+     * @param $modelName
+     * @return array
+     * @throws HttpException
+     */
+    protected function prepareRequestParams($requestParams, $formName, $modelName)
+    {
+        if ($this instanceof TaskController && empty($requestParams[$modelName]['scheduling'])) {
+            return $requestParams;
+        }
+        
+        if (empty($requestParams[$formName]['start_date']) || empty($requestParams[$formName]['end_date'])) {
+            $message = empty($requestParams[$formName]['start_date']) ? 'Start ' : 'End ';
+            $message .=  'date cannot be blank';
+            throw new HttpException(400, $message);
+        }
+
+        if (! empty($requestParams[$formName]['start_time'])) {
+            $requestParams[$modelName]['all_day'] = 0;
+            $requestParams[$formName]['start_date'] .= ' ' . $requestParams[$formName]['start_time'] . ':00';
+        } else {
+            $requestParams[$formName]['start_date'] .= ' 00:00:00';
+        }
+
+        if (! empty($requestParams[$formName]['end_time'])) {
+            $requestParams[$modelName]['all_day'] = 0;
+            $requestParams[$formName]['end_date'] .= ' ' . $requestParams[$formName]['end_time'] . ':00';
+        } else {
+            $requestParams[$formName]['end_date'] .= ' 23:59:00';
+        }
+
+        if (preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['start_date']) ||
+            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['start_date']) ||
+            preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['end_date']) ||
+            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['end_date'])) {
+            return $requestParams;
+        }
+        throw new HttpException(400, 'Wrong calendar entry date format.');
     }
 }

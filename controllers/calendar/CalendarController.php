@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://www.humhub.org/
- * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
+ * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
  */
 
@@ -55,7 +55,7 @@ class CalendarController extends BaseContentController
             return $this->returnError(403, 'You are not allowed to create calendar entry!');
         }
 
-        $requestParams = $this->prepareRequestParams(Yii::$app->request->getBodyParams());
+        $requestParams = $this->prepareRequestParams(Yii::$app->request->getBodyParams(), 'CalendarEntryForm', 'CalendarEntry');
 
         $calendarEntryForm = new CalendarEntryForm();
         $calendarEntryForm->createNew($container);
@@ -88,9 +88,9 @@ class CalendarController extends BaseContentController
             return $this->returnError(403, 'You are not allowed to update this calendar entry!');
         }
 
-        $this->prepareFormDate($calendarEntryForm, Yii::$app->request->post('CalendarEntryForm', []));
+        $requestParams = $this->prepareRequestParams(Yii::$app->request->getBodyParams(), 'CalendarEntryForm', 'CalendarEntry');
 
-        $calendarEntryForm->load(Yii::$app->request->getBodyParams(), '');
+        $calendarEntryForm->load($requestParams, '');
 
         if ($calendarEntryForm->save()) {
             return CalendarDefinitions::getCalendarEntry($calendarEntryForm->entry);
@@ -103,7 +103,7 @@ class CalendarController extends BaseContentController
             ]);
         } else {
             Yii::error('Could not create validated calendar entry.', 'api');
-            return $this->returnError(500, 'Internal error while save calendar entry!');
+            return $this->returnError(500, 'Internal error while update calendar entry!');
         }
     }
 
@@ -135,49 +135,6 @@ class CalendarController extends BaseContentController
             return $this->returnError(400, 'Bad request', ['errors' => $participationState->getErrors()]);
         } else {
             return $this->returnSuccess('Participation successfully changed.');
-        }
-    }
-
-    private function prepareRequestParams($requestParams)
-    {
-        if (empty($requestParams['CalendarEntryForm']['start_date']) || empty($requestParams['CalendarEntryForm']['end_date'])) {
-            $message = empty($requestParams['CalendarEntryForm']['start_date']) ? 'Start ' : 'End ';
-            $message .=  'date cannot be blank';
-            throw new HttpException(400, $message);
-        }
-
-        if (! empty($requestParams['CalendarEntryForm']['start_time'])) {
-            $requestParams['CalendarEntry']['all_day'] = 0;
-            $requestParams['CalendarEntryForm']['start_date'] .= ' ' . $requestParams['CalendarEntryForm']['start_time'] . ':00';
-            unset($requestParams['CalendarEntryForm']['start_time']);
-        } else {
-            $requestParams['CalendarEntryForm']['start_date'] .= ' 00:00:00';
-        }
-
-        if (! empty($requestParams['CalendarEntryForm']['end_time'])) {
-            $requestParams['CalendarEntry']['all_day'] = 0;
-            $requestParams['CalendarEntryForm']['end_date'] .= ' ' . $requestParams['CalendarEntryForm']['end_time'] . ':00';
-            unset($requestParams['CalendarEntryForm']['end_time']);
-        } else {
-            $requestParams['CalendarEntryForm']['end_date'] .= ' 23:59:00';
-        }
-
-        if (preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams['CalendarEntryForm']['start_date']) ||
-            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams['CalendarEntryForm']['start_date']) ||
-            preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams['CalendarEntryForm']['end_date']) ||
-            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams['CalendarEntryForm']['end_date'])) {
-            return $requestParams;
-        }
-        throw new HttpException(400, 'Wrong calendar entry date format.');
-    }
-
-    private function prepareFormDate($calendarEntryForm, $entryForm)
-    {
-        if (empty($entryForm['start_date'])) {
-            $calendarEntryForm->start_date = $calendarEntryForm->entry->start_datetime;
-        }
-        if (empty($entryForm['end_date'])) {
-            $calendarEntryForm->end_date = $calendarEntryForm->entry->end_datetime;
         }
     }
 }

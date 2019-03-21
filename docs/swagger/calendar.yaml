@@ -12,16 +12,6 @@ info:
     url: 'https://www.humhub.org/en/licences'
 basePath: /api/v1
 
-components:
-  schemas:
-    CalendarEntry:
-      type: object
-      properties:
-        title:
-          type: string
-          required: true
-          example: Api calendar event
-
 paths:
   '/calendar':
     get:
@@ -145,6 +135,17 @@ paths:
                 example: Content container not found!
         422:
           description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while save calendar entry!
 
     delete:
       tags:
@@ -256,6 +257,17 @@ paths:
                 example: Calendar entry not found
         422:
           description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while update calendar entry!
 
     delete:
       tags:
@@ -292,6 +304,147 @@ paths:
               message:
                 type: string
                 example: Calendar entry not found
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin Calendar Entry Management
+#-----------------------------------------------------------------------------------------------------------------------
+
+  '/calendar/entry/{id}/upload-files':
+    post:
+      tags:
+        - Calendar entry management
+      summary: Attach files to calendar entry
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: path
+          name: id
+          description: The id of the calendar entry
+          required: true
+          type: integer
+        - in: formData
+          name: files
+          type: array
+          required: true
+          description: The files to upload.
+          items:
+            type: file
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Files successfully uploaded.
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: No files to upload.
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content record not found!
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while saving file.
+
+  '/calendar/entry/{$id}remove-file/{fileId}':
+    delete:
+      tags:
+        - Calendar entry management
+      summary: Remove file from calendar entry
+      description: ''
+      produces:
+        - application/json
+      parameters:
+       - in: path
+         name: id
+         description: The id of the calendar entry
+         required: true
+         type: integer
+       - in: path
+         name: fileId
+         required: true
+         description: The id of file to remove.
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: File successfully removed.
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: Insufficient permissions!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Could not find requested content record or file!
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while removing file.
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin Participants
+#-----------------------------------------------------------------------------------------------------------------------
 
   '/calendar/entry/{id}/respond':
     post:
@@ -370,19 +523,19 @@ definitions:
       description:
         type: string
         example: Space event by API description
-      startDateTime:
+      start_datetime:
         type: string
         format: datetime
         example: "2019-02-27 00:00:00"
-      endDateTime:
+      end_datetime:
         type: string
         format: datetime
         example: "2019-02-28 23:59:00"
-      allDay:
+      all_day:
         type: integer
         format: int64
         example: 1
-      participationMode:
+      participation_mode:
         type: integer
         format: int64
         example: 2
@@ -390,29 +543,29 @@ definitions:
         type: integer
         format: int64
         example: null
-      recurringType:
+      recurring_type:
         type: integer
         format: int64
         example: null
-      recurringInterval:
+      recurring_interval:
         type: integer
         format: int64
         example: null
-      recurringEnd:
+      recurring_end:
         type: string
         example: null
       color:
         type: string
         example: "#6fdbe8"
-      allowDecline:
+      allow_decline:
         type: integer
         format: int64
         example: 1
-      allowMaybe:
+      allow_maybe:
         type: integer
         format: int64
         example: 1
-      timeZone:
+      time_zone:
         type: string
         example: America/Los_Angeles
       participant_info:
@@ -422,7 +575,7 @@ definitions:
         type: integer
         format: int64
         example: 0
-      maxParticipants:
+      max_participants:
         type: string
         example: null
       content:
@@ -476,10 +629,6 @@ definitions:
             participant_info:
               type: string
               example: ""
-            forceJoin:
-              type: integer
-              format: int64
-              example: 0
         CalendarEntryForm:
           type: object
           required:
@@ -507,6 +656,10 @@ definitions:
             timeZone:
               type: string
               example: America/Los_Angeles
+            forceJoin:
+              type: integer
+              format: int64
+              example: 0
             topics:
               type: array
               items:
@@ -521,9 +674,14 @@ definitions:
     description: Calendar entry information
     schema:
       type: object
+      required:
+        - CalendarEntry
+        - CalendarEntryForm
       properties:
         CalendarEntry:
           type: object
+          required:
+            - title
           properties:
             title:
               type: string
@@ -557,16 +715,11 @@ definitions:
             participant_info:
               type: string
               example: ""
-            forceJoin:
-              type: integer
-              format: int64
-              example: 0
-            sendUpdateNotification:
-              type: integer
-              format: int64
-              example: 0
         CalendarEntryForm:
           type: object
+          required:
+            - start_date
+            - end_date
           properties:
             is_public:
               type: integer
@@ -589,6 +742,14 @@ definitions:
             timeZone:
               type: string
               example: America/Los_Angeles
+            forceJoin:
+              type: integer
+              format: int64
+              example: 0
+            sendUpdateNotification:
+              type: integer
+              format: int64
+              example: 0
             topics:
               type: array
               items:
