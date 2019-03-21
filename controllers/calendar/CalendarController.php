@@ -7,7 +7,6 @@
 
 namespace humhub\modules\rest\controllers\calendar;
 
-use humhub\libs\DbDateValidator;
 use humhub\modules\calendar\models\CalendarEntry;
 use humhub\modules\calendar\models\CalendarEntryParticipant;
 use humhub\modules\calendar\models\forms\CalendarEntryForm;
@@ -18,8 +17,6 @@ use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseContentController;
 use humhub\modules\rest\definitions\CalendarDefinitions;
 use Yii;
-use yii\web\HttpException;
-
 
 class CalendarController extends BaseContentController
 {

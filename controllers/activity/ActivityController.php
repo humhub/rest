@@ -63,6 +63,4 @@ class ActivityController extends BaseController
         }
         return $this->returnPagination($query, $pagination, $results);
     }
-
-
 }

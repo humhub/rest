@@ -12,7 +12,6 @@ use humhub\modules\file\models\File;
 use humhub\modules\rest\components\BaseController;
 use Yii;
 
-
 class FileController extends BaseController
 {
 

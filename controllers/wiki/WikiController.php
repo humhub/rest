@@ -12,7 +12,6 @@ use humhub\modules\rest\components\BaseContentController;
 use humhub\modules\rest\definitions\WikiDefinitions;
 use humhub\modules\wiki\models\WikiPage;
 
-
 class WikiController extends BaseContentController
 {
     public static $moduleId = 'Wiki';

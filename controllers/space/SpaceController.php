@@ -8,7 +8,6 @@
 namespace humhub\modules\rest\controllers\space;
 
 use Colors\RandomColor;
-use humhub\modules\content\components\ContentContainerControllerAccess;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Space;
