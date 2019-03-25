@@ -926,6 +926,465 @@
 			"name": "Wiki",
 			"item": [
 				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get wiki pages by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove wiki pages by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Page",
+					"item": [
+						{
+							"name": "Get wiki page by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new wiki page",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"WikiPage\": {\n\t\t\"title\": \"First api page\",\n\t\t\"is_home\": 1,\n\t\t\"admin_only\": 1,\n\t\t\"is_category\": 1,\n\t\t\"parent_page_id\": 0\n\t},\n\t\"WikiPageRevision\": {\n\t\t\"content\": \"test content\"\n\t},\n\t\"PageEditForm\": {\n\t\t\"isPublic\": 1,\n\t\t\"topics\": [\n\t\t\t17\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update wiki page",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"WikiPage\": {\n\t\t\"title\": \"First api page upd\",\n\t\t\"is_home\": 0,\n\t\t\"admin_only\": 0,\n\t\t\"is_category\": 0,\n\t\t\"parent_page_id\": 0\n\t},\n\t\"WikiPageRevision\": {\n\t\t\"content\": \"test content updated\"\n\t},\n\t\"PageEditForm\": {\n\t\t\"isPublic\": 1,\n\t\t\"topics\": [\n\t\t\t17,\n\t\t\t13\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove wiki page by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Page management",
+					"item": [
+						{
+							"name": "Change page index",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target_id\": 5,\n\t\"index\": 1\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10/change-index",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10",
+										"change-index"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Move wiki page",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target\": \"c1c1c7dc-8197-471b-b5fe-2c12b183623a\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10/move",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10",
+										"move"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Revision",
+					"item": [
+						{
+							"name": "Get wiki page revisions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10/revisions",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10",
+										"revisions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get revision by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/revision/9",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"revision",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revert page by revision",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/revision/10/revert",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"revision",
+										"10",
+										"revert"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Get wiki pages",
 					"request": {
 						"method": "GET",
@@ -1407,14 +1866,14 @@
 										"description": "admin",
 										"key": "Authorization",
 										"type": "text",
-										"value": "{{AUTHORIZATION_ADMIN}}",
-										"disabled": true
+										"value": "{{AUTHORIZATION_ADMIN}}"
 									},
 									{
 										"description": "test",
 										"key": "Authorization",
 										"type": "text",
-										"value": "{{AUTHORIZATION_TEST}}"
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
 									}
 								],
 								"body": {
@@ -1422,14 +1881,14 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{API_URL}}/tasks/container/19",
+									"raw": "{{API_URL}}/tasks/container/2",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"tasks",
 										"container",
-										"19"
+										"2"
 									]
 								}
 							},
