@@ -8,6 +8,7 @@
 namespace humhub\modules\rest\definitions;
 use humhub\modules\wiki\models\WikiPage;
 use humhub\modules\wiki\models\WikiPageRevision;
+use yii\helpers\Url;
 
 
 /**
@@ -26,6 +27,7 @@ class WikiDefinitions
             'admin_only' => $page->admin_only,
             'is_category' => $page->is_category,
             'parent_page_id' => $page->parent_page_id,
+            'permalink' => static::getPagePermalink($page),
             'latest_revision' => static::getWikiPageRevision($page->latestRevision),
             'content' => ContentDefinitions::getContent($page->content)
         ];
@@ -41,6 +43,11 @@ class WikiDefinitions
             'created_by' => UserDefinitions::getUserShort($revision->author),
             'content' => $revision->content,
         ];
+    }
+
+    public static function getPagePermalink(WikiPage $page)
+    {
+        return Url::to(['/content/perma', 'id' => $page->content->id], true);
     }
 
 }

@@ -122,11 +122,26 @@ class Events
     {
         if (Yii::$app->getModule('wiki')) {
             Yii::$app->urlManager->addRules([
-                // Temp
+
                 ['pattern' => 'api/v1/wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/wiki/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
                 ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
+                ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/delete-by-container', 'verb' => 'DELETE'],
+
+                //Wiki Page CRUD
+                ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/create', 'verb' => 'POST'],
+                ['pattern' => 'api/v1/wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/update', 'verb' => 'PUT'],
+                ['pattern' => 'api/v1/wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
+
+                //Wiki Page Management
+                ['pattern' => 'api/v1/wiki/page/<id:\d+>/change-index', 'route' => 'rest/wiki/wiki/change-index', 'verb' => 'PATCH'],
+                ['pattern' => 'api/v1/wiki/page/<id:\d+>/move', 'route' => 'rest/wiki/wiki/move', 'verb' => 'PATCH'],
+
+                //Wiki Page Revision
+                ['pattern' => 'api/v1/wiki/page/<pageId:\d+>/revisions', 'route' => 'rest/wiki/revision/index', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'api/v1/wiki/revision/<id:\d+>', 'route' => 'rest/wiki/revision/view', 'verb' => 'GET'],
+                ['pattern' => 'api/v1/wiki/revision/<id:\d+>/revert', 'route' => 'rest/wiki/revision/revert', 'verb' => 'PATCH'],
+
             ], true);
         } else {
             static::addModuleNotFoundRoutes('wiki');
