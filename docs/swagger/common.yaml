@@ -52,3 +52,16 @@ components:
         last:
           type: string
           example: "{endpoint_path}?page=8&per-page=10"
+
+definitions:
+  ContainerNotFound:
+    description: Not found
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Content container not found!

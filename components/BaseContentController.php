@@ -28,8 +28,6 @@ use yii\web\UploadedFile;
  */
 abstract class BaseContentController extends BaseController
 {
-    public static $moduleId = '';
-
     /**
      * @return string returns the class name of the active record
      */
@@ -263,13 +261,6 @@ abstract class BaseContentController extends BaseController
         } else {
             return $this->returnError(500, 'Internal error while removing file.');
         }
-
-    }
-
-    public function actionNotSupported()
-    {
-        $module = static::$moduleId;
-        return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
     }
 
     /**********************************************************************************

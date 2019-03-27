@@ -5,7 +5,7 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\rest\controllers\task;
+namespace humhub\modules\rest\controllers\tasks;
 
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
@@ -18,9 +18,9 @@ use humhub\modules\tasks\permissions\CreateTask;
 use humhub\modules\tasks\permissions\ManageTasks;
 use Yii;
 
-class TaskController extends BaseContentController
+class TasksController extends BaseContentController
 {
-    public static $moduleId = 'Tasks';
+    public static $moduleId = 'tasks';
 
     /**
      * {@inheritdoc}

@@ -2519,6 +2519,596 @@
 			]
 		},
 		{
+			"name": "cFiles",
+			"item": [
+				{
+					"name": "Folder",
+					"item": [
+						{
+							"name": "Get folders list by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folders/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folders",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get folder by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folder/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folder",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new folder",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target_id\": 14,\n\t\"Folder\": {\n\t\t\"title\": \"API sub foldersss\",\n\t\t\"description\": \"API sub directory\",\n\t\t\"visibility\": 0\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folders/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folders",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update folder",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Folder\": {\n\t\t\"title\": \"API test folder upd\",\n\t\t\"description\": \"API directory\",\n\t\t\"visibility\": 0\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folder/7",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folder",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete folder",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folder/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folder",
+										"19"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "File",
+					"item": [
+						{
+							"name": "Get files by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/files/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"files",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get file by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/file/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"file",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload new files",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "folder_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/files/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"files",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete file",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/file/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"file",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Items management",
+					"item": [
+						{
+							"name": "Delete items",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"selection\": [\n\t\t\"folder_17\",\n\t\t\"file_5\",\n\t\t\"file_4\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/delete",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Move items",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"source_id\": 3,\n\t\"MoveForm\": {\n\t\t\"destId\": 4\n\t},\n\t\"selection\": [\n\t\t\"folder_5\",\n\t\t\"file_1\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/move",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"move"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Make items as public",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"selection\": [\n\t\t\"folder_5\",\n\t\t\"file_1\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/make-public",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"make-public"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Make items as private",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"selection\": [\n\t\t\"folder_5\",\n\t\t\"file_1\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/make-private",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"make-private"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e45a3cc2-61fa-4658-8608-38085ccd50e2",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "88d91a6a-f759-4d9f-89f1-83d5344bb1f0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
 			"name": "EAN Delete User",
 			"request": {
 				"method": "DELETE",

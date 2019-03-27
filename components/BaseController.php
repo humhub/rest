@@ -25,6 +25,8 @@ use yii\web\HttpException;
  */
 abstract class BaseController extends Controller
 {
+    public static $moduleId = '';
+
     /**
      * @inheritdoc
      */
@@ -43,6 +45,12 @@ abstract class BaseController extends Controller
         Yii::$app->user->login(User::findOne(['id' => $user->id]));
 
         return parent::beforeAction($action);
+    }
+
+    public function actionNotSupported()
+    {
+        $module = static::$moduleId;
+        return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
     }
 
     protected function authWithJwt()
