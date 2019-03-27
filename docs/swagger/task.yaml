@@ -535,7 +535,7 @@ paths:
                 type: string
                 example: Internal error while saving file.
 
-  '/tasks/task/{$id}/remove-file/{fileId}':
+  '/tasks/task/{id}/remove-file/{fileId}':
     delete:
       tags:
         - Task management

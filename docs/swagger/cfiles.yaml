@@ -17,7 +17,7 @@ paths:
 # Begin cFiles Directory endpoints
 #-----------------------------------------------------------------------------------------------------------------------
 
-  '/cfiels/folders/container/{containerId}':
+  '/cfiels/folders/container/{id}':
     get:
       tags:
         - Directory
@@ -28,7 +28,7 @@ paths:
         - application/xml
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -58,7 +58,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -199,7 +199,7 @@ paths:
 # Begin cFiles File endpoints
 #-----------------------------------------------------------------------------------------------------------------------
 
-  '/cfiels/files/container/{containerId}':
+  '/cfiels/files/container/{id}':
     get:
       tags:
         - File
@@ -210,7 +210,7 @@ paths:
         - application/xml
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -240,7 +240,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -358,7 +358,7 @@ paths:
 # Begin cFiles items management
 #-----------------------------------------------------------------------------------------------------------------------
 
-  '/cfiels/items/container/{containerId}/make-public':
+  '/cfiels/items/container/{id}/make-public':
     patch:
       tags:
         - Items Management
@@ -368,7 +368,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -411,7 +411,7 @@ paths:
                 type: string
                 example: Internal error while setting public visibility for cFiles item!
 
-  '/cfiels/items/container/{containerId}/make-private':
+  '/cfiels/items/container/{id}/make-private':
     patch:
       tags:
         - Items Management
@@ -421,7 +421,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -464,7 +464,7 @@ paths:
                 type: string
                 example: Internal error while setting private visibility for cFiles item!
 
-  '/cfiels/items/container/{containerId}/move':
+  '/cfiels/items/container/{id}/move':
     post:
       tags:
         - Items Management
@@ -474,7 +474,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer
@@ -509,7 +509,7 @@ paths:
                 type: string
                 example: Internal error while move cFiles items!
 
-  '/cfiels/items/container/{containerId}/delete':
+  '/cfiels/items/container/{id}/delete':
     delete:
       tags:
         - Items Management
@@ -519,7 +519,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: containerId
+          name: id
           description: The id of content container
           required: true
           type: integer

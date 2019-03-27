@@ -435,7 +435,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
+        - name: pageId
           in: path
           description: ID of wiki page
           required: true

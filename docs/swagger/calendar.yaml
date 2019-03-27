@@ -378,7 +378,7 @@ paths:
                 type: string
                 example: Internal error while saving file.
 
-  '/calendar/entry/{$id}remove-file/{fileId}':
+  '/calendar/entry/{id}remove-file/{fileId}':
     delete:
       tags:
         - Calendar entry management
