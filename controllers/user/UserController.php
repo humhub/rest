@@ -9,11 +9,18 @@ namespace humhub\modules\rest\controllers\user;
 
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\user\models\forms\Login;
 use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
 use Yii;
 use yii\web\HttpException;
+
+use humhub\modules\user\authclient\AuthClientHelpers;
+use humhub\modules\user\authclient\interfaces\ApprovalBypass;
+use humhub\modules\user\authclient\BaseFormAuth;
+use humhub\modules\user\authclient\AuthAction;
+use yii\authclient\BaseClient;
 
 
 /**
@@ -182,6 +189,57 @@ class UserController extends BaseController
 
         return $this->returnError(500, 'Internal error while soft delete user!');
     }
+    
+    public function actionLogin(){
+        
+        // Login Form Handling
+        $login = new Login;
+        
+        if ($login->load(Yii::$app->request->post()) && $login->validate()) {
+            return $this->onAuthSuccess($login->authClient);
+        }else{
+            return $this->returnError(400, Yii::t('UserModule.base', 'User validation failed.'));
+        }
+
+        return $this->returnError(500, 'Internal error while save user!');
+    }
+    
+    public function onAuthSuccess(BaseClient $authClient)
+    {
+         
+        $attributes = $authClient->getUserAttributes();
+
+        
+        // Login existing user 
+        $user = AuthClientHelpers::getUserByAuthClient($authClient);
+       
+        if ($user !== null) {
+            return $this->actionView($user->id);
+        }
+
+        if (!$authClient instanceof ApprovalBypass && !Yii::$app->getModule('user')->settings->get('auth.anonymousRegistration')) {
+            return $this->returnError(404, Yii::t('UserModule.base', "You're not registered."));
+        }
+
+        // Check if E-Mail is given
+        if (!isset($attributes['email']) && Yii::$app->getModule('user')->emailRequired) {
+           return $this->returnError(400, Yii::t('UserModule.base', 'Missing E-Mail Attribute from AuthClient.'));
+        }
+
+        if (!isset($attributes['id'])) {
+           return $this->returnError(400, Yii::t('UserModule.base', 'Missing ID AuthClient Attribute from AuthClient.'));
+        }
+
+        // Check if e-mail is already taken
+        if (isset($attributes['email']) && User::findOne(['email' => $attributes['email']]) !== null) {
+            return $this->returnError(400, Yii::t('UserModule.base', 'User with the same email already exists but isn\'t linked to you. Login using your email first to link it.'));
+        }
+        
+        return $this->returnError(400, Yii::t('UserModule.base', "Please check your data it is a bad request"));
+
+        
+    }
+    
 
 
 }
