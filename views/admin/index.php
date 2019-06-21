@@ -25,6 +25,9 @@ use yii\helpers\Html;
         <?= $form->field($model, 'jwtExpire'); ?>
 
         <br />
+        <?= $form->field($model, 'enableBasicAuth')->checkbox(); ?>
+
+        <br />
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>

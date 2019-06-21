@@ -46,7 +46,7 @@ class ConfigureForm extends Model
             'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
             'jwtExpire' => 'JWT Token Expiration',
             'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
-            'enableBasicAuth' => 'Allow Basic Authentication'
+            'enableBasicAuth' => 'Allow HTTP Basic Authentication'
         ];
     }
 
