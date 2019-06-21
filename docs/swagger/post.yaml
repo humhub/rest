@@ -65,9 +65,9 @@ paths:
           schema:
             type: object
             required:
-              - post
+              - data
             properties:
-              post:
+              data:
                 $ref: "#/definitions/Post"
       responses:
         '200':
