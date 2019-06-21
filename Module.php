@@ -8,8 +8,10 @@
 namespace humhub\modules\rest;
 
 use humhub\components\UrlManager;
+use humhub\modules\rest\models\ConfigureForm;
 use Yii;
 use yii\helpers\Url;
+use yii\web\HttpException;
 use yii\web\JsonParser;
 
 class Module extends \humhub\components\Module
@@ -41,4 +43,5 @@ class Module extends \humhub\components\Module
     {
         return Url::to(['/rest/admin/index']);
     }
+
 }

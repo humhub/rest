@@ -11,6 +11,7 @@ use Exception;
 use Firebase\JWT\JWT;
 use humhub\components\Controller;
 use humhub\modules\rest\models\ConfigureForm;
+use humhub\modules\rest\Module;
 use humhub\modules\user\models\User;
 use Yii;
 use yii\data\Pagination;
@@ -32,37 +33,63 @@ abstract class BaseController extends Controller
      */
     public $enableCsrfValidation = false;
 
+
     /**
      * @inheritdoc
      */
     public function beforeAction($action)
     {
         $user = $this->authWithJwt();
-        if (! $user) {
-            throw new HttpException('401', 'Invalid Token!');
+
+        if ($user === null) {
+            throw new HttpException('401', 'Invalid token!');
         }
 
-        Yii::$app->user->login(User::findOne(['id' => $user->id]));
+        if (!$this->isUserEnabled($user)) {
+            throw new HttpException('401', 'Invalid user!');
+        }
+
+        Yii::$app->user->login($user);
 
         return parent::beforeAction($action);
     }
 
+
+    /**
+     * Not supported
+     *
+     * @return array
+     */
     public function actionNotSupported()
     {
         $module = static::$moduleId;
         return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
     }
 
-    protected function authWithJwt()
+
+    /**
+     * Authentication using JWT Bearer Header
+     *
+     * @return User|null
+     * @throws HttpException
+     */
+    private function authWithJwt()
     {
         $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
 
+        /** @var Module $module */
+        $module = Yii::$app->getModule('rest');
+
         if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
             $token = $matches[1];
-            try{
-                $valid_data = JWT::decode($token, $this->getApiKey(), ['HS512']);
-                return $valid_data->data;
-            }catch(Exception $e){
+            try {
+                $validData = JWT::decode($token, ConfigureForm::getInstance()->jwtKey, ['HS512']);
+
+                if (!empty($validData->uid)) {
+                    return User::find()->active()->andWhere(['user.id' => $validData->uid])->one();
+                }
+
+            } catch (Exception $e) {
                 throw new HttpException(401, $e->getMessage());
             }
         }
@@ -70,23 +97,30 @@ abstract class BaseController extends Controller
         return null;
     }
 
+
     /**
-     * Returns the configured API key
+     * Checks if users is allowed to use the Rest API
      *
-     * @return string the API key
-     * @throws HttpException when no api key is configured
+     * @param User $user
+     * @return bool
      */
-    protected function getApiKey()
+    private function isUserEnabled(User $user)
     {
+
         $config = new ConfigureForm();
         $config->loadSettings();
 
-        if (empty($config->apiKey)) {
-            throw new HttpException('404', 'API disabled - No API KEY configured.');
+        if (!empty($config->enabledForAllUsers)) {
+            return true;
         }
 
-        return $config->apiKey;
+        if (in_array($user->guid, (array)$config->enabledUsers)) {
+            return true;
+        }
+
+        return false;
     }
+
 
     /**
      * Handles pagination
@@ -97,8 +131,8 @@ abstract class BaseController extends Controller
      */
     protected function handlePagination(ActiveQuery $query, $limit = 100)
     {
-        $limit = (int) Yii::$app->request->get('limit', $limit);
-        $page = (int) Yii::$app->request->get('page', 1);
+        $limit = (int)Yii::$app->request->get('limit', $limit);
+        $page = (int)Yii::$app->request->get('page', 1);
 
         if ($limit > 100) {
             $limit = 100;
@@ -117,6 +151,15 @@ abstract class BaseController extends Controller
         return $pagination;
     }
 
+
+    /**
+     * Generates pagination response
+     *
+     * @param ActiveQuery $query
+     * @param Pagination $pagination
+     * @param $data array
+     * @return array
+     */
     protected function returnPagination(ActiveQuery $query, Pagination $pagination, $data)
     {
         return [
@@ -128,6 +171,15 @@ abstract class BaseController extends Controller
         ];
     }
 
+
+    /**
+     * Generates error response
+     *
+     * @param int $statusCode
+     * @param string $message
+     * @param array $additional
+     * @return array
+     */
     protected function returnError($statusCode = 400, $message = 'Invalid request', $additional = [])
     {
         Yii::$app->response->statusCode = $statusCode;
@@ -135,6 +187,14 @@ abstract class BaseController extends Controller
     }
 
 
+    /**
+     * Generates success response
+     *
+     * @param string $message
+     * @param int $statusCode
+     * @param array $additional
+     * @return array
+     */
     protected function returnSuccess($message = 'Request successful', $statusCode = 200, $additional = [])
     {
         Yii::$app->response->statusCode = $statusCode;

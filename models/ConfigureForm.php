@@ -7,12 +7,19 @@
 
 namespace humhub\modules\rest\models;
 
+use humhub\modules\rest\Module;
 use Yii;
 
 class ConfigureForm extends \yii\base\Model
 {
 
-    public $apiKey;
+    public $enabledForAllUsers;
+
+    public $enabledUsers;
+
+    public $jwtKey;
+
+    public $jwtExpire;
 
     /**
      * @inheritdoc
@@ -20,7 +27,10 @@ class ConfigureForm extends \yii\base\Model
     public function rules()
     {
         return [
-            [['apiKey'], 'string', 'min' => 10, 'max' => 200]
+            [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
+            [['enabledUsers'], 'safe'],
+            [['enabledForAllUsers'], 'boolean'],
+            [['jwtExpire'], 'integer']
         ];
     }
 
@@ -30,7 +40,9 @@ class ConfigureForm extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'apiKey' => Yii::t('RestModule.base', 'API key'),
+            'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
+            'jwtExpire' => 'JWT Token Expiration',
+            'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
         ];
     }
 
@@ -39,21 +51,53 @@ class ConfigureForm extends \yii\base\Model
      */
     public function attributeHints()
     {
-        return [];
+        return [
+            'jwtKey' => 'If empty, a random key is generated automatically.',
+            'jwtExpire' => 'in seconds. 0 for no JWT token expiration.',
+            'enabledForAllUsers' => 'Please note, it is not recommended to enable the API for all users yet.'
+        ];
     }
 
     public function loadSettings()
     {
-        $settings = Yii::$app->getModule('rest')->settings;
-        $this->apiKey = $settings->get('apiKey');
+        /** @var Module $module */
+        $module = Yii::$app->getModule('rest');
+
+
+        $settings = $module->settings;
+
+        $this->jwtKey = $settings->get('jwtKey');
+        if (empty($this->jwtKey)) {
+            $settings->set('jwtKey', Yii::$app->security->generateRandomString(86));
+            $this->jwtKey = $settings->getSerialized('jwtKey');
+        }
+
+        $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
+        $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
+        $this->jwtExpire = (int) $settings->get('jwtExpire');
+
         return true;
     }
 
     public function saveSettings()
     {
-        $settings = Yii::$app->getModule('rest')->settings;
-        $settings->set('apiKey', $this->apiKey);
+        /** @var Module $module */
+        $module = Yii::$app->getModule('rest');
+
+        $module->settings->set('jwtExpire', (int) $this->jwtExpire);
+        $module->settings->set('jwtKey', $this->jwtKey);
+        $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
+        $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
+
         return true;
+    }
+
+    public static function getInstance()
+    {
+        $config = new static;
+        $config->loadSettings();
+
+        return $config;
     }
 
 }

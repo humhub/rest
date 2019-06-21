@@ -39,7 +39,7 @@ paths:
             properties:
               username:
                 type: string
-                description: Your email address
+                description: Your username or email address
                 example: username@example.com
               password:
                 type: string
