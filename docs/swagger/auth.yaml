@@ -1,0 +1,75 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub auth module API reference.
+
+  version: 1.0.0
+  title: HumHub - Auth API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: Authentication
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login in the application
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: Credentials for login in app
+          required: true
+          schema:
+            type: object
+            required:
+              - username
+              - password
+            properties:
+              username:
+                type: string
+                description: Your email address
+                example: username@example.com
+              password:
+                type: string
+                example: password
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                example: 200
+              message:
+                type: string
+                expample: Success
+              auth_token:
+                type: string
+                example: eyJ0eXAiOiJKV1QiLC .... tE_7_rLSX3vA
+              expired_at:
+                type: string
+                expample: 1552305077
+        400:
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: Wrong username or password

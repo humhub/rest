@@ -6,11 +6,10 @@
  */
 
 namespace humhub\modules\rest\definitions;
+
 use humhub\components\ActiveRecord;
-use humhub\modules\comment\models\Comment;
 use humhub\modules\content\models\Content;
 use humhub\modules\like\models\Like;
-
 
 /**
  * Class CommentDefinitions

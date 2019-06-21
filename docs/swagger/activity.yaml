@@ -1,0 +1,168 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub activity module API reference.
+
+  version: 1.0.0
+  title: HumHub - Activity API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: Activity
+    description: API to access activity information.
+    externalDocs:
+      description: Find out more
+      url: 'http://docs.humhub.org'
+paths:
+  /activity:
+    get:
+      tags:
+        - Activity
+      summary: Find all global activity
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Activity'
+
+  '/activity/{id}':
+    get:
+      tags:
+        - Activity
+      summary: Get activity by id
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of activity
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Activity"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Activity not found
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin From container
+#-----------------------------------------------------------------------------------------------------------------------
+  /activity/container/{containerId}:
+    get:
+      tags:
+        - Activity
+      summary: Get all activities by container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+        - in: path
+          name: containerId
+          description: The id of container
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Activity'
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+  Activity:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 32
+      class:
+        type: string
+        example: humhub\modules\space\activities\MemberAdded
+      content:
+        $ref: "#/definitions/ActivityContent"
+      originator:
+        $ref: "user.yaml#/definitions/UserShort"
+      source:
+        $ref: "space.yaml#/definitions/SpaceShort"
+      createdAt:
+        type: string
+        example: 2019-03-05 15:35:02
+
+  ActivityContent:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 12
+      guid:
+        type: string
+        example: 3c66dc40-6157-4b9e-a3cd-b2bdba69614d
+      pinned:
+        type: boolean
+        example: false
+      archived:
+        type: boolean
+        example: false
+      output:
+        type: string
+        example: <strong>John Smith</strong> joined the space <strong>Welcome Space</strong>

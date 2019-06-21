@@ -7,6 +7,8 @@
 
 namespace humhub\modules\rest\components;
 
+use Exception;
+use Firebase\JWT\JWT;
 use humhub\components\Controller;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\user\models\User;
@@ -23,51 +25,49 @@ use yii\web\HttpException;
  */
 abstract class BaseController extends Controller
 {
+    public static $moduleId = '';
+
     /**
      * @inheritdoc
      */
     public $enableCsrfValidation = false;
-
 
     /**
      * @inheritdoc
      */
     public function beforeAction($action)
     {
-        if (!$this->auth()) {
-            throw new HttpException('401', 'Invalid API Key!');
+        $user = $this->authWithJwt();
+        if (! $user) {
+            throw new HttpException('401', 'Invalid Token!');
         }
 
-        Yii::$app->user->login(User::findOne(['id' => 1]));
+        Yii::$app->user->login(User::findOne(['id' => $user->id]));
 
         return parent::beforeAction($action);
     }
 
-
-    /**
-     * Simple authentication using the specified API key
-     *
-     * @return bool authenticated
-     * @throws HttpException
-     */
-    protected function auth()
+    public function actionNotSupported()
     {
-        $apiKey = $this->getApiKey();
+        $module = static::$moduleId;
+        return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
+    }
 
+    protected function authWithJwt()
+    {
         $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
 
-        // HttpBearer
-        if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches) && $matches[1] == $apiKey) {
-            return true;
+        if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            $token = $matches[1];
+            try{
+                $valid_data = JWT::decode($token, $this->getApiKey(), ['HS512']);
+                return $valid_data->data;
+            }catch(Exception $e){
+                throw new HttpException(401, $e->getMessage());
+            }
         }
 
-        // Api key as request parameter
-        $keyParam = Yii::$app->request->get('key', Yii::$app->request->post('key'));
-        if (!empty($keyParam) && $keyParam == $apiKey) {
-            return true;
-        }
-
-        return false;
+        return null;
     }
 
     /**
@@ -91,11 +91,13 @@ abstract class BaseController extends Controller
     /**
      * Handles pagination
      *
+     * @param ActiveQuery $query
+     * @param int $limit
      * @return Pagination the pagination
      */
-    protected function handlePagination(ActiveQuery $query)
+    protected function handlePagination(ActiveQuery $query, $limit = 100)
     {
-        $limit = (int) Yii::$app->request->get('limit', 100);
+        $limit = (int) Yii::$app->request->get('limit', $limit);
         $page = (int) Yii::$app->request->get('page', 1);
 
         if ($limit > 100) {
@@ -119,7 +121,9 @@ abstract class BaseController extends Controller
     {
         return [
             'total' => $pagination->totalCount,
-            'page' => 1,
+            'page' => $pagination->getPage() + 1,
+            'pages' => $pagination->getPageCount(),
+            'links' => $pagination->getLinks(),
             'results' => $data,
         ];
     }

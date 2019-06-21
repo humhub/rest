@@ -59,6 +59,10 @@ paths:
                 $ref: 'common.yaml#/components/properties/totalProperty'
               page:
                 $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
               results:
                 type: array
                 items:
@@ -90,6 +94,10 @@ paths:
                 $ref: 'common.yaml#/components/properties/totalProperty'
               page:
                 $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
               results:
                 type: array
                 items:

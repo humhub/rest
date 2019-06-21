@@ -1,0 +1,706 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub cFiles module API reference.
+
+  version: 1.0.0
+  title: HumHub - cFiles API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+
+paths:
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin cFiles Directory endpoints
+#-----------------------------------------------------------------------------------------------------------------------
+
+  '/cfiels/folders/container/{id}':
+    get:
+      tags:
+        - Directory
+      summary: Find all folders by content container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Directory'
+
+    post:
+      tags:
+        - Directory
+      summary: Create new directory
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - $ref: "#/definitions/DirectoryParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Directory"
+        404:
+          $ref: "common.yaml#/definitions/ContainerNotFound"
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while save valid directory!
+
+  '/cfiels/folder/{id}':
+    get:
+      tags:
+        - Directory
+      summary: Get directory by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of directory
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Directory"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Requested content not found!
+
+    put:
+      tags:
+        - Directory
+      summary: Update directory by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the directory
+          required: true
+          type: integer
+        - $ref: "#/definitions/DirectoryParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Directory"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: cFiles folder not found!
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while update cFiles folder!
+
+    delete:
+      tags:
+        - Directory
+      summary: Deletes a directory by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of directory
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Selected items are successfully deleted!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                description: Content record not found!
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin cFiles File endpoints
+#-----------------------------------------------------------------------------------------------------------------------
+
+  '/cfiels/files/container/{id}':
+    get:
+      tags:
+        - File
+      summary: Find all files by content container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/File'
+
+    post:
+      tags:
+        - File
+      summary: Upload files
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - in: formData
+          name: folder_id
+          required: true
+          type: integer
+          format: int64
+          description: Id of directory
+        - in: formData
+          name: files
+          type: array
+          required: true
+          description: The files to upload.
+          items:
+            type: file
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Files successfully uploaded!
+        400:
+          description: Bad Request
+        404:
+          $ref: "common.yaml#/definitions/ContainerNotFound"
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while save valid directory!
+
+  '/cfiels/file/{id}':
+    get:
+      tags:
+        - File
+      summary: Get file info by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of file
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/File"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Requested content not found!
+
+    delete:
+      tags:
+        - File
+      summary: Deletes a file by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of file
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Successfully deleted!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                description: Content record not found!
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin cFiles items management
+#-----------------------------------------------------------------------------------------------------------------------
+
+  '/cfiels/items/container/{id}/make-public':
+    patch:
+      tags:
+        - Items Management
+      summary: Make items public
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Array of items
+          required: true
+          schema:
+            type: object
+            required:
+              - selection
+            properties:
+              selection:
+                $ref: "#/definitions/Selection"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Items successfully marked public!
+        404:
+          $ref: "common.yaml#/definitions/ContainerNotFound"
+        400:
+          description: Bad Request
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while setting public visibility for cFiles item!
+
+  '/cfiels/items/container/{id}/make-private':
+    patch:
+      tags:
+        - Items Management
+      summary: Make items private
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Array of items
+          required: true
+          schema:
+            type: object
+            required:
+              - selection
+            properties:
+              selection:
+                $ref: "#/definitions/Selection"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Items successfully marked private!
+        404:
+          $ref: "common.yaml#/definitions/ContainerNotFound"
+        400:
+          description: Bad Request
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while setting private visibility for cFiles item!
+
+  '/cfiels/items/container/{id}/move':
+    post:
+      tags:
+        - Items Management
+      summary: Move items to another folder
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - $ref: "#/definitions/MoveFormParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Items successfully moved.
+        404:
+          $ref: "common.yaml#/definitions/ContainerNotFound"
+        400:
+          description: Bad Request
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while move cFiles items!
+
+  '/cfiels/items/container/{id}/delete':
+    delete:
+      tags:
+        - Items Management
+      summary: Delete items from folder
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Array of items
+          required: true
+          schema:
+            type: object
+            required:
+              - selection
+            properties:
+              selection:
+                $ref: "#/definitions/Selection"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Selected items are successfully deleted!
+        404:
+          $ref: "common.yaml#/definitions/ContainerNotFound"
+        400:
+          description: Bad Request
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while deleting cFiles item!
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+
+  DirectoryShort:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 4
+      title:
+        type: string
+        example: "API directory"
+      description:
+        type: string
+        example: "API directory description"
+
+
+  Directory:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 4
+      title:
+        type: string
+        example: "API directory"
+      description:
+        type: string
+        example: "API directory description"
+      parent_folder_id:
+        type: integer
+        format: int64
+        example: 1
+      type:
+        type: string
+        example: null
+      created_at:
+        type: string
+        example: 2019-03-05 15:35:02
+      created_by:
+        $ref: "user.yaml#/definitions/UserShort"
+      content:
+        $ref: "content.yaml#/definitions/Content"
+
+  File:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 4
+      description:
+        type: string
+        example: "API directory description"
+      parent_folder:
+        $ref: "#/definitions/DirectoryShort"
+      created_at:
+        type: string
+        example: 2019-03-05 15:35:02
+      created_by:
+        $ref: "user.yaml#/definitions/UserShort"
+      content:
+        $ref: "content.yaml#/definitions/Content"
+
+  Selection:
+    type: array
+    description: Item id in format {type}_{id}
+    items:
+      type: string
+    example:
+      - folder_4
+      - file_2
+
+  DirectoryParams:
+    in: body
+    name: body
+    required: true
+    description: Directory information
+    schema:
+      type: object
+      required:
+        - target_id
+        - Folder
+      properties:
+        target_id:
+          type: integer
+          format: int64
+          example: 1
+        Folder:
+          type: object
+          required:
+            - title
+          properties:
+            title:
+              type: string
+              example: API folder
+            description:
+              type: string
+              example: API folder description
+            visibility:
+              type: integer
+              format: int64
+              enum: [0,1]
+              description: >
+                Allowed visibility statuses:
+                  * 0 - Private
+                  * 1 - Public
+              example: 1
+
+  MoveFormParams:
+    in: body
+    name: body
+    required: true
+    description: Directory information
+    schema:
+      type: object
+      required:
+        - source_id
+        - MoveForm
+        - selection
+      properties:
+        source_id:
+          type: integer
+          format: int64
+          example: 14
+        MoveForm:
+          type: object
+          required:
+            - destId
+          properties:
+            destId:
+              type: string
+              example: 3
+        selection:
+          $ref: "#/definitions/Selection"

@@ -1,0 +1,181 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub notification module API reference.
+
+  version: 1.0.0
+  title: HumHub - Notification API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: Notification
+    description: API to access notification information.
+    externalDocs:
+      description: Find out more
+      url: 'http://docs.humhub.org'
+paths:
+  /notification:
+    get:
+      tags:
+        - Notification
+      summary: Find all user notifications
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+        - in: query
+          name: excludeFilters
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+            - admin
+            - calendar
+            - task
+            - task_reminder
+            - comments
+            - content_created
+            - like
+            - space_member
+            - followed
+            - mentioned
+          description: Filters to exclude notifications from result.
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Notification'
+
+  '/notification/{id}':
+    get:
+      tags:
+        - Notification
+      summary: Get notification by id
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of notification
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Notification"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Notification not found
+
+  /notification/unseen:
+    get:
+      tags:
+        - Notification
+      summary: Find unseen user notifications
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Notification'
+
+  /notification/mark-as-seen:
+    patch:
+      tags:
+        - Notification
+      summary: Mark all notifications as seen
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: All notifications successfully marked as seen
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+  Notification:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 32
+      class:
+        type: string
+        example: humhub\modules\content\notifications\ContentCreated
+      output:
+        type: string
+        example: <strong>John Smith</strong> created post "Calvin Klein – Between love and madness lies obsession."
+      originator:
+        $ref: "user.yaml#/definitions/UserShort"
+      source:
+        $ref: "post.yaml#/definitions/Post"
+      createdAt:
+        type: string
+        example: 2019-03-05 15:35:02

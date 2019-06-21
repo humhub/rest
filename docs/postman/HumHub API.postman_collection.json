@@ -1,20 +1,3128 @@
 {
 	"info": {
-		"_postman_id": "e9532e74-0b3e-4eab-bfa8-fc38861da36d",
+		"_postman_id": "32a2a07d-642a-4a36-93a9-8bfb254a2c6a",
 		"name": "EAN",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "de9c217c-597d-44e1-90fc-1785af7f4122",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable('AUTHORIZATION_ADMIN', 'Bearer ' + jsonData.auth_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "h5pqjdnq",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/auth/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tester login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "de9c217c-597d-44e1-90fc-1785af7f4122",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable('AUTHORIZATION_TEST', 'Bearer ' + jsonData.auth_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "test@test.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "h5pqjdnq",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}/auth/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activity",
+			"item": [
+				{
+					"name": "Get activity",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/activity",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get activity by container",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/activity/container/2",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"activity",
+								"container",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get activity by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/activity/251",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"activity",
+								"251"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Get notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification"
+							],
+							"query": [
+								{
+									"key": "excludeFilters[0]",
+									"value": "admin",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[1]",
+									"value": "calendar",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[2]",
+									"value": "task",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[3]",
+									"value": "task_reminder",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[4]",
+									"value": "comments",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[5]",
+									"value": "content_created",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[6]",
+									"value": "like",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[7]",
+									"value": "space_member",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[8]",
+									"value": "followed",
+									"disabled": true
+								},
+								{
+									"key": "excludeFilters[9]",
+									"value": "mentioned",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get unseen notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification/unseen",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification",
+								"unseen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get notification by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification/251",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification",
+								"251"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as seen",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/notification/mark-as-seen",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"notification",
+								"mark-as-seen"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Space",
+			"item": [
+				{
+					"name": "Get all spaces",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/space",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get space by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/space/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new space",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Second API space\",\n\t\"description\": \"test description\",\n\t\"visibility\": 1,\n\t\"join_policy\": 1\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/space",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update space by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"First API space upd\",\n\t\"description\": \"test description updated upd\",\n\t\"tags\": \"first, second, third\",\n\t\"color\": \"#eeeeee\",\n\t\"url\": \"first-api-space\",\n\t\"indexUrl\": \"/s/first-api-space23/tasks/list\",\n\t\"indexGuestUrl\": \"/s/first-api-space23/wiki/page\",\n\t\"visibility\": 1,\n\t\"join_policy\": 2,\n\t\"default_content_visibility\": 1\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/space/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete space by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/space/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archive space",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/space/1/archive",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1",
+								"archive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unarchive space",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/space/1/unarchive",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1",
+								"unarchive"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Post",
 			"item": []
+		},
+		{
+			"name": "Topic",
+			"item": [
+				{
+					"name": "Get all topics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"description": "admin",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"description": "test",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get topics by container",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/container/5",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"container",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get topic by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/14",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ef44de1-aa21-4d7c-80a5-032835718365",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"first api topic\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/container/2",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"container",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update topic by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"my topic\"\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/10",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete topic by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}"
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/topic/21",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"topic",
+								"21"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wiki",
+			"item": [
+				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get wiki pages by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove wiki pages by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Page",
+					"item": [
+						{
+							"name": "Get wiki page by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new wiki page",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"WikiPage\": {\n\t\t\"title\": \"First api page\",\n\t\t\"is_home\": 1,\n\t\t\"admin_only\": 1,\n\t\t\"is_category\": 1,\n\t\t\"parent_page_id\": 0\n\t},\n\t\"WikiPageRevision\": {\n\t\t\"content\": \"test content\"\n\t},\n\t\"PageEditForm\": {\n\t\t\"isPublic\": 1,\n\t\t\"topics\": [\n\t\t\t17\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update wiki page",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"WikiPage\": {\n\t\t\"title\": \"First api page upd\",\n\t\t\"is_home\": 0,\n\t\t\"admin_only\": 0,\n\t\t\"is_category\": 0,\n\t\t\"parent_page_id\": 0\n\t},\n\t\"WikiPageRevision\": {\n\t\t\"content\": \"test content updated\"\n\t},\n\t\"PageEditForm\": {\n\t\t\"isPublic\": 1,\n\t\t\"topics\": [\n\t\t\t17,\n\t\t\t13\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove wiki page by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Page management",
+					"item": [
+						{
+							"name": "Change page index",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target_id\": 5,\n\t\"index\": 1\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10/change-index",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10",
+										"change-index"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Move wiki page",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target\": \"c1c1c7dc-8197-471b-b5fe-2c12b183623a\"\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10/move",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10",
+										"move"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Revision",
+					"item": [
+						{
+							"name": "Get wiki page revisions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/page/10/revisions",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"page",
+										"10",
+										"revisions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get revision by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/revision/9",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"revision",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revert page by revision",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/wiki/revision/10/revert",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"wiki",
+										"revision",
+										"10",
+										"revert"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get wiki pages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/wiki",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"wiki"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calendar",
+			"item": [
+				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get calendars entries by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete calendar entries by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/container/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"container",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Calendar entry",
+					"item": [
+						{
+							"name": "Get calendar entry by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create calendar entry",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\",\n\t\t\"color\": \"#6fdbe8\",\n\t\t\"all_day\": 1,\n\t\t\"participation_mode\": 2,\n\t\t\"max_participants\": \"\",\n\t\t\"allow_decline\": 1,\n\t\t\"allow_maybe\": 1,\n\t\t\"participant_info\": \"\"\n\t},\n\t\"CalendarEntryForm\": {\n\t\t\"is_public\": 0,\n\t\t\"start_date\": \"2019-03-19\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"forceJoin\": 1,\n\t\t\"topics\": \"\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update calendar entry by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"CalendarEntry\": {\n\t\t\"title\": \"test api calendar entry\",\n\t\t\"description\": \"test api description\",\n\t\t\"color\": \"#6fdbe8\",\n\t\t\"all_day\": 1,\n\t\t\"participation_mode\": 2,\n\t\t\"max_participants\": \"\",\n\t\t\"allow_decline\": 1,\n\t\t\"allow_maybe\": 1,\n\t\t\"participant_info\": \"\"\n\t},\n\t\"CalendarEntryForm\": {\n\t\t\"is_public\": 0,\n\t\t\"start_date\": \"2019-03-19\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"forceJoin\": 1,\n\t\t\"topics\": \"\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/60",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"60"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete calendar entry by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/7",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"7"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Partisipation",
+					"item": [
+						{
+							"name": "Change participation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"type\": 3\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/2/respond",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"2",
+										"respond"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Calendar entry management",
+					"item": [
+						{
+							"name": "Upload files to calendar entry",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/9/upload-files",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"9",
+										"upload-files"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove file from calendar entry",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/calendar/entry/9/remove-file/23",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"calendar",
+										"entry",
+										"9",
+										"remove-file",
+										"23"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get all calendars entries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/calendar",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"calendar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get tasks by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete tasks by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Task",
+					"item": [
+						{
+							"name": "Get task by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new task",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Task\": {\n\t\t\"title\": \"First api task\",\n\t\t\"description\": \"First api task for test space 2\",\n\t\t\"task_list_id\": null,\n\t\t\"scheduling\": 1,\n\t\t\"all_day\": 0,\n\t\t\"selectedReminders\": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t8\n\t\t],\n\t\t\"cal_mode\": 1,\n\t\t\"assignedUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"responsibleUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"review\": 1\n\t},\n\t\"TaskForm\": {\n\t\t\"is_public\": 1,\n\t\t\"start_date\": \"2019-03-29\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"newItems\": [\n\t\t\t\"first\",\n\t\t\t\"second\",\n\t\t\t\"third\"\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update task by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Task\": {\n\t\t\"title\": \"First api task upd\",\n\t\t\"description\": \"First api task description\",\n\t\t\"task_list_id\": null,\n\t\t\"scheduling\": 1,\n\t\t\"all_day\": 1,\n\t\t\"selectedReminders\": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t8\n\t\t],\n\t\t\"cal_mode\": 1,\n\t\t\"assignedUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"responsibleUsers\": [\n\t\t\t\"ad82fbfa-9621-489f-993a-0cf6d8be5747\"\t\n\t\t],\n\t\t\"review\": 1\n\t},\n\t\"TaskForm\": {\n\t\t\"is_public\": 1,\n\t\t\"start_date\": \"2019-03-29\",\n\t\t\"start_time\": \"10:00\",\n\t\t\"end_date\": \"2019-03-31\",\n\t\t\"end_time\": \"19:30\",\n\t\t\"timeZone\": \"Europe/Helsinki\",\n\t\t\"newItems\": [\n\t\t\t\"first\",\n\t\t\t\"second\",\n\t\t\t\"third\"\n\t\t]\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete task by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/14",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"14"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Task List",
+					"item": [
+						{
+							"name": "Get task lists by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/lists/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"lists",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get task list by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/list/25",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"list",
+										"25"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new task list",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"TaskList\": {\n\t\t\"name\": \"First api task list\",\n\t\t\"color\": \"#7b9102\"\n\t},\n\t\"TaskListSettings\": {\n\t\t\"hide_if_completed\": 0\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/lists/container/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"lists",
+										"container",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update task list by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"TaskList\": {\n\t\t\"name\": \"First api task list\",\n\t\t\"color\": \"#7b9102\"\n\t},\n\t\"TaskListSettings\": {\n\t\t\"hide_if_completed\": 1\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/list/48",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"list",
+										"48"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete task list by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/list/37",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"list",
+										"37"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Task management",
+					"item": [
+						{
+							"name": "Revert task",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/21/revert",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"21",
+										"revert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload files to task",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29/upload-files",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29",
+										"upload-files"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove file from task",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/29/remove-file/20",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"29",
+										"remove-file",
+										"20"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change task status",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"status\": 5\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/tasks/task/21/processed",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"task",
+										"21",
+										"processed"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get all tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/tasks",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cFiles",
+			"item": [
+				{
+					"name": "Folder",
+					"item": [
+						{
+							"name": "Get folders list by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folders/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folders",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get folder by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folder/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folder",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new folder",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target_id\": 14,\n\t\"Folder\": {\n\t\t\"title\": \"API sub foldersss\",\n\t\t\"description\": \"API sub directory\",\n\t\t\"visibility\": 0\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folders/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folders",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update folder",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Folder\": {\n\t\t\"title\": \"API test folder upd\",\n\t\t\"description\": \"API directory\",\n\t\t\"visibility\": 0\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folder/7",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folder",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete folder",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/folder/19",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"folder",
+										"19"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "File",
+					"item": [
+						{
+							"name": "Get files by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/files/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"files",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get file by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/file/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"file",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload new files",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "folder_id",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "files[]",
+											"type": "file",
+											"src": ""
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/files/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"files",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete file",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/file/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"file",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Items management",
+					"item": [
+						{
+							"name": "Delete items",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"selection\": [\n\t\t\"folder_17\",\n\t\t\"file_5\",\n\t\t\"file_4\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/delete",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Move items",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"source_id\": 3,\n\t\"MoveForm\": {\n\t\t\"destId\": 4\n\t},\n\t\"selection\": [\n\t\t\"folder_5\",\n\t\t\"file_1\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/move",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"move"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Make items as public",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"selection\": [\n\t\t\"folder_5\",\n\t\t\"file_1\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/make-public",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"make-public"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Make items as private",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"selection\": [\n\t\t\"folder_5\",\n\t\t\"file_1\"\n\t]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/cfiles/items/container/2/make-private",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"cfiles",
+										"items",
+										"container",
+										"2",
+										"make-private"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e45a3cc2-61fa-4658-8608-38085ccd50e2",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "88d91a6a-f759-4d9f-89f1-83d5344bb1f0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
 		},
 		{
 			"name": "EAN Delete User",
 			"request": {
 				"method": "DELETE",
-				"header": [],
-				"body": {},
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer:501e92d8e6220671abb419304db0d689",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "https://my.stage1.ean.org/ean/api/users/delete?id=70816&api_key=501e92d8e6220671abb419304db0d689",
 					"protocol": "https",
