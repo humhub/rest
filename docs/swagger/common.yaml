@@ -5,6 +5,8 @@ securityDefinitions:
     type: JWT
     name: Authorization
     in: header
+  BasicAuth:
+    type: basic
 
 components:
   parameters:

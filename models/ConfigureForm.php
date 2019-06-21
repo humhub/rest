@@ -9,8 +9,9 @@ namespace humhub\modules\rest\models;
 
 use humhub\modules\rest\Module;
 use Yii;
+use yii\base\Model;
 
-class ConfigureForm extends \yii\base\Model
+class ConfigureForm extends Model
 {
 
     public $enabledForAllUsers;
@@ -21,6 +22,8 @@ class ConfigureForm extends \yii\base\Model
 
     public $jwtExpire;
 
+    public $enableBasicAuth;
+
     /**
      * @inheritdoc
      */
@@ -29,7 +32,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
             [['enabledUsers'], 'safe'],
-            [['enabledForAllUsers'], 'boolean'],
+            [['enabledForAllUsers', 'enableBasicAuth'], 'boolean'],
             [['jwtExpire'], 'integer']
         ];
     }
@@ -43,6 +46,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
             'jwtExpire' => 'JWT Token Expiration',
             'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
+            'enableBasicAuth' => 'Allow Basic Authentication'
         ];
     }
 
@@ -54,7 +58,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             'jwtKey' => 'If empty, a random key is generated automatically.',
             'jwtExpire' => 'in seconds. 0 for no JWT token expiration.',
-            'enabledForAllUsers' => 'Please note, it is not recommended to enable the API for all users yet.'
+            'enabledForAllUsers' => 'Please note, it is not recommended to enable the API for all users yet.',
         ];
     }
 
@@ -74,7 +78,8 @@ class ConfigureForm extends \yii\base\Model
 
         $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
         $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
-        $this->jwtExpire = (int) $settings->get('jwtExpire');
+        $this->jwtExpire = (int)$settings->get('jwtExpire');
+        $this->enableBasicAuth = (boolean)$settings->get('enableBasicAuth');
 
         return true;
     }
@@ -84,9 +89,10 @@ class ConfigureForm extends \yii\base\Model
         /** @var Module $module */
         $module = Yii::$app->getModule('rest');
 
-        $module->settings->set('jwtExpire', (int) $this->jwtExpire);
+        $module->settings->set('jwtExpire', (int)$this->jwtExpire);
         $module->settings->set('jwtKey', $this->jwtKey);
         $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
+        $module->settings->set('enableBasicAuth', (boolean)$this->enableBasicAuth);
         $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
         return true;

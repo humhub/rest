@@ -24,14 +24,13 @@ class AuthController extends BaseController
 
     public function actionIndex()
     {
-        $login = new Login;
-        if (!$login->load(Yii::$app->request->post(), '') || !$login->validate()) {
+        $user = static::authByUserAndPassword(Yii::$app->request->post('username'), Yii::$app->request->post('password'));
+
+        if ($user === null) {
             return $this->returnError(400, 'Wrong username or password');
         }
 
-        $user = AuthClientHelpers::getUserByAuthClient($login->authClient);
         $issuedAt = time();
-
         $data = [
             'iat' => $issuedAt,
             'iss' => Yii::$app->settings->get('baseUrl'),
@@ -51,5 +50,17 @@ class AuthController extends BaseController
             'auth_token' => $jwt,
             'expired_at' => (!isset($data['exp'])) ? 0 : $data['exp']
         ]);
+    }
+
+
+    public static function authByUserAndPassword($username, $password)
+    {
+        $login = new Login;
+        if (!$login->load(['username' => $username, 'password' => $password], '') || !$login->validate()) {
+            return null;
+        }
+
+        $user = AuthClientHelpers::getUserByAuthClient($login->authClient);
+        return $user;
     }
 }

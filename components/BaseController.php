@@ -10,6 +10,7 @@ namespace humhub\modules\rest\components;
 use Exception;
 use Firebase\JWT\JWT;
 use humhub\components\Controller;
+use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\Module;
 use humhub\modules\user\models\User;
@@ -40,6 +41,13 @@ abstract class BaseController extends Controller
     public function beforeAction($action)
     {
         $user = $this->authWithJwt();
+        $config = ConfigureForm::getInstance();
+
+        if ($user === null && !empty($config->enableBasicAuth)) {
+            // Try login by username and password
+            list($username, $password) = Yii::$app->request->getAuthCredentials();
+            $user = AuthController::authByUserAndPassword($username, $password);
+        }
 
         if ($user === null) {
             throw new HttpException('401', 'Invalid token!');
