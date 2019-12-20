@@ -1,7 +1,7 @@
 {
     "id": "rest",
     "name": "RESTful API",
-    "description": "Provides a RESTful API (experimental) to the HumHub installation",
+    "description": "Provides a RESTful API to the HumHub installation",
     "keywords": [
         "api", "rest"
     ],
