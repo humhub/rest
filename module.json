@@ -1,11 +1,11 @@
 {
     "id": "rest",
-    "name": "RESTful API Interface",
-    "description": "Provides a RESTful API to the HumHub installation",
+    "name": "RESTful API",
+    "description": "Provides a RESTful API (experimental) to the HumHub installation",
     "keywords": [
         "api", "rest"
     ],
-    "version": "0.0.1",
+    "version": "0.1.0",
     "humhub": {
         "minVersion": "1.3"
     },

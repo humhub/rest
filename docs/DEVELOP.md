@@ -1,6 +1,5 @@
 # API development 
 
-
 ## Documentation
 
 To completely adapt the API documentation after a change, the following steps are necessary.

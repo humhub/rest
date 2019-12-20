@@ -2,9 +2,6 @@
 
 - Login As (Remove hardcoded user id 1)
 
-
-
-
 ## To discuss
 
 - API Endpoint  /api vs /rest
