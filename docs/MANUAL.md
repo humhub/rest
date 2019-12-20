@@ -7,7 +7,7 @@ Following RESTful API endpoints are available.
 
 **Core APIs:**
 
-- [User](https://www.humhub.com/en/marketplace/rest/docs/html/users.html)
+- [User](https://www.humhub.com/en/marketplace/rest/docs/html/user.html)
 - [Content](https://www.humhub.com/en/marketplace/rest/docs/html/content.html)
 - [Post](https://www.humhub.com/en/marketplace/rest/docs/html/post.html)
 - [Comment](https://www.humhub.com/en/marketplace/rest/docs/html/comment.html)
