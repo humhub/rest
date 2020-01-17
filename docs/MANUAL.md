@@ -4,6 +4,10 @@
 
 Following RESTful API endpoints are available.
 
+**Base URL:**
+
+The base url for all APIs is: `https://yourhost/api/v1/`
+
 
 **Core APIs:**
 

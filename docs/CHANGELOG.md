@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.1.1  (January 17, 2020)
+-------------------------
+- Initial release in marketplace
+- Chg: Removed 'members' attribute from 'Space' output object
+- Enh: Added Space Membership Endpoint
+
 
 0.1.0  (20 December, 2019)
 ---------------------------

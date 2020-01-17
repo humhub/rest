@@ -640,6 +640,89 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Membership - List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/space/1/membership",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1",
+								"membership"
+							]
+						},
+						"description": "List all space memberships"
+					},
+					"response": []
+				},
+				{
+					"name": "Membership - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/space/1/membership/3",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1",
+								"membership",
+								"3"
+							]
+						},
+						"description": "Delete Space Member"
+					},
+					"response": []
+				},
+				{
+					"name": "Membership - Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/space/1/membership/3",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1",
+								"membership",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Membership - Role",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/space/1/membership/3/role/admin",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"space",
+								"1",
+								"membership",
+								"3",
+								"role",
+								"admin"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -3064,6 +3147,43 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "123qwe",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "Admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2225d958-4f29-4a07-9798-0cb05aaaa8db",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "6dfaddfb-14a8-45ab-9cab-230fad2a0a39",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
