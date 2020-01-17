@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "32a2a07d-642a-4a36-93a9-8bfb254a2c6a",
-		"name": "EAN",
+		"_postman_id": "a991fe5b-9ceb-4065-ab52-6af8d73ac782",
+		"name": "Humhub Rest API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -102,7 +102,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Activity",
@@ -126,10 +127,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/activity",
 							"host": [
@@ -161,10 +158,6 @@
 								"value": "{{AUTHORIZATION_TEST}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/activity/container/2",
 							"host": [
@@ -198,10 +191,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/activity/251",
 							"host": [
@@ -215,7 +204,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Notification",
@@ -239,12 +229,8 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "{{API_URL}}/notification",
+							"raw": "{{API_URL}}/notification?",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -326,10 +312,6 @@
 								"value": "{{AUTHORIZATION_TEST}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/notification/unseen",
 							"host": [
@@ -362,10 +344,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/notification/251",
 							"host": [
@@ -415,7 +393,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Space",
@@ -437,10 +416,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/space",
 							"host": [
@@ -470,10 +445,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/space/1",
 							"host": [
@@ -670,11 +641,13 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Post",
-			"item": []
+			"item": [],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Topic",
@@ -698,10 +671,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/topic",
 							"host": [
@@ -733,10 +702,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/topic/container/5",
 							"host": [
@@ -770,10 +735,6 @@
 								"disabled": true
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/topic/14",
 							"host": [
@@ -920,7 +881,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Wiki",
@@ -947,10 +909,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/wiki/container/2",
 									"host": [
@@ -1003,6 +961,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1027,10 +986,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/wiki/page/4",
 									"host": [
@@ -1169,6 +1124,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1263,6 +1219,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1287,10 +1244,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/wiki/page/10/revisions",
 									"host": [
@@ -1325,10 +1278,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/wiki/revision/9",
 									"host": [
@@ -1382,6 +1331,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1403,10 +1353,6 @@
 								"value": "{{AUTHORIZATION_TEST}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/wiki",
 							"host": [
@@ -1419,7 +1365,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Calendar",
@@ -1446,10 +1393,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/calendar/container/2",
 									"host": [
@@ -1502,6 +1445,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1526,10 +1470,6 @@
 										"disabled": true
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/calendar/entry/2",
 									"host": [
@@ -1668,6 +1608,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1718,6 +1659,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1747,13 +1689,13 @@
 									"formdata": [
 										{
 											"key": "files[]",
-											"type": "file",
-											"src": ""
+											"value": "",
+											"type": "file"
 										},
 										{
 											"key": "files[]",
-											"type": "file",
-											"src": ""
+											"value": "",
+											"type": "file"
 										}
 									]
 								},
@@ -1812,6 +1754,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1833,10 +1776,6 @@
 								"value": "{{AUTHORIZATION_TEST}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/calendar",
 							"host": [
@@ -1849,7 +1788,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Tasks",
@@ -1876,10 +1816,6 @@
 										"disabled": true
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/tasks/container/2",
 									"host": [
@@ -1932,6 +1868,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -1956,10 +1893,6 @@
 										"disabled": true
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/tasks/task/29",
 									"host": [
@@ -2098,6 +2031,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -2122,10 +2056,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/tasks/lists/container/19",
 									"host": [
@@ -2160,10 +2090,6 @@
 										"disabled": true
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/tasks/list/25",
 									"host": [
@@ -2303,6 +2229,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -2370,13 +2297,13 @@
 									"formdata": [
 										{
 											"key": "files[]",
-											"type": "file",
-											"src": ""
+											"value": "",
+											"type": "file"
 										},
 										{
 											"key": "files[]",
-											"type": "file",
-											"src": ""
+											"value": "",
+											"type": "file"
 										}
 									]
 								},
@@ -2479,6 +2406,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -2500,10 +2428,6 @@
 								"value": "{{AUTHORIZATION_TEST}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{API_URL}}/tasks",
 							"host": [
@@ -2516,7 +2440,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "cFiles",
@@ -2543,10 +2468,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/cfiles/folders/container/2",
 									"host": [
@@ -2581,10 +2502,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/cfiles/folder/2",
 									"host": [
@@ -2724,6 +2641,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -2748,10 +2666,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/cfiles/files/container/2",
 									"host": [
@@ -2786,10 +2700,6 @@
 										"value": "{{AUTHORIZATION_TEST}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
 									"raw": "{{API_URL}}/cfiles/file/1",
 									"host": [
@@ -2833,13 +2743,13 @@
 										},
 										{
 											"key": "files[]",
-											"type": "file",
-											"src": ""
+											"value": "",
+											"type": "file"
 										},
 										{
 											"key": "files[]",
-											"type": "file",
-											"src": ""
+											"value": "",
+											"type": "file"
 										}
 									]
 								},
@@ -2896,6 +2806,7 @@
 							"response": []
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -3104,9 +3015,11 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "EAN Delete User",
@@ -3152,5 +3065,6 @@
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

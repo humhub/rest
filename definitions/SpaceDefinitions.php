@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\definitions;
 
+use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
 use yii\helpers\Url;
 
@@ -41,17 +42,24 @@ class SpaceDefinitions
             'status' => $space->status,
             'tags' => $space->tags,
             'owner' => UserDefinitions::getUserShort($space->ownerUser),
-            'members' => static::getMembers($space),
         ];
     }
 
-    public static function getMembers(Space $space)
+    public static function getSpaceMembership(Membership $membership)
     {
-        $members = [];
-        foreach ($space->getMembershipUser()->all() as $member) {
-            $members[] = UserDefinitions::getUserShort($member);
-        }
-        return $members;
+        return [
+            'user' => UserDefinitions::getUserShort($membership->user),
+            'role' => $membership->group_id,
+            'status' => $membership->status,
+            'can_cancel_membership' => $membership->can_cancel_membership,
+            'send_notifications' => $membership->send_notifications,
+            'show_at_dashboard' => $membership->show_at_dashboard,
+            'originator_user' => ($membership->originator !== null) ? UserDefinitions::getUserShort($membership->originator) : null,
+            'member_since' => $membership->created_at,
+            'request_message' => $membership->request_message,
+            'updated_at' => $membership->updated_at,
+            'last_visit' => $membership->last_visit,
+        ];
     }
 
 }

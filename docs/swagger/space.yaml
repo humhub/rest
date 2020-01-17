@@ -438,6 +438,139 @@ paths:
                 type: string
                 example: Space not found
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin space memberships
+#-----------------------------------------------------------------------------------------------------------------------
+  '/space/{id}/membership':
+    get:
+      tags:
+        - Membership
+      summary: List all memberships by given space id
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of space
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/SpaceMembership'
+        400:
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: Invalid space id supplied!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Space not found
+  '/space/{id}/membership/{userId}':
+    post:
+      tags:
+        - Membership
+      summary: Add a new user to the space
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of space
+          required: true
+          type: integer
+        - name: userId
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+        - in: query
+          name: silent
+          type: boolean
+          description: Send added notification to the user
+          default: false
+      responses:
+        default:
+          description: Successful operation
+    delete:
+      tags:
+        - Membership
+      summary: Delete a space membership of a user
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of space
+          required: true
+          type: integer
+        - name: userId
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+      responses:
+        default:
+          description: Successful operation
+  '/space/{id}/membership/{userId}/role':
+    patch:
+      tags:
+        - Membership
+      summary: Set the user membership role
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The id of space
+          required: true
+          type: integer
+        - name: userId
+          in: path
+          description: The id of user
+          required: true
+          type: integer
+        - in: query
+          name: role
+          type: string
+          description: admin, member or moderator
+          required: true
+      responses:
+        default:
+          description: Successful operation
+
 securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
 
@@ -500,7 +633,46 @@ definitions:
         example: 'first tag, second tag'
       owner:
         $ref: "user.yaml#/definitions/UserShort"
-      members:
-        type: array
-        items:
+
+  SpaceMembership:
+    type: object
+    properties:
+      role:
+        type: string
+        example: member
+        description: Available roles=admin, moderator or member
+      status:
+        type: integer
+        example: 3
+        description: 1=Invited, 2=Applicant, 3=Member
+      can_cancel_membership:
+        type: boolean
+        example: false
+      send_notifications:
+        type: boolean
+        example: false
+      show_at_dashboard:
+        type: boolean
+        example: false
+      originator_user:
+        $ref: "user.yaml#/definitions/UserShort"
+        readOnly: true
+      member_since:
+        type: string
+        readOnly: true
+        example: 2019-12-01 11:43:16
+      request_message:
+        type: string
+        readOnly: true
+        example: "Please add me to this space!"
+      updated_at:
+        type: string
+        readOnly: true
+        example: 2019-12-30 11:00:59
+      last_visit:
+        type: string
+        readOnly: true
+        example: 2020-01-15 14:00:59
+      user:
           $ref: "user.yaml#/definitions/UserShort"
+          readOnly: true

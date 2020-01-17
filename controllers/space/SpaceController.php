@@ -47,10 +47,11 @@ class SpaceController extends BaseController
 
     public function actionCreate()
     {
-        if (! Yii::$app->user->permissionmanager->can(new CreatePublicSpace) && ! Yii::$app->user->permissionmanager->can(new CreatePrivateSpace)) {
+        if (!Yii::$app->user->permissionmanager->can(new CreatePublicSpace) && !Yii::$app->user->permissionmanager->can(new CreatePrivateSpace)) {
             return $this->returnError(401, 'You are not allowed to create spaces!');
         }
 
+        /** @var Space $module */
         $module = Yii::$app->getModule('space');
 
         $space = new Space();
@@ -62,7 +63,7 @@ class SpaceController extends BaseController
         $space->load(Yii::$app->request->getBodyParams(), '');
         $space->validate();
 
-        if($space->hasErrors()) {
+        if ($space->hasErrors()) {
             return $this->returnError(422, 'Validation failed', [
                 'space' => $space->getErrors(),
             ]);
@@ -84,7 +85,7 @@ class SpaceController extends BaseController
             return $this->returnError(404, 'Space not found!');
         }
 
-        if (! $space->isAdmin()) {
+        if (!$space->isAdmin()) {
             return $this->returnError(401, 'You are not allowed to manage this space!');
         }
 
@@ -92,7 +93,7 @@ class SpaceController extends BaseController
         $space->load(Yii::$app->request->getBodyParams(), '');
         $space->validate();
 
-        if($space->hasErrors()) {
+        if ($space->hasErrors()) {
             return $this->returnError(422, 'Validation failed', [
                 'space' => $space->getErrors(),
             ]);
@@ -113,7 +114,7 @@ class SpaceController extends BaseController
             return $this->returnError(404, 'Space not found!');
         }
 
-        if (! $space->canDelete()) {
+        if (!$space->canDelete()) {
             return $this->returnError(401, 'You are not allowed to delete this space!');
         }
 

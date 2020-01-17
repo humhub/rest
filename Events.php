@@ -44,7 +44,6 @@ class Events
             // User: Session Controller
             ['pattern' => 'api/v1/user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],
 
-
             // Space: Default Controller
             ['pattern' => 'api/v1/space/', 'route' => '/rest/space/space/index', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/view', 'verb' => ['GET', 'HEAD']],
@@ -55,6 +54,12 @@ class Events
             // Space: Archive Controller
             ['pattern' => 'api/v1/space/<id:\d+>/archive', 'route' => '/rest/space/archive/archive', 'verb' => 'PATCH'],
             ['pattern' => 'api/v1/space/<id:\d+>/unarchive', 'route' => '/rest/space/archive/unarchive', 'verb' => 'PATCH'],
+
+            // Space: Membership Controller
+            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership', 'route' => '/rest/space/membership/index', 'verb' => 'GET'],
+            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership/<userId:\d+>', 'route' => '/rest/space/membership/create', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership/<userId:\d+>/role', 'route' => '/rest/space/membership/role', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership/<userId:\d+>', 'route' => '/rest/space/membership/delete', 'verb' => 'DELETE'],
 
             // Content
             ['pattern' => 'api/v1/content/find-by-container/<id:\d+>', 'route' => 'rest/content/content/find-by-container', 'verb' => ['GET', 'HEAD']],
