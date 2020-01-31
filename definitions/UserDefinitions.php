@@ -8,6 +8,7 @@
 namespace humhub\modules\rest\definitions;
 
 use humhub\modules\user\models\Profile;
+use humhub\modules\user\models\Group;
 use humhub\modules\user\models\User;
 use yii\helpers\Url;
 
@@ -63,5 +64,17 @@ class UserDefinitions
         ];
     }
 
+    public static function getGroup(Group $group)
+    {
+        return [
+            'id' => $group->id,
+            'name' => $group->name,
+            'description' => $group->description,
+            'show_at_registration' => $group->show_at_registration,
+            'show_at_directory' => $group->show_at_directory,
+            'space_id' => $group->space_id,
+            'sort_order' => $group->sort_order
+        ];
+    }
 }
 

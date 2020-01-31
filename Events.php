@@ -38,6 +38,16 @@ class Events
             ['pattern' => 'api/v1/user/full/<id:\d+>', 'route' => 'rest/user/user/hard-delete', 'verb' => ['DELETE']],
             ['pattern' => 'api/v1/user/', 'route' => 'rest/user/user/create', 'verb' => 'POST'],
 
+            // User: Group Controller
+            ['pattern' => 'api/v1/user/group', 'route' => 'rest/user/group/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/user/group', 'route' => 'rest/user/group/create', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/user/group/<id:\d+>', 'route' => 'rest/user/group/view', 'verb' => ['GET']],
+            ['pattern' => 'api/v1/user/group/<id:\d+>', 'route' => 'rest/user/group/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'api/v1/user/group/<id:\d+>', 'route' => 'rest/user/group/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'api/v1/user/group/<id:\d+>/member', 'route' => 'rest/user/group/members', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'api/v1/user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-add', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'api/v1/user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-remove', 'verb' => ['DELETE']],
+
             // User: Invite Controller
             //['pattern' => 'api/v1/user/invite', 'route' => 'api/user/invite/index', 'verb' => 'POST'],
 

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.1.2  (January 31, 2020)
+-------------------------
+- Enh: Added User group endpoint
+
+
+
 0.1.1  (January 17, 2020)
 -------------------------
 - Initial release in marketplace
