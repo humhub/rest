@@ -708,7 +708,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/space/1/membership/3/role/admin",
+							"raw": "{{API_URL}}/space/1/membership/3/role?role=admin",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -717,8 +717,13 @@
 								"1",
 								"membership",
 								"3",
-								"role",
-								"admin"
+								"role"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "admin"
+								}
 							]
 						}
 					},
@@ -3105,48 +3110,225 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "EAN Delete User",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer:501e92d8e6220671abb419304db0d689",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "https://my.stage1.ean.org/ean/api/users/delete?id=70816&api_key=501e92d8e6220671abb419304db0d689",
-					"protocol": "https",
-					"host": [
-						"my",
-						"stage1",
-						"ean",
-						"org"
-					],
-					"path": [
-						"ean",
-						"api",
-						"users",
-						"delete"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "70816"
-						},
-						{
-							"key": "api_key",
-							"value": "501e92d8e6220671abb419304db0d689"
+			"name": "User",
+			"item": [
+				{
+					"name": "List Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/user/group",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Add group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Some new group\",\n\t\"description\": \"Example Description\",\n\t\"show_at_registration\": 0,\n\t\"show_in_directory\": 1,\n\t\"space_id\": 1,\n\t\"sort_order\": 150\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/user/group",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit group",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Some new new group\",\n\t\"description\": \"Example Description\",\n\t\"show_at_registration\": 0,\n\t\"show_in_directory\": 1,\n\t\"space_id\": 1,\n\t\"sort_order\": 155\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/user/group/8",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete group",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URL}}/user/group/7",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/user/group/1/member",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group",
+								"1",
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add member",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Some new group\",\n\t\"description\": \"Example Description\",\n\t\"show_at_registration\": 0,\n\t\"show_in_directory\": 1,\n\t\"space_id\": 1,\n\t\"sort_order\": 150\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/user/group/8/member?userId=1&isManager=0",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group",
+								"8",
+								"member"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "1"
+								},
+								{
+									"key": "isManager",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove member",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Some new group\",\n\t\"description\": \"Example Description\",\n\t\"show_at_registration\": 0,\n\t\"show_in_directory\": 1,\n\t\"space_id\": 1,\n\t\"sort_order\": 150\n}"
+						},
+						"url": {
+							"raw": "{{API_URL}}/user/group/8/member?userId=1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"user",
+								"group",
+								"8",
+								"member"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"auth": {
