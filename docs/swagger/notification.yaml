@@ -1,4 +1,4 @@
-swagger: '2.0'
+openapi: '3.0.1'
 info:
   description: |
     Welcome to the HumHub notification module API reference.
