@@ -6,7 +6,7 @@ The REST API module provides a generic interface to various subsystems of the Hu
 
 ## Requirements
 
-- Make sure HumHub URL Rewriting is enabled on your installation(http://docs.humhub.org/admin-installation-configuration.html#url-rewriting-optional)
+- Make sure HumHub URL Rewriting is enabled on your installation(https://docs.humhub.org/docs/admin/installation#pretty-urls)
 - Minimum HumHub version: 1.3+
 
 
