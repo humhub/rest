@@ -9,6 +9,7 @@ namespace humhub\modules\rest\components;
 
 use Exception;
 use Firebase\JWT\JWT;
+use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
@@ -34,6 +35,11 @@ abstract class BaseController extends Controller
      */
     public $enableCsrfValidation = false;
 
+    /**
+     * @inerhitdoc
+     * Do not enforce authentication.
+     */
+    public $access = ControllerAccess::class;
 
     /**
      * @inheritdoc
