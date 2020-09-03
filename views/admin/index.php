@@ -5,7 +5,7 @@
  * @license https://www.humhub.com/licences
  */
 
-/* @var $this \humhub\components\View */
+/* @var $this \humhub\modules\ui\view\components\View */
 
 use humhub\modules\user\widgets\UserPickerField;
 use yii\bootstrap\ActiveForm;

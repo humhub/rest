@@ -5,7 +5,7 @@
  * @license https://www.humhub.com/licences
  */
 
-/* @var $this \humhub\components\View */
+/* @var $this \humhub\modules\ui\view\components\View */
 
 namespace humhub\modules\rest\definitions;
 
