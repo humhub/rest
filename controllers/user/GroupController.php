@@ -11,6 +11,7 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\user\models\GroupUser;
 use humhub\modules\user\models\Group;
+use humhub\modules\user\models\User;
 use Yii;
 
 
