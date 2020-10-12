@@ -45,6 +45,33 @@ class UserController extends BaseController
         return UserDefinitions::getUser($user);
     }
 
+
+    /**
+     * Get User ID from username or email
+     * 
+     * @param string $username the username searched
+     * @param string $email the email searched
+     * @return User ID
+     * @throws HttpException
+     */
+    public function actionGetId($username = null, $email = null)
+    {
+        if ($username !== null) {
+            $user = User::findOne(['username' => $username]);
+        }
+
+        if ($email !== null) {
+            $user = User::findOne(['email' => $email]);
+        }
+
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
+        
+        return $user->id;
+    }
+    
+
     public function actionUpdate($id)
     {
         $user = User::findOne(['id' => $id]);
