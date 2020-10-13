@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.1.4  (October 13, 2020)
+-------------------------
+- Enh: User new endpoints, find-by-username and find-by-email
+
 0.1.3  (August 5, 2020)
 -------------------------
 - Fix: HumHub 1.6 compatibility issues
