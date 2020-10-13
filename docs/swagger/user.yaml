@@ -27,7 +27,7 @@ tags:
   - name: Session
     description: User sessions
 paths:
-  /user:
+  '/user':
     get:
       tags:
         - User
@@ -82,6 +82,50 @@ paths:
       responses:
         default:
           description: Successful operation
+
+  '/user/get-by-username':
+    get:
+      tags:
+        - User
+      summary: Get user by username
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          description: The username of user
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: "#/definitions/User"
+        '404':
+          description: User not found
+
+  '/user/get-by-email':
+    get:
+      tags:
+        - User
+      summary: Get user by email
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: email
+          in: query
+          description: The email of user
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: "#/definitions/User"
+        '404':
+          description: User not found
 
   '/user/{id}':
     get:

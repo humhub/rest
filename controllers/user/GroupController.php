@@ -11,6 +11,7 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\user\models\GroupUser;
 use humhub\modules\user\models\Group;
+use humhub\modules\user\models\User;
 use Yii;
 
 
@@ -116,9 +117,21 @@ class GroupController extends BaseController
             return $this->returnError(404, 'Group not found!');
         }
 
-        $group->addUser(Yii::$app->request->get('userId'), !(empty(Yii::$app->request->get('isManager'))));
+        $userId = Yii::$app->request->get('userId');
+        $user = User::findOne(['id' => $userId]);
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
 
-        return $this->returnSuccess('Member added!');
+        if ($group->isMember($userId)) {
+            return $this->returnError(400, 'User is already a member of the group!');
+        }
+
+        if ($group->addUser($userId, !(empty(Yii::$app->request->get('isManager'))))) {
+            return $this->returnSuccess('Member added!');
+        }
+
+        return $this->returnError(400, 'Could not add member!');
     }
 
     public function actionMemberRemove($id)
@@ -128,7 +141,17 @@ class GroupController extends BaseController
             return $this->returnError(404, 'Group not found!');
         }
 
-        if ($group->removeUser(Yii::$app->request->get('userId'))) {
+        $userId = Yii::$app->request->get('userId');
+        $user = User::findOne(['id' => $userId]);
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
+
+        if (!$group->isMember($userId)) {
+            return $this->returnError(400, 'User is not a member of the group!');
+        }
+
+        if ($group->removeUser($userId)) {
             return $this->returnSuccess('Member removed!');
         }
 
