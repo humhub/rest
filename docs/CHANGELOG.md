@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.1.4  (Unreleased)
+-------------------------
+- Enh: Endpoints for Mail module
+
 0.1.3  (August 5, 2020)
 -------------------------
 - Fix: HumHub 1.6 compatibility issues

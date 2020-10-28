@@ -1,0 +1,55 @@
+<?php
+/**
+ * @link https://www.humhub.org/
+ * @copyright Copyright (c) 2020 HumHub GmbH & Co. KG
+ * @license https://www.humhub.com/licences
+ */
+
+namespace humhub\modules\rest\definitions;
+
+use humhub\modules\mail\models\Message;
+use humhub\modules\mail\models\MessageEntry;
+
+
+/**
+ * Class MailDefinitions
+ */
+class MailDefinitions
+{
+
+    public static function getMessage(Message $message)
+    {
+        return [
+            'id' => $message->id,
+            'title' => $message->title,
+            'created_at' => $message->created_at,
+            'created_by' => $message->created_by,
+            'updated_at' => $message->updated_at,
+            'updated_by' => $message->updated_by,
+        ];
+    }
+
+    public static function getMessageEntry(MessageEntry $entry)
+    {
+        return [
+            'id' => $entry->id,
+            'user_id' => $entry->user_id,
+            'file_id' => $entry->file_id,
+            'content' => $entry->content,
+            'created_at' => $entry->created_at,
+            'created_by' => $entry->created_by,
+            'updated_at' => $entry->updated_at,
+            'updated_by' => $entry->updated_by,
+        ];
+    }
+
+    public static function getMessageUsers(Message $message)
+    {
+        $messageUsers = [];
+        foreach ($message->getUsers()->all() as $messageUser) {
+            $messageUsers[] = UserDefinitions::getUser($messageUser);
+        }
+        return $messageUsers;
+    }
+}
+
