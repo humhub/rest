@@ -9,12 +9,11 @@ namespace humhub\modules\rest\controllers\mail;
 
 use humhub\modules\mail\models\forms\CreateMessage;
 use humhub\modules\mail\models\Message;
-use humhub\modules\mail\models\MessageEntry;
 use humhub\modules\mail\permissions\SendMail;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\MailDefinitions;
-use humhub\modules\user\models\User;
 use Yii;
+use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 
 
@@ -97,76 +96,9 @@ class MessageController extends BaseController
         }
 
         if ($checkParticipant && !$message->isParticipant(Yii::$app->user)) {
-            throw new HttpException(403, 'You must be a participant of the conversation.');
+            throw new ForbiddenHttpException('You must be a participant of the conversation.');
         }
 
         return $message;
-    }
-
-    /**
-     * Get user by id
-     *
-     * @param $id
-     * @return User
-     * @throws HttpException
-     */
-    public static function getUser($id)
-    {
-        $user = User::findOne(['id' => $id]);
-        if ($user === null) {
-            throw new HttpException(404, 'User not found!');
-        }
-        return $user;
-    }
-
-    /**
-     * Get participant of the conversation
-     *
-     * @param $messageId
-     * @param $userId
-     * @param null|boolean $isParticipant
-     * @return array [Message, User]
-     * @throws HttpException
-     */
-    public static function getMessageUser($messageId, $userId, $isParticipant = null)
-    {
-        $message = static::getMessage($messageId);
-        $user = static::getUser($userId);
-
-        if ($isParticipant === false && $message->isParticipant($user)) {
-            throw new HttpException(400, 'User is already a participant of the conversation.');
-        } else if ($isParticipant === true && !$message->isParticipant($user)) {
-            throw new HttpException(400, 'User is not a participant of the conversation.');
-        }
-
-        return [$message, $user];
-    }
-
-    /**
-     * Get entry of the conversation
-     *
-     * @param $messageId
-     * @param $entryId
-     * @return MessageEntry
-     * @throws HttpException
-     */
-    public static function getMessageEntry($messageId, $entryId)
-    {
-        $message = static::getMessage($messageId, true);
-
-        $entry = MessageEntry::findOne([
-            'id' => $entryId,
-            'message_id' => $message->id
-        ]);
-
-        if (!$entry) {
-            throw new HttpException(404, 'Conversation entry not found!');
-        }
-
-        if (!$entry->canEdit()) {
-            throw new HttpException(403, 'You cannot edit the conversation entry!');
-        }
-
-        return $entry;
     }
 }

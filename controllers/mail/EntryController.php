@@ -8,10 +8,11 @@
 namespace humhub\modules\rest\controllers\mail;
 
 use humhub\modules\mail\models\forms\ReplyForm;
-use humhub\modules\mail\models\MessageEntry as MessageEntryAlias;
+use humhub\modules\mail\models\MessageEntry;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\MailDefinitions;
 use Yii;
+use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 
 
@@ -26,11 +27,12 @@ class EntryController extends BaseController
      *
      * @param $messageId
      * @return array
+     * @throws HttpException
      */
     public function actionIndex($messageId)
     {
         $results = [];
-        $entriesQuery = MessageEntryAlias::find()->where(['message_id' => $messageId]);
+        $entriesQuery = MessageEntry::find()->where(['message_id' => $messageId]);
 
         $pagination = $this->handlePagination($entriesQuery);
         foreach ($entriesQuery->all() as $entry) {
@@ -49,7 +51,7 @@ class EntryController extends BaseController
      */
     public function actionView($messageId, $entryId)
     {
-        $entry = MessageController::getMessageEntry($messageId, $entryId);
+        $entry = $this->getMessageEntry($messageId, $entryId);
         return MailDefinitions::getMessageEntry($entry);
     }
 
@@ -89,7 +91,7 @@ class EntryController extends BaseController
      */
     public function actionUpdate($messageId, $entryId)
     {
-        $entry = MessageController::getMessageEntry($messageId, $entryId);
+        $entry = $this->getMessageEntry($messageId, $entryId);
 
         $entry->load(['MessageEntry' => Yii::$app->request->post()]);
 
@@ -115,7 +117,7 @@ class EntryController extends BaseController
      */
     public function actionDelete($messageId, $entryId)
     {
-        $entry = MessageController::getMessageEntry($messageId, $entryId);
+        $entry = $this->getMessageEntry($messageId, $entryId);
 
         if ($entry->delete()) {
             return $this->returnSuccess('Conversation entry successfully deleted!');
@@ -123,5 +125,33 @@ class EntryController extends BaseController
 
         Yii::error('Could not delete validated entry from the conversation.', 'api');
         return $this->returnError(500, 'Internal error while delete entry from the conversation!');
+    }
+
+    /**
+     * Get entry of the conversation
+     *
+     * @param $messageId
+     * @param $entryId
+     * @return MessageEntry
+     * @throws HttpException
+     */
+    protected function getMessageEntry($messageId, $entryId)
+    {
+        $message = MessageController::getMessage($messageId, true);
+
+        $entry = MessageEntry::findOne([
+            'id' => $entryId,
+            'message_id' => $message->id
+        ]);
+
+        if (!$entry) {
+            throw new HttpException(404, 'Conversation entry not found!');
+        }
+
+        if (!$entry->canEdit()) {
+            throw new ForbiddenHttpException('You cannot edit the conversation entry!');
+        }
+
+        return $entry;
     }
 }

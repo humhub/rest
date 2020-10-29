@@ -9,6 +9,7 @@ namespace humhub\modules\rest\definitions;
 
 use humhub\modules\mail\models\Message;
 use humhub\modules\mail\models\MessageEntry;
+use humhub\modules\mail\models\MessageTag;
 
 
 /**
@@ -50,6 +51,16 @@ class MailDefinitions
             $messageUsers[] = UserDefinitions::getUser($messageUser);
         }
         return $messageUsers;
+    }
+
+    public static function getMessageTag(MessageTag $tag)
+    {
+        return [
+            'id' => $tag->id,
+            'name' => $tag->name,
+            'sort_order' => $tag->sort_order,
+            'color' => $tag->color,
+        ];
     }
 }
 

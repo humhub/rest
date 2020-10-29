@@ -280,7 +280,9 @@ class Events
                 ['pattern' => 'api/v1/mail/<messageId:\d+>/entry/<entryId:\d+>', 'route' => 'rest/mail/entry/update', 'verb' => 'PUT'],
                 ['pattern' => 'api/v1/mail/<messageId:\d+>/entry/<entryId:\d+>', 'route' => 'rest/mail/entry/delete', 'verb' => 'DELETE'],
 
-                // TODO:Tags
+                // Tags
+                ['pattern' => 'api/v1/mail/<messageId:\d+>/tags', 'route' => 'rest/mail/tag/index', 'verb' => 'GET'],
+                ['pattern' => 'api/v1/mail/<messageId:\d+>/tags', 'route' => 'rest/mail/tag/update', 'verb' => 'PUT'],
 
             ], true);
         } else {
