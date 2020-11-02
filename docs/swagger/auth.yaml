@@ -73,3 +73,19 @@ paths:
               message:
                 type: string
                 example: Wrong username or password
+
+  '/auth/current':
+    get:
+      tags:
+        - User
+      summary: Get current user
+      description: ''
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: "user.yaml#/definitions/User"
+        '401':
+          description: Unauthorized

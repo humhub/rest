@@ -83,16 +83,6 @@ class UserController extends BaseController
         return UserDefinitions::getUser($user);
     }
 
-    /**
-     * Get current User details
-     *
-     * @return array
-     */
-    public function actionCurrent()
-    {
-        return $this->actionView(Yii::$app->user->id);
-    }
-
     public function actionUpdate($id)
     {
         $user = User::findOne(['id' => $id]);

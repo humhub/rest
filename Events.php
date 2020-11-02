@@ -29,12 +29,12 @@ class Events
 
             // Auth
             ['pattern' => 'api/v1/auth/login/', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
+            ['pattern' => 'api/v1/auth/current', 'route' => 'rest/auth/auth/current', 'verb' => ['GET', 'HEAD']],
 
             // User: Default Controller
             ['pattern' => 'api/v1/user/', 'route' => 'rest/user/user/index', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/user/get-by-username', 'route' => 'rest/user/user/get-by-username', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/user/get-by-email', 'route' => 'rest/user/user/get-by-email', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/current', 'route' => 'rest/user/user/current', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/update', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/delete', 'verb' => ['DELETE']],

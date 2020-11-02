@@ -9,6 +9,7 @@ namespace humhub\modules\rest\controllers\auth;
 
 use Firebase\JWT\JWT;
 use humhub\modules\rest\components\BaseController;
+use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\user\authclient\AuthClientHelpers;
 use humhub\modules\user\models\forms\Login;
@@ -62,5 +63,20 @@ class AuthController extends BaseController
 
         $user = AuthClientHelpers::getUserByAuthClient($login->authClient);
         return $user;
+    }
+
+    /**
+     * Get current User details
+     *
+     * @return array
+     */
+    public function actionCurrent()
+    {
+        $user = User::findOne(['id' => Yii::$app->user->id]);
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
+
+        return UserDefinitions::getUser($user);
     }
 }
