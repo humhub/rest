@@ -80,6 +80,6 @@ class TagController extends BaseController
         }
 
         Yii::error('Could not create validated entry for the conversation.', 'api');
-        return $this->returnError(500, 'Internal error while save entry for the conversation!');
+        return $this->returnError(500, 'Internal error while update tags of the conversation!');
     }
 }
