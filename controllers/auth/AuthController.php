@@ -20,7 +20,7 @@ class AuthController extends BaseController
 {
     public function beforeAction($action)
     {
-        return true;
+        return $action->id == 'current' ? parent::beforeAction($action) : true;
     }
 
     public function actionIndex()
