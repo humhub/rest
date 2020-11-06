@@ -1,9 +1,15 @@
 Changelog
 =========
 
-0.1.4  (Unreleased)
+0.1.5  (Unreleased)
 -------------------------
 - Enh: Endpoints for Mail module
+
+
+0.1.4  (October 13, 2020)
+-------------------------
+- Enh: User new endpoints, find-by-username and find-by-email
+- Enh: Added current User details endpoint
 
 0.1.3  (August 5, 2020)
 -------------------------

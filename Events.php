@@ -29,6 +29,7 @@ class Events
 
             // Auth
             ['pattern' => 'api/v1/auth/login/', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
+            ['pattern' => 'api/v1/auth/current', 'route' => 'rest/auth/auth/current', 'verb' => ['GET', 'HEAD']],
 
             // User: Default Controller
             ['pattern' => 'api/v1/user/', 'route' => 'rest/user/user/index', 'verb' => ['GET', 'HEAD']],
