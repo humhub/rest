@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\controllers\user;
 
+use humhub\modules\admin\permissions\ManageGroups;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\user\models\GroupUser;
@@ -20,6 +21,16 @@ use Yii;
  */
 class GroupController extends BaseController
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function getAccessRules()
+    {
+        return [
+            ['permissions' => [ManageGroups::class]],
+        ];
+    }
 
     public function actionIndex()
     {

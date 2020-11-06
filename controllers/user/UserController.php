@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\controllers\user;
 
+use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\user\models\Password;
@@ -21,6 +22,16 @@ use yii\web\HttpException;
  */
 class UserController extends BaseController
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function getAccessRules()
+    {
+        return [
+            ['permissions' => [ManageUsers::class]],
+        ];
+    }
 
     public function actionIndex()
     {
