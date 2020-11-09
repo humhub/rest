@@ -26,10 +26,6 @@ class CalendarDefinitions
             'end_datetime' => $entry->end_datetime,
             'all_day' => $entry->all_day,
             'participation_mode' => $entry->participation_mode,
-            'recurring' => $entry->recur,
-            'recurring_type' => $entry->recur_type,
-            'recurring_interval' => $entry->recur_interval,
-            'recurring_end' => $entry->recur_end,
             'color' => $entry->color,
             'allow_decline' => $entry->allow_decline,
             'allow_maybe' => $entry->allow_maybe,
@@ -38,7 +34,7 @@ class CalendarDefinitions
             'closed' => $entry->closed,
             'max_participants' => $entry->max_participants,
             'content' => ContentDefinitions::getContent($entry->content),
-            'participants' => static::getParticipantUsers($entry->getParticipants()->with('user')->all())
+            'participants' => static::getParticipantUsers($entry->getParticipantEntries()->with('user')->all())
         ];
     }
 
