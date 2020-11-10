@@ -21,6 +21,9 @@ class FileController extends BaseController
         if ($file === null) {
             return $this->returnError(404, 'File not found!');
         }
+        if (!$file->canRead()) {
+            return $this->returnError(403, 'You cannot download this file!');
+        }
 
         $fileName = $file->file_name;
         $mimeType = FileHelper::getMimeTypeByExtension($fileName);
