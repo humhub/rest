@@ -43,7 +43,12 @@ class UserController extends BaseController
      */
     public function actionAdd($messageId, $userId)
     {
-        list($message, $user) = $this->getMessageUser($messageId, $userId, false);
+        $message = MessageController::getMessage($messageId);
+        $user = $this->getUser($userId);
+
+        if ($message->isParticipant($user)) {
+            return $this->returnError(400, 'User is already a participant of the conversation.');
+        }
 
         if ($message->addRecepient($user)) {
             return $this->actionIndex($messageId);
@@ -63,7 +68,12 @@ class UserController extends BaseController
      */
     public function actionLeave($messageId, $userId)
     {
-        list($message) = $this->getMessageUser($messageId, $userId, true);
+        $message = MessageController::getMessage($messageId);
+        $user = $this->getUser($userId);
+
+        if (!$message->isParticipant($user)) {
+            return $this->returnError(400, 'User is not a participant of the conversation.');
+        }
 
         $message->leave($userId);
 
@@ -84,28 +94,5 @@ class UserController extends BaseController
             throw new HttpException(404, 'User not found!');
         }
         return $user;
-    }
-
-    /**
-     * Get participant of the conversation
-     *
-     * @param $messageId
-     * @param $userId
-     * @param null|boolean $isParticipant
-     * @return array [Message, User]
-     * @throws HttpException
-     */
-    protected function getMessageUser($messageId, $userId, $isParticipant = null)
-    {
-        $message = MessageController::getMessage($messageId);
-        $user = $this->getUser($userId);
-
-        if ($isParticipant === false && $message->isParticipant($user)) {
-            throw new HttpException(400, 'User is already a participant of the conversation.');
-        } else if ($isParticipant === true && !$message->isParticipant($user)) {
-            throw new HttpException(400, 'User is not a participant of the conversation.');
-        }
-
-        return [$message, $user];
     }
 }
