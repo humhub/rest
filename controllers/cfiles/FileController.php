@@ -9,6 +9,7 @@ namespace humhub\modules\rest\controllers\cfiles;
 
 use humhub\modules\cfiles\models\File;
 use humhub\modules\cfiles\models\Folder;
+use humhub\modules\cfiles\permissions\ManageFiles;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
@@ -53,6 +54,9 @@ class FileController extends BaseContentController
         $targetDir = Folder::find()->contentContainer($container)->andWhere(['cfiles_folder.id' => $folderId])->one();
         if ($targetDir === null) {
             return $this->returnError(404, 'cFiles folder not found!');
+        }
+        if (!$container->can(ManageFiles::class)) {
+            return $this->returnError(403, 'You cannot upload files into this folder!');
         }
 
         $files = UploadedFile::getInstancesByName('files');

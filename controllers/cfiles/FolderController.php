@@ -8,6 +8,7 @@
 namespace humhub\modules\rest\controllers\cfiles;
 
 use humhub\modules\cfiles\models\Folder;
+use humhub\modules\cfiles\permissions\ManageFiles;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\Content;
@@ -54,6 +55,9 @@ class FolderController extends BaseContentController
         if ($targetDir === null) {
             return $this->returnError(404, 'cFiles folder not found!');
         }
+        if (!$container->can(ManageFiles::class)) {
+            return $this->returnError(403, 'You cannot create folder in this container!');
+        }
 
         if ((! $targetDir->isRoot() && $targetDir->content->isPrivate()) && $isPublicDirectory) {
             return $this->returnError(403, 'Could not create public directory inside private directory!');
@@ -82,6 +86,9 @@ class FolderController extends BaseContentController
 
         if ($folder === null) {
             return $this->returnError(404, 'cFiles folder not found!');
+        }
+        if (!$folder->content->canEdit()) {
+            return $this->returnError(403, 'You cannot edit this folder!');
         }
 
         if ($folder->load(Yii::$app->request->getBodyParams()) && $folder->save()) {
