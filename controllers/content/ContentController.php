@@ -8,6 +8,7 @@
 namespace humhub\modules\rest\controllers\content;
 
 use humhub\modules\activity\models\Activity;
+use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ContentDefinitions;
 use humhub\modules\content\models\Content;
@@ -18,6 +19,11 @@ class ContentController extends BaseController
 
     public function actionFindByContainer($id)
     {
+        $contentContainer = ContentContainer::findOne(['id' => (int) $id]);
+        if ($contentContainer === null) {
+            return $this->returnError(404, 'Content container not found!');
+        }
+
         $results = [];
         $query = Content::find();
         $query->andWhere(['contentcontainer_id' => (int) $id]);
@@ -40,6 +46,9 @@ class ContentController extends BaseController
         if ($content === null) {
             return $this->returnError(404, 'Content not found!');
         }
+        if (!$content->canView()) {
+            return $this->returnError(403, 'You cannot view this content!');
+        }
 
         return ContentDefinitions::getContentOutput($content);
     }
@@ -50,6 +59,9 @@ class ContentController extends BaseController
         $content = Content::findOne(['id' => $id]);
         if ($content === null) {
             return $this->returnError(404, 'Content not found!');
+        }
+        if (!$content->canEdit()) {
+            return $this->returnError(403, 'You cannot delete this content!');
         }
 
         if ($content->delete()) {
