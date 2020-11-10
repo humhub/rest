@@ -37,7 +37,10 @@ class NotificationController extends BaseController
 
     public function actionView($id)
     {
-        $notification = Notification::findOne(['id' => $id]);
+        $notification = Notification::find()
+            ->where(['id' => $id])
+            ->andWhere(['user_id' => Yii::$app->user->id])
+            ->one();
 
         if (! $notification) {
             return $this->returnError(404, 'Notification not found');
