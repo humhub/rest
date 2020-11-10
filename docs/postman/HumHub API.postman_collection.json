@@ -230,7 +230,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{API_URL}}/notification?",
+							"raw": "{{API_URL}}/notification",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -3326,6 +3326,323 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Mail",
+			"item": [
+				{
+					"name": "Conversation",
+					"item": [
+						{
+							"name": "List Conversations",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Conversation by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Conversation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Sample conversation from API\",\n    \"message\": \"First sample message from API\",\n    \"recipient\": [\"8eddbecb-8207-4848-bba6-5910115d3e4a\", \"b6b66077-916d-4718-af28-5ffc20895d30\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/mail",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Entry",
+					"item": [
+						{
+							"name": "List Entries by Conversation id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/entries",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"entries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Entry by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/entry/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"entry",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Entry",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\": \"New sample reply from API\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/mail/1/entry",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"entry"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entry by id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": \"Updated sample reply from API\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/mail/1/entry/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"entry",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entry by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/entry/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"entry",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Recipient",
+					"item": [
+						{
+							"name": "List Recipients of Conversation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/users",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Recipient to Conversation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/user/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"user",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Recipient from Conversation",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/user/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"user",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Tag",
+					"item": [
+						{
+							"name": "List Tags of Conversation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}/mail/1/tags",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"tags"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Tags of Conversations",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"tags\": [\"Photo\", \"Demo\", \"Sample tag from API\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/mail/1/tags",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"mail",
+										"1",
+										"tags"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
