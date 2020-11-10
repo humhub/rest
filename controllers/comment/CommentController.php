@@ -21,6 +21,9 @@ class CommentController extends BaseController
         if ($comment === null) {
             return $this->returnError(404, 'Comment not found!');
         }
+        if (!$comment->canRead()) {
+            return $this->returnError(403, 'You cannot view this comment!');
+        }
 
         return CommentDefinitions::getComment($comment);
     }
@@ -30,6 +33,9 @@ class CommentController extends BaseController
         $comment = Comment::findOne(['id' => $id]);
         if ($comment === null) {
             return $this->returnError(404, 'Comment not found!');
+        }
+        if (!$comment->canDelete()) {
+            return $this->returnError(403, 'You cannot delete this comment!');
         }
 
         if ($comment->delete()) {
