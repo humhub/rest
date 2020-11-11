@@ -100,6 +100,9 @@ class WikiController extends BaseContentController
         if (! $page) {
             return $this->returnError(404, 'Page not found!');
         }
+        if (!$page->canEdit()) {
+            return $this->returnError(403, 'You cannot edit the page!');
+        }
         $requestParams = Yii::$app->request->getBodyParams();
         if (empty($requestParams['target_id'])) {
             return $this->returnError(400, 'Target category is required.');
@@ -107,6 +110,9 @@ class WikiController extends BaseContentController
         $targetPage = WikiPage::findOne(['id' => $requestParams['target_id']]);
         if (! $targetPage || ! $targetPage->is_category) {
             return $this->returnError(400, 'Wrong target category.');
+        }
+        if (!$targetPage->canEdit()) {
+            return $this->returnError(403, 'You cannot edit the target page!');
         }
         $formParams = [
             'id' => $id,
@@ -130,6 +136,9 @@ class WikiController extends BaseContentController
         }
         if (! $page->content) {
             return $this->returnError(404, 'Page content not found!');
+        }
+        if (!$page->canEdit()) {
+            return $this->returnError(403, 'You cannot move the page!');
         }
 
         $target = Yii::$app->request->post('target', null);
