@@ -50,7 +50,7 @@ class ContentController extends BaseController
             return $this->returnError(403, 'You cannot view this content!');
         }
 
-        return ContentDefinitions::getContentOutput($content);
+        return ContentDefinitions::getContent($content);
     }
 
 
