@@ -17,7 +17,7 @@ use Yii;
 class LikeController extends BaseController
 {
 
-    public function actionFindByRecord()
+    public function actionFindByObject()
     {
         $contentFilter = [
             'object_model' => Yii::$app->request->get('model'),
