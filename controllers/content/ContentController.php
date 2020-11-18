@@ -8,6 +8,7 @@
 namespace humhub\modules\rest\controllers\content;
 
 use humhub\modules\activity\models\Activity;
+use humhub\modules\content\components\ActiveQueryContent;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ContentDefinitions;
@@ -25,10 +26,20 @@ class ContentController extends BaseController
         }
 
         $results = [];
-        $query = Content::find();
-        $query->andWhere(['contentcontainer_id' => (int) $id]);
-        $query->andWhere(['!=', 'object_model', Activity::class]);
-        $query->orderBy(['created_at' => SORT_DESC]);
+        $query = (new ActiveQueryContent(Content::class))
+            ->leftJoin(ContentContainer::tableName(), ContentContainer::tableName() . '.id = ' . Content::tableName() . '.contentcontainer_id')
+            ->where([Content::tableName() . '.contentcontainer_id' => (int) $id])
+            ->andWhere(['!=', Content::tableName() . '.object_model', Activity::class])
+            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
+            ->readable();
+        // Remove "Join with Content" from \humhub\modules\content\components\ActiveQueryContent::readable(),
+        // because here main table is already Content:
+        foreach ($query->joinWith as $j => $joinWith) {
+            if (isset($joinWith[0][0]) && $joinWith[0][0] == 'content') {
+                unset($query->joinWith[$j]);
+                break;
+            }
+        }
 
         $pagination = $this->handlePagination($query);
 
