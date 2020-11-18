@@ -11,19 +11,18 @@ use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\TaskDefinitions;
+use humhub\modules\space\models\Space;
 use humhub\modules\tasks\models\lists\TaskList;
+use humhub\modules\user\models\User;
 use Yii;
+use yii\web\HttpException;
 
 class TaskListController extends BaseController
 {
     public function actionIndex($containerId)
     {
-        $containerRecord = ContentContainer::findOne(['id' => $containerId]);
-        if ($containerRecord === null) {
-            return $this->returnError(404, 'Content container not found!');
-        }
-        /** @var ContentContainerActiveRecord $container */
-        $container = $containerRecord->getPolymorphicRelation();
+        $container = $this->getContainerById($containerId);
+
         $results = [];
         $query = TaskList::findOverviewLists($container);
 
@@ -42,17 +41,14 @@ class TaskListController extends BaseController
             return $this->returnError(404, 'Task list not found!');
         }
 
+        $this->checkContainerAccess($list->getContainer());
+
         return TaskDefinitions::getTaskList($list);
     }
 
     public function actionCreate($containerId)
     {
-        $containerRecord = ContentContainer::findOne(['id' => $containerId]);
-        if ($containerRecord === null) {
-            return $this->returnError(404, 'Content container not found!');
-        }
-        /** @var ContentContainerActiveRecord $container */
-        $container = $containerRecord->getPolymorphicRelation();
+        $container = $this->getContainerById($containerId);
 
         $taskList = new TaskList($container);
 
@@ -78,6 +74,8 @@ class TaskListController extends BaseController
             return $this->returnError(404, 'Task list not found!');
         }
 
+        $this->checkContainerAccess($taskList->getContainer());
+
         if($taskList->load(Yii::$app->request->post()) && $taskList->save()) {
             return TaskDefinitions::getTaskList($taskList);
         }
@@ -99,10 +97,58 @@ class TaskListController extends BaseController
             return $this->returnError(404, 'Task list not found!');
         }
 
+        $this->checkContainerAccess($list->getContainer());
+
         if ($list->delete()) {
             return $this->returnSuccess('Task list successfully deleted!');
         }
 
         return $this->returnError(500, 'Internal error while delete task list!');
+    }
+
+
+    /**
+     * Get Container by ID
+     *
+     * @param integer $id
+     * @return ContentContainerActiveRecord
+     * @throws \yii\db\IntegrityException
+     * @throws HttpException
+     */
+    protected function getContainerById($id)
+    {
+        $containerRecord = ContentContainer::findOne(['id' => $id]);
+        if ($containerRecord === null) {
+            throw new HttpException(404, 'Content container not found!');
+        }
+
+        /** @var ContentContainerActiveRecord $container */
+        $container = $containerRecord->getPolymorphicRelation();
+
+        $this->checkContainerAccess($container);
+
+        return $container;
+    }
+
+
+    /**
+     * Check access of current User to the Container
+     *
+     * @param ContentContainerActiveRecord
+     * @throws HttpException
+     */
+    protected function checkContainerAccess($container)
+    {
+        if (Yii::$app->user->isAdmin()) {
+            return;
+        }
+
+        if ($container instanceof User && $container->id != Yii::$app->user->id) {
+            throw new HttpException(401, 'You have no access to the user container!');
+        }
+
+        if ($container instanceof Space && !$container->isAdmin() && !$container->isMember(Yii::$app->user->id)) {
+            throw new HttpException(401, 'You have no access to the space container!');
+        }
     }
 }
