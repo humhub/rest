@@ -1,15 +1,20 @@
 Changelog
 =========
 
-0.1.5  (Unreleased)
--------------------------
-- Enh: Endpoints for Mail module
+0.2.0-beta.1  (November 23, 2020)
+---------------------------------
+- Enh: New Endpoints for Mail module
+- Enh: Added permission checks for regular user access
+- Fix #42: Activity Module Endpoint
+- Fix #43: Swagger doc is incorrect for user "display_name" for User endpoints 
+- Fix: Renamed "/like/findByRecord" endpoint to "/like/find-by-object"
 
 
 0.1.4  (October 13, 2020)
 -------------------------
 - Enh: User new endpoints, find-by-username and find-by-email
 - Enh: Added current User details endpoint
+
 
 0.1.3  (August 5, 2020)
 -------------------------
