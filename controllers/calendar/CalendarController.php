@@ -110,6 +110,9 @@ class CalendarController extends BaseContentController
         if (! $calendarEntry) {
             return $this->returnError(404, 'Calendar entry not found!');
         }
+        if (!$calendarEntry->content->canView()) {
+            return $this->returnError(403, 'You cannot view this content!');
+        }
 
         $respondType = Yii::$app->request->post('type', null);
 
@@ -126,12 +129,8 @@ class CalendarController extends BaseContentController
             return $this->returnError(400, 'Invalid respond type');
         }
 
-        $participationState = $calendarEntry->respond((int)$respondType);
+        $calendarEntry->setParticipationStatus(Yii::$app->user->getIdentity(), (int)$respondType);
 
-        if($participationState->hasErrors()) {
-            return $this->returnError(400, 'Bad request', ['errors' => $participationState->getErrors()]);
-        } else {
-            return $this->returnSuccess('Participation successfully changed.');
-        }
+        return $this->returnSuccess('Participation successfully changed.');
     }
 }

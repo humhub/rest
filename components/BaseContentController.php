@@ -51,6 +51,9 @@ abstract class BaseContentController extends BaseController
         if ($contentRecord === null) {
             return $this->returnError(404, 'Requested content not found!');
         }
+        if (!$contentRecord->content->canView()) {
+            return $this->returnError(403, 'You cannot view this content!');
+        }
 
         return $this->returnContentDefinition($contentRecord);
     }
@@ -65,8 +68,7 @@ abstract class BaseContentController extends BaseController
         $class = $this->getContentActiveRecordClass();
 
         /** @var ActiveQueryContent $query */
-        $query = $class::find()->joinWith('content')->orderBy(['content.created_at' => SORT_DESC]);
-
+        $query = $class::find()->joinWith('content')->orderBy(['content.created_at' => SORT_DESC])->readable();
 
         $pagination = $this->handlePagination($query);
 
@@ -96,7 +98,7 @@ abstract class BaseContentController extends BaseController
         $class = $this->getContentActiveRecordClass();
 
         /** @var ActiveQueryContent $query */
-        $query = $class::find()->contentContainer($contentContainer->getPolymorphicRelation())->orderBy(['content.created_at' => SORT_DESC]);
+        $query = $class::find()->contentContainer($contentContainer->getPolymorphicRelation())->orderBy(['content.created_at' => SORT_DESC])->readable();
 
         ContentDefinitions::handleTopicsParam($query, $containerId);
 
@@ -151,6 +153,9 @@ abstract class BaseContentController extends BaseController
         if ($contentRecord === null) {
             return $this->returnError(404, 'Request object not found!');
         }
+        if (!$contentRecord->content->canEdit()) {
+            return $this->returnError(403, 'You are not allowed to update this content!');
+        }
 
         if ($contentRecord->load(Yii::$app->request->getBodyParam('data', []), '') && $contentRecord->save()) {
             return $this->returnContentDefinition($contentRecord);
@@ -172,6 +177,9 @@ abstract class BaseContentController extends BaseController
         $contentRecord = $class::findOne(['id' => $id]);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Content record not found!');
+        }
+        if (!$contentRecord->content->canEdit()) {
+            return $this->returnError(403, 'You are not allowed to delete this content!');
         }
 
         if ($contentRecord->delete()) {
@@ -196,15 +204,17 @@ abstract class BaseContentController extends BaseController
         $class = $this->getContentActiveRecordClass();
 
         /** @var ActiveQueryContent $query */
-        $records = $class::find()->contentContainer($contentContainer->getPolymorphicRelation())->all();
+        $query = $class::find()->contentContainer($contentContainer->getPolymorphicRelation())->readable();
 
-        foreach ($records as $record) {
+        $deletedRecordsCount = 0;
+        foreach ($query->all() as $record) {
             if (!$record->delete()) {
                 return $this->returnError(500, 'Internal error while delete content!');
             }
+            $deletedRecordsCount++;
         }
 
-        return $this->returnSuccess('Records successfully deleted!');
+        return $this->returnSuccess($deletedRecordsCount ? $deletedRecordsCount . ' records successfully deleted!' : 'No records deleted.');
     }
 
     public function actionAttachFiles($id)
@@ -213,6 +223,9 @@ abstract class BaseContentController extends BaseController
         $contentRecord = $class::findOne(['id' => $id]);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Content record not found!');
+        }
+        if (!$contentRecord->content->canEdit()) {
+            return $this->returnError(403, 'You are not allowed to upload files to this content!');
         }
         $uploadedFiles = UploadedFile::getInstancesByName('files');
 
@@ -249,6 +262,9 @@ abstract class BaseContentController extends BaseController
 
         if ($file == null || $contentRecord == null) {
             return $this->returnError(404, 'Could not find requested content record or file!');
+        }
+        if (!$contentRecord->content->canEdit()) {
+            return $this->returnError(403, 'You are not allowed to remove files from this content!');
         }
 
         $isAssignedTo = $file->object_model === $class && $file->object_id == $contentRecord->getPrimaryKey();
@@ -288,16 +304,10 @@ abstract class BaseContentController extends BaseController
 
         if (! empty($requestParams[$formName]['start_time'])) {
             $requestParams[$modelName]['all_day'] = 0;
-            $requestParams[$formName]['start_date'] .= ' ' . $requestParams[$formName]['start_time'] . ':00';
-        } else {
-            $requestParams[$formName]['start_date'] .= ' 00:00:00';
         }
 
         if (! empty($requestParams[$formName]['end_time'])) {
             $requestParams[$modelName]['all_day'] = 0;
-            $requestParams[$formName]['end_date'] .= ' ' . $requestParams[$formName]['end_time'] . ':00';
-        } else {
-            $requestParams[$formName]['end_date'] .= ' 23:59:00';
         }
 
         if (preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['start_date']) ||

@@ -25,7 +25,7 @@ class SpaceController extends BaseController
     public function actionIndex()
     {
         $results = [];
-        $query = Space::find();
+        $query = Space::find()->visible();
 
         $pagination = $this->handlePagination($query);
         foreach ($query->all() as $space) {
@@ -40,6 +40,10 @@ class SpaceController extends BaseController
 
         if ($space === null) {
             return $this->returnError(404, 'Space not found!');
+        }
+
+        if (!$space->canAccessPrivateContent()) {
+            return $this->returnError(403, 'You don\'t have an access to this space!');
         }
 
         return SpaceDefinitions::getSpace($space);

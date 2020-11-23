@@ -19,26 +19,26 @@ class ActivityController extends BaseController
     {
         $results = [];
 
-        $query = Content::find()
-                ->where(['object_model' => Activity::class])
-                ->andWhere(['!=', 'created_by', Yii::$app->user->id])
-                ->orderBy('created_at DESC');
+        $query = Activity::find()
+            ->where(['!=', Content::tableName() . '.created_by', Yii::$app->user->id])
+            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
+            ->readable();
 
         $pagination = $this->handlePagination($query, 10);
-        foreach ($query->all() as $content) {
-            $activity = $content->getPolymorphicRelation();
-            if ($activity) {
-                $results[] = ActivityDefinitions::getActivity($activity);
-            }
+        foreach ($query->all() as $activity) {
+            $results[] = ActivityDefinitions::getActivity($activity);
         }
         return $this->returnPagination($query, $pagination, $results);
     }
 
     public function actionView($id)
     {
-        $content = Content::find()->where(['object_model' => Activity::class, 'object_id' => $id])->one();
+        $activity = Activity::find()
+            ->where([Content::tableName() . '.object_id' => $id])
+            ->readable()
+            ->one();
 
-        if (! $content || ! $activity = $content->getPolymorphicRelation()) {
+        if (!$activity) {
             return $this->returnError(404, 'Activity not found');
         }
 
@@ -49,17 +49,15 @@ class ActivityController extends BaseController
     {
         $results = [];
 
-        $query = Content::find()
-                 ->where(['object_model' => Activity::class, 'contentcontainer_id' => $containerId])
-                 ->andWhere(['!=', 'created_by', Yii::$app->user->id])
-                 ->orderBy('created_at DESC');
+        $query = Activity::find()
+            ->where([Content::tableName() . '.contentcontainer_id' => $containerId])
+            ->andWhere(['!=', Content::tableName() . '.created_by', Yii::$app->user->id])
+            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
+            ->readable();
 
         $pagination = $this->handlePagination($query, 10);
-        foreach ($query->all() as $content) {
-            $activity = $content->getPolymorphicRelation();
-            if ($activity) {
-                $results[] = ActivityDefinitions::getActivity($activity);
-            }
+        foreach ($query->all() as $activity) {
+            $results[] = ActivityDefinitions::getActivity($activity);
         }
         return $this->returnPagination($query, $pagination, $results);
     }

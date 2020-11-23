@@ -539,21 +539,6 @@ definitions:
         type: integer
         format: int64
         example: 2
-      recurring:
-        type: integer
-        format: int64
-        example: null
-      recurring_type:
-        type: integer
-        format: int64
-        example: null
-      recurring_interval:
-        type: integer
-        format: int64
-        example: null
-      recurring_end:
-        type: string
-        example: null
       color:
         type: string
         example: "#6fdbe8"

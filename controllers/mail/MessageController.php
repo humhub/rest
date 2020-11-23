@@ -9,7 +9,7 @@ namespace humhub\modules\rest\controllers\mail;
 
 use humhub\modules\mail\models\forms\CreateMessage;
 use humhub\modules\mail\models\Message;
-use humhub\modules\mail\permissions\SendMail;
+use humhub\modules\mail\permissions\StartConversation;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\MailDefinitions;
 use Yii;
@@ -31,7 +31,9 @@ class MessageController extends BaseController
     public function actionIndex()
     {
         $results = [];
-        $messagesQuery = Message::find();
+        $messagesQuery = Message::find()
+            ->innerJoin('user_message', 'message_id = id')
+            ->where(['user_id' => Yii::$app->user->id]);
 
         $pagination = $this->handlePagination($messagesQuery);
         foreach ($messagesQuery->all() as $message) {
@@ -49,7 +51,7 @@ class MessageController extends BaseController
      */
     public function actionView($id)
     {
-        $message = static::getMessage($id);
+        $message = static::getMessage($id, true);
         return MailDefinitions::getMessage($message);
     }
 
@@ -61,7 +63,7 @@ class MessageController extends BaseController
      */
     public function actionCreate()
     {
-        if (!Yii::$app->user->isAdmin() && !Yii::$app->user->getPermissionManager()->can(SendMail::class)) {
+        if (!Yii::$app->user->isAdmin() && !Yii::$app->user->getPermissionManager()->can(StartConversation::class)) {
             return $this->returnError(403, 'You cannot create conversations!');
         }
 
@@ -84,18 +86,17 @@ class MessageController extends BaseController
      * Get conversation by id
      *
      * @param $id
-     * @param boolean $checkParticipant
      * @return Message
      * @throws HttpException
      */
-    public static function getMessage($id, $checkParticipant = false)
+    public static function getMessage($id)
     {
         $message = Message::findOne(['id' => $id]);
         if ($message === null) {
             throw new HttpException(404, 'Message not found!');
         }
 
-        if ($checkParticipant && !$message->isParticipant(Yii::$app->user)) {
+        if (!$message->isParticipant(Yii::$app->user)) {
             throw new ForbiddenHttpException('You must be a participant of the conversation.');
         }
 

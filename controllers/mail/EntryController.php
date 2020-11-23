@@ -12,7 +12,6 @@ use humhub\modules\mail\models\MessageEntry;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\MailDefinitions;
 use Yii;
-use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 
 
@@ -31,6 +30,9 @@ class EntryController extends BaseController
      */
     public function actionIndex($messageId)
     {
+        // Check the requested Conversation exists and allowed to view by current User
+        MessageController::getMessage($messageId);
+
         $results = [];
         $entriesQuery = MessageEntry::find()->where(['message_id' => $messageId]);
 
@@ -64,7 +66,7 @@ class EntryController extends BaseController
      */
     public function actionAdd($messageId)
     {
-        $message = MessageController::getMessage($messageId, true);
+        $message = MessageController::getMessage($messageId);
 
         $replyForm = new ReplyForm(['model' => $message]);
         $replyForm->load(['ReplyForm' => Yii::$app->request->post()]);
@@ -93,6 +95,10 @@ class EntryController extends BaseController
     {
         $entry = $this->getMessageEntry($messageId, $entryId);
 
+        if (!$entry->canEdit()) {
+            return $this->returnError(403, 'You cannot edit the conversation entry!');
+        }
+
         $entry->load(['MessageEntry' => Yii::$app->request->post()]);
 
         if ($entry->save()) {
@@ -119,6 +125,10 @@ class EntryController extends BaseController
     {
         $entry = $this->getMessageEntry($messageId, $entryId);
 
+        if (!$entry->canEdit()) {
+            return $this->returnError(403, 'You cannot delete the conversation entry!');
+        }
+
         if ($entry->delete()) {
             return $this->returnSuccess('Conversation entry successfully deleted!');
         }
@@ -137,7 +147,7 @@ class EntryController extends BaseController
      */
     protected function getMessageEntry($messageId, $entryId)
     {
-        $message = MessageController::getMessage($messageId, true);
+        $message = MessageController::getMessage($messageId);
 
         $entry = MessageEntry::findOne([
             'id' => $entryId,
@@ -146,10 +156,6 @@ class EntryController extends BaseController
 
         if (!$entry) {
             throw new HttpException(404, 'Conversation entry not found!');
-        }
-
-        if (!$entry->canEdit()) {
-            throw new ForbiddenHttpException('You cannot edit the conversation entry!');
         }
 
         return $entry;

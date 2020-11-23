@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\controllers\user;
 
+use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\user\models\Session;
 use humhub\modules\user\models\User;
@@ -14,6 +15,16 @@ use humhub\modules\user\models\User;
 
 class SessionController extends BaseController
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function getAccessRules()
+    {
+        return [
+            ['permissions' => [ManageUsers::class]],
+        ];
+    }
 
     public function actionDeleteFromUser($id)
     {

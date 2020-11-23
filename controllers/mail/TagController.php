@@ -27,9 +27,13 @@ class TagController extends BaseController
      *
      * @param $messageId
      * @return array
+     * @throws HttpException
      */
     public function actionIndex($messageId)
     {
+        // Check the requested Conversation exists and allowed to view by current User
+        MessageController::getMessage($messageId);
+
         $results = [];
         $tagsQuery = MessageTag::find()
             ->innerJoin(UserMessageTag::tableName(), 'tag_id = id')
@@ -52,7 +56,7 @@ class TagController extends BaseController
      */
     public function actionUpdate($messageId)
     {
-        $message = MessageController::getMessage($messageId, true);
+        $message = MessageController::getMessage($messageId);
 
         $conversationTagsForm = new ConversationTagsForm(['message' => $message]);
 

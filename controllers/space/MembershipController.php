@@ -70,7 +70,7 @@ class MembershipController extends BaseController
             return $this->returnError(400, 'You cannot administer this space!');
         }
 
-        if ($space->removeMember($userId)) {
+        if ($space->removeMember($userId) !== false) {
             return $this->returnSuccess('Member deleted');
         }
         return $this->returnError(404, 'Member NOT deleted!');
