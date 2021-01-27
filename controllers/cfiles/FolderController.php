@@ -48,11 +48,15 @@ class FolderController extends BaseContentController
         $isPublicDirectory = isset($params['Folder']['visibility']) && $params['Folder']['visibility'] === Content::VISIBILITY_PUBLIC;
 
         if (empty($params['target_id'])) {
-            return $this->returnError(400, 'Target folder id is required!');
+            if (!($targetDir = Folder::getRoot($container)) &&
+                !($targetDir = Folder::initRoot($container))) {
+                return $this->returnError(400, 'Target folder id is required!');
+            }
+        } else {
+            $targetDir = Folder::findOne(['id' => $params['target_id']]);
         }
 
-        $targetDir = Folder::findOne(['id' => $params['target_id']]);
-        if ($targetDir === null) {
+        if (empty($targetDir)) {
             return $this->returnError(404, 'cFiles folder not found!');
         }
         if (!$container->can(ManageFiles::class)) {
