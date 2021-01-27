@@ -3,7 +3,7 @@ Changelog
 
 0.2.1  (Unreleased)
 -------------------------
-- Enh #45: Don’t require target folder id to create root automatically
+- Enh #45: Files Endpoint - Don’t require target folder id to create root automatically
 
 
 0.2.0-beta.1  (November 23, 2020)
