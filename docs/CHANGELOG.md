@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.2.1  (Unreleased)
--------------------------
+0.2.1  (February 17, 2021)
+--------------------------
 - Enh #45: Files Endpoint - Don’t require target folder id to create root automatically
 
 
