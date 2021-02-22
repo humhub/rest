@@ -644,9 +644,6 @@ definitions:
       show_at_registration:
         type: boolean
         example: false
-      space_id:
-        type: integer
-        example: 1
       sort_order:
         type: int
         example: 100

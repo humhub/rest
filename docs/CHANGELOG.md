@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.0  (February 22, 2021)
+--------------------------
+- Fix #51: Remove group.space_id for compatible with Humhub 1.8
+
+
 0.2.1  (February 17, 2021)
 --------------------------
 - Enh #45: Files Endpoint - Don’t require target folder id to create root automatically

@@ -5,9 +5,9 @@
     "keywords": [
         "api", "rest"
     ],
-    "version": "0.2.1",
+    "version": "0.3.0",
     "humhub": {
-        "minVersion": "1.7"
+        "minVersion": "1.8"
     },
     "screenshots": []
 }
