@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.0  (Unreleased)
+0.3.0  (February 22, 2021)
 --------------------------
 - Fix #51: Remove group.space_id for compatible with Humhub 1.8
 
