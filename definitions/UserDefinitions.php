@@ -72,7 +72,6 @@ class UserDefinitions
             'description' => $group->description,
             'show_at_registration' => $group->show_at_registration,
             'show_at_directory' => $group->show_at_directory,
-            'space_id' => $group->space_id,
             'sort_order' => $group->sort_order
         ];
     }
