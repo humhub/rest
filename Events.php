@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest;
 
+use humhub\components\Event;
 use Yii;
 use yii\web\JsonParser;
 
@@ -135,6 +136,8 @@ class Events
         static::addCalendarModuleRules();
         static::addTasksModuleRules();
         static::addCfilesModuleRules();
+
+        Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
     }
 
     private static function addWikiModuleRules()

@@ -17,6 +17,8 @@ use yii\web\JsonParser;
 class Module extends \humhub\components\Module
 {
 
+    const EVENT_REST_API_ADD_RULES = 'restApiAddRules';
+
     /**
      * @inheritdoc
      */
