@@ -135,7 +135,6 @@ class Events
         static::addCalendarModuleRules();
         static::addTasksModuleRules();
         static::addCfilesModuleRules();
-        static::addMailModuleRules();
     }
 
     private static function addWikiModuleRules()
@@ -256,38 +255,6 @@ class Events
             ], true);
         } else {
             static::addModuleNotFoundRoutes('cfiles');
-        }
-    }
-
-    private static function addMailModuleRules()
-    {
-        if (Yii::$app->getModule('mail')) {
-            Yii::$app->urlManager->addRules([
-
-                // Conversations
-                ['pattern' => 'api/v1/mail', 'route' => 'rest/mail/message/index', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/mail/<id:\d+>', 'route' => 'rest/mail/message/view', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/mail', 'route' => 'rest/mail/message/create', 'verb' => 'POST'],
-
-                // Participants
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/users', 'route' => 'rest/mail/user/index', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/user/<userId:\d+>', 'route' => 'rest/mail/user/add', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/user/<userId:\d+>', 'route' => 'rest/mail/user/leave', 'verb' => 'DELETE'],
-
-                // Entries
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/entries', 'route' => 'rest/mail/entry/index', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/entry', 'route' => 'rest/mail/entry/add', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/entry/<entryId:\d+>', 'route' => 'rest/mail/entry/view', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/entry/<entryId:\d+>', 'route' => 'rest/mail/entry/update', 'verb' => 'PUT'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/entry/<entryId:\d+>', 'route' => 'rest/mail/entry/delete', 'verb' => 'DELETE'],
-
-                // Tags
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/tags', 'route' => 'rest/mail/tag/index', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/mail/<messageId:\d+>/tags', 'route' => 'rest/mail/tag/update', 'verb' => 'PUT'],
-
-            ], true);
-        } else {
-            static::addModuleNotFoundRoutes('mail');
         }
     }
 
