@@ -9,7 +9,6 @@ namespace humhub\modules\rest;
 
 use humhub\components\Event;
 use Yii;
-use yii\web\JsonParser;
 
 class Events
 {
@@ -26,103 +25,109 @@ class Events
             Yii::$app->response->format = 'json';
         }
 
-        Yii::$app->urlManager->addRules([
+        /* @var Module $module */
+        $module = Yii::$app->getModule('rest');
+        $module->addRules([
 
             // Auth
-            ['pattern' => 'api/v1/auth/login/', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
-            ['pattern' => 'api/v1/auth/current', 'route' => 'rest/auth/auth/current', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'auth/login/', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
+            ['pattern' => 'auth/current', 'route' => 'rest/auth/auth/current', 'verb' => ['GET', 'HEAD']],
 
             // User: Default Controller
-            ['pattern' => 'api/v1/user/', 'route' => 'rest/user/user/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/get-by-username', 'route' => 'rest/user/user/get-by-username', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/get-by-email', 'route' => 'rest/user/user/get-by-email', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/update', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/delete', 'verb' => ['DELETE']],
-            ['pattern' => 'api/v1/user/full/<id:\d+>', 'route' => 'rest/user/user/hard-delete', 'verb' => ['DELETE']],
-            ['pattern' => 'api/v1/user/', 'route' => 'rest/user/user/create', 'verb' => 'POST'],
+            ['pattern' => 'user/', 'route' => 'rest/user/user/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'user/get-by-username', 'route' => 'rest/user/user/get-by-username', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'user/get-by-email', 'route' => 'rest/user/user/get-by-email', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'user/full/<id:\d+>', 'route' => 'rest/user/user/hard-delete', 'verb' => ['DELETE']],
+            ['pattern' => 'user/', 'route' => 'rest/user/user/create', 'verb' => 'POST'],
 
             // User: Group Controller
-            ['pattern' => 'api/v1/user/group', 'route' => 'rest/user/group/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/group', 'route' => 'rest/user/group/create', 'verb' => 'POST'],
-            ['pattern' => 'api/v1/user/group/<id:\d+>', 'route' => 'rest/user/group/view', 'verb' => ['GET']],
-            ['pattern' => 'api/v1/user/group/<id:\d+>', 'route' => 'rest/user/group/update', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/user/group/<id:\d+>', 'route' => 'rest/user/group/delete', 'verb' => ['DELETE']],
-            ['pattern' => 'api/v1/user/group/<id:\d+>/member', 'route' => 'rest/user/group/members', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-add', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-remove', 'verb' => ['DELETE']],
+            ['pattern' => 'user/group', 'route' => 'rest/user/group/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'user/group', 'route' => 'rest/user/group/create', 'verb' => 'POST'],
+            ['pattern' => 'user/group/<id:\d+>', 'route' => 'rest/user/group/view', 'verb' => ['GET']],
+            ['pattern' => 'user/group/<id:\d+>', 'route' => 'rest/user/group/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'user/group/<id:\d+>', 'route' => 'rest/user/group/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/members', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-add', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-remove', 'verb' => ['DELETE']],
 
             // User: Invite Controller
-            //['pattern' => 'api/v1/user/invite', 'route' => 'api/user/invite/index', 'verb' => 'POST'],
+            //['pattern' => 'user/invite', 'route' => 'api/user/invite/index', 'verb' => 'POST'],
 
             // User: Session Controller
-            ['pattern' => 'api/v1/user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],
+            ['pattern' => 'user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],
 
             // Space: Default Controller
-            ['pattern' => 'api/v1/space/', 'route' => '/rest/space/space/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/space/', 'route' => '/rest/space/space/create', 'verb' => 'POST'],
-            ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/update', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/space/<id:\d+>', 'route' => '/rest/space/space/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'space/', 'route' => '/rest/space/space/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'space/<id:\d+>', 'route' => '/rest/space/space/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'space/', 'route' => '/rest/space/space/create', 'verb' => 'POST'],
+            ['pattern' => 'space/<id:\d+>', 'route' => '/rest/space/space/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'space/<id:\d+>', 'route' => '/rest/space/space/delete', 'verb' => 'DELETE'],
 
             // Space: Archive Controller
-            ['pattern' => 'api/v1/space/<id:\d+>/archive', 'route' => '/rest/space/archive/archive', 'verb' => 'PATCH'],
-            ['pattern' => 'api/v1/space/<id:\d+>/unarchive', 'route' => '/rest/space/archive/unarchive', 'verb' => 'PATCH'],
+            ['pattern' => 'space/<id:\d+>/archive', 'route' => '/rest/space/archive/archive', 'verb' => 'PATCH'],
+            ['pattern' => 'space/<id:\d+>/unarchive', 'route' => '/rest/space/archive/unarchive', 'verb' => 'PATCH'],
 
             // Space: Membership Controller
-            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership', 'route' => '/rest/space/membership/index', 'verb' => 'GET'],
-            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership/<userId:\d+>', 'route' => '/rest/space/membership/create', 'verb' => 'POST'],
-            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership/<userId:\d+>/role', 'route' => '/rest/space/membership/role', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/space/<spaceId:\d+>/membership/<userId:\d+>', 'route' => '/rest/space/membership/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'space/<spaceId:\d+>/membership', 'route' => '/rest/space/membership/index', 'verb' => 'GET'],
+            ['pattern' => 'space/<spaceId:\d+>/membership/<userId:\d+>', 'route' => '/rest/space/membership/create', 'verb' => 'POST'],
+            ['pattern' => 'space/<spaceId:\d+>/membership/<userId:\d+>/role', 'route' => '/rest/space/membership/role', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'space/<spaceId:\d+>/membership/<userId:\d+>', 'route' => '/rest/space/membership/delete', 'verb' => 'DELETE'],
 
             // Content
-            ['pattern' => 'api/v1/content/find-by-container/<id:\d+>', 'route' => 'rest/content/content/find-by-container', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/content/container', 'route' => 'rest/content/container/list', 'verb' => 'GET'],
-            ['pattern' => 'api/v1/content/<id:\d+>', 'route' => 'rest/content/content/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/content/<id:\d+>', 'route' => 'rest/content/content/delete', 'verb' => 'DELETE'],
-            //['pattern' => 'api/v1/content/pin/<id:\d+>', 'route' => 'api/user/content/pin', 'verb' => 'POST'],
-            //['pattern' => 'api/v1/content/unpin/<id:\d+>', 'route' => 'api/user/content/unpin', 'verb' => 'POST'],
-            //['pattern' => 'api/v1/content/archive/<id:\d+>', 'route' => 'api/user/content/archive', 'verb' => 'POST'],
-            //['pattern' => 'api/v1/content/unarchive/<id:\d+>', 'route' => 'api/user/content/unarchive', 'verb' => 'POST'],
+            ['pattern' => 'content/find-by-container/<id:\d+>', 'route' => 'rest/content/content/find-by-container', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'content/container', 'route' => 'rest/content/container/list', 'verb' => 'GET'],
+            ['pattern' => 'content/<id:\d+>', 'route' => 'rest/content/content/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'content/<id:\d+>', 'route' => 'rest/content/content/delete', 'verb' => 'DELETE'],
+            //['pattern' => 'content/pin/<id:\d+>', 'route' => 'api/user/content/pin', 'verb' => 'POST'],
+            //['pattern' => 'content/unpin/<id:\d+>', 'route' => 'api/user/content/unpin', 'verb' => 'POST'],
+            //['pattern' => 'content/archive/<id:\d+>', 'route' => 'api/user/content/archive', 'verb' => 'POST'],
+            //['pattern' => 'content/unarchive/<id:\d+>', 'route' => 'api/user/content/unarchive', 'verb' => 'POST'],
 
             // Comment
-            ['pattern' => 'api/v1/comment/<id:\d+>', 'route' => 'rest/comment/comment/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/comment/<id:\d+>', 'route' => 'rest/comment/comment/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'comment/<id:\d+>', 'route' => 'rest/comment/comment/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'comment/<id:\d+>', 'route' => 'rest/comment/comment/delete', 'verb' => 'DELETE'],
 
             // Like
-            ['pattern' => 'api/v1/like/<id:\d+>', 'route' => 'rest/like/like/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/like/<id:\d+>', 'route' => 'rest/like/like/delete', 'verb' => 'DELETE'],
-            ['pattern' => 'api/v1/like/find-by-object', 'route' => 'rest/like/like/find-by-object', 'verb' => 'GET'],
+            ['pattern' => 'like/<id:\d+>', 'route' => 'rest/like/like/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'like/<id:\d+>', 'route' => 'rest/like/like/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'like/find-by-object', 'route' => 'rest/like/like/find-by-object', 'verb' => 'GET'],
 
             // Post
-            ['pattern' => 'api/v1/post/', 'route' => 'rest/post/post/find', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/post/<id:\d+>', 'route' => 'rest/post/post/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/post/<id:\d+>', 'route' => 'rest/post/post/update', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/post/<id:\d+>', 'route' => 'rest/post/post/delete', 'verb' => ['DELETE']],
-            ['pattern' => 'api/v1/post/container/<containerId:\d+>', 'route' => 'rest/post/post/create', 'verb' => 'POST'],
-            ['pattern' => 'api/v1/post/container/<containerId:\d+>', 'route' => 'rest/post/post/find-by-container', 'verb' => 'GET'],
+            ['pattern' => 'post/', 'route' => 'rest/post/post/find', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'post/<id:\d+>', 'route' => 'rest/post/post/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'post/<id:\d+>', 'route' => 'rest/post/post/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'post/<id:\d+>', 'route' => 'rest/post/post/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'post/container/<containerId:\d+>', 'route' => 'rest/post/post/create', 'verb' => 'POST'],
+            ['pattern' => 'post/container/<containerId:\d+>', 'route' => 'rest/post/post/find-by-container', 'verb' => 'GET'],
 
             // Topic
-            ['pattern' => 'api/v1/topic/', 'route' => 'rest/topic/topic/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/topic/<id:\d+>', 'route' => 'rest/topic/topic/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/topic/<id:\d+>', 'route' => 'rest/topic/topic/update', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'api/v1/topic/<id:\d+>', 'route' => 'rest/topic/topic/delete', 'verb' => ['DELETE']],
-            ['pattern' => 'api/v1/topic/container/<containerId:\d+>', 'route' => 'rest/topic/topic/create', 'verb' => 'POST'],
-            ['pattern' => 'api/v1/topic/container/<containerId:\d+>', 'route' => 'rest/topic/topic/find-by-container', 'verb' => 'GET'],
+            ['pattern' => 'topic/', 'route' => 'rest/topic/topic/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'topic/<id:\d+>', 'route' => 'rest/topic/topic/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'topic/<id:\d+>', 'route' => 'rest/topic/topic/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'topic/<id:\d+>', 'route' => 'rest/topic/topic/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'topic/container/<containerId:\d+>', 'route' => 'rest/topic/topic/create', 'verb' => 'POST'],
+            ['pattern' => 'topic/container/<containerId:\d+>', 'route' => 'rest/topic/topic/find-by-container', 'verb' => 'GET'],
 
             // Activity
-            ['pattern' => 'api/v1/activity/', 'route' => 'rest/activity/activity/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/activity/<id:\d+>', 'route' => 'rest/activity/activity/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/activity/container/<containerId:\d+>', 'route' => 'rest/activity/activity/find-by-container', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'activity/', 'route' => 'rest/activity/activity/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'activity/<id:\d+>', 'route' => 'rest/activity/activity/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'activity/container/<containerId:\d+>', 'route' => 'rest/activity/activity/find-by-container', 'verb' => ['GET', 'HEAD']],
 
             // Notification
-            ['pattern' => 'api/v1/notification/', 'route' => 'rest/notification/notification/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/notification/unseen/', 'route' => 'rest/notification/notification/unseen', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'api/v1/notification/mark-as-seen/', 'route' => 'rest/notification/notification/mark-as-seen', 'verb' => ['PATCH']],
-            ['pattern' => 'api/v1/notification/<id:\d+>', 'route' => 'rest/notification/notification/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'notification/', 'route' => 'rest/notification/notification/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'notification/unseen/', 'route' => 'rest/notification/notification/unseen', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'notification/mark-as-seen/', 'route' => 'rest/notification/notification/mark-as-seen', 'verb' => ['PATCH']],
+            ['pattern' => 'notification/<id:\d+>', 'route' => 'rest/notification/notification/view', 'verb' => ['GET', 'HEAD']],
 
             // File
-            ['pattern' => 'api/v1/file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
+
+        ]);
+
+        Yii::$app->urlManager->addRules([
 
             // API Config
             ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
@@ -143,28 +148,30 @@ class Events
     private static function addWikiModuleRules()
     {
         if (Yii::$app->getModule('wiki')) {
-            Yii::$app->urlManager->addRules([
+            /* @var Module $module */
+            $module = Yii::$app->getModule('rest');
+            $module->addRules([
 
-                ['pattern' => 'api/v1/wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/delete-by-container', 'verb' => 'DELETE'],
+                ['pattern' => 'wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
+                ['pattern' => 'wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/delete-by-container', 'verb' => 'DELETE'],
 
                 //Wiki Page CRUD
-                ['pattern' => 'api/v1/wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/create', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/update', 'verb' => 'PUT'],
-                ['pattern' => 'api/v1/wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
+                ['pattern' => 'wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/create', 'verb' => 'POST'],
+                ['pattern' => 'wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/update', 'verb' => 'PUT'],
+                ['pattern' => 'wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
 
                 //Wiki Page Management
-                ['pattern' => 'api/v1/wiki/page/<id:\d+>/change-index', 'route' => 'rest/wiki/wiki/change-index', 'verb' => 'PATCH'],
-                ['pattern' => 'api/v1/wiki/page/<id:\d+>/move', 'route' => 'rest/wiki/wiki/move', 'verb' => 'PATCH'],
+                ['pattern' => 'wiki/page/<id:\d+>/change-index', 'route' => 'rest/wiki/wiki/change-index', 'verb' => 'PATCH'],
+                ['pattern' => 'wiki/page/<id:\d+>/move', 'route' => 'rest/wiki/wiki/move', 'verb' => 'PATCH'],
 
                 //Wiki Page Revision
-                ['pattern' => 'api/v1/wiki/page/<pageId:\d+>/revisions', 'route' => 'rest/wiki/revision/index', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/wiki/revision/<id:\d+>', 'route' => 'rest/wiki/revision/view', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/wiki/revision/<id:\d+>/revert', 'route' => 'rest/wiki/revision/revert', 'verb' => 'PATCH'],
+                ['pattern' => 'wiki/page/<pageId:\d+>/revisions', 'route' => 'rest/wiki/revision/index', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'wiki/revision/<id:\d+>', 'route' => 'rest/wiki/revision/view', 'verb' => 'GET'],
+                ['pattern' => 'wiki/revision/<id:\d+>/revert', 'route' => 'rest/wiki/revision/revert', 'verb' => 'PATCH'],
 
-            ], true);
+            ]);
         } else {
             static::addModuleNotFoundRoutes('wiki');
         }
@@ -173,25 +180,27 @@ class Events
     private static function addCalendarModuleRules()
     {
         if (Yii::$app->getModule('calendar')) {
-            Yii::$app->urlManager->addRules([
+            /* @var Module $module */
+            $module = Yii::$app->getModule('rest');
+            $module->addRules([
 
-                ['pattern' => 'api/v1/calendar/', 'route' => 'rest/calendar/calendar/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/find-by-container', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/delete-by-container', 'verb' => 'DELETE'],
+                ['pattern' => 'calendar/', 'route' => 'rest/calendar/calendar/find', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/find-by-container', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/delete-by-container', 'verb' => 'DELETE'],
 
                 //Calendar entry CRUD
-                ['pattern' => 'api/v1/calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/create', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/update', 'verb' => 'PUT'],
-                ['pattern' => 'api/v1/calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/delete', 'verb' => 'DELETE'],
+                ['pattern' => 'calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/create', 'verb' => 'POST'],
+                ['pattern' => 'calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/update', 'verb' => 'PUT'],
+                ['pattern' => 'calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/delete', 'verb' => 'DELETE'],
 
                 //Calendar Entry Management
-                ['pattern' => 'api/v1/calendar/entry/<id:\d+>/upload-files', 'route' => 'rest/calendar/calendar/attach-files', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/calendar/entry/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/calendar/calendar/remove-file', 'verb' => 'DELETE'],
+                ['pattern' => 'calendar/entry/<id:\d+>/upload-files', 'route' => 'rest/calendar/calendar/attach-files', 'verb' => 'POST'],
+                ['pattern' => 'calendar/entry/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/calendar/calendar/remove-file', 'verb' => 'DELETE'],
 
                 //Participate
-                ['pattern' => 'api/v1/calendar/entry/<id:\d+>/respond', 'route' => 'rest/calendar/calendar/respond', 'verb' => 'POST'],
-            ], true);
+                ['pattern' => 'calendar/entry/<id:\d+>/respond', 'route' => 'rest/calendar/calendar/respond', 'verb' => 'POST'],
+            ]);
         } else {
             static::addModuleNotFoundRoutes('calendar');
         }
@@ -200,32 +209,34 @@ class Events
     private static function addTasksModuleRules()
     {
         if (Yii::$app->getModule('tasks')) {
-            Yii::$app->urlManager->addRules([
+            /* @var Module $module */
+            $module = Yii::$app->getModule('rest');
+            $module->addRules([
 
-                ['pattern' => 'api/v1/tasks/', 'route' => 'rest/tasks/tasks/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/find-by-container', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/delete-by-container', 'verb' => 'DELETE'],
+                ['pattern' => 'tasks/', 'route' => 'rest/tasks/tasks/find', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/find-by-container', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/delete-by-container', 'verb' => 'DELETE'],
 
                 //Task CRUD
-                ['pattern' => 'api/v1/tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/create', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/update', 'verb' => 'PUT'],
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/delete', 'verb' => 'DELETE'],
+                ['pattern' => 'tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/create', 'verb' => 'POST'],
+                ['pattern' => 'tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/update', 'verb' => 'PUT'],
+                ['pattern' => 'tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/delete', 'verb' => 'DELETE'],
 
                 //Task management
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>/processed', 'route' => 'rest/tasks/tasks/processed', 'verb' => 'PATCH'],
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>/revert', 'route' => 'rest/tasks/tasks/revert', 'verb' => 'PATCH'],
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>/upload-files', 'route' => 'rest/tasks/tasks/attach-files', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/tasks/task/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/tasks/tasks/remove-file', 'verb' => 'DELETE'],
+                ['pattern' => 'tasks/task/<id:\d+>/processed', 'route' => 'rest/tasks/tasks/processed', 'verb' => 'PATCH'],
+                ['pattern' => 'tasks/task/<id:\d+>/revert', 'route' => 'rest/tasks/tasks/revert', 'verb' => 'PATCH'],
+                ['pattern' => 'tasks/task/<id:\d+>/upload-files', 'route' => 'rest/tasks/tasks/attach-files', 'verb' => 'POST'],
+                ['pattern' => 'tasks/task/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/tasks/tasks/remove-file', 'verb' => 'DELETE'],
 
                 //Task List CRUD
-                ['pattern' => 'api/v1/tasks/lists/container/<containerId:\d+>', 'route' => 'rest/tasks/task-list/index', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/tasks/lists/container/<containerId:\d+>', 'route' => 'rest/tasks/task-list/create', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/update', 'verb' => 'PUT'],
-                ['pattern' => 'api/v1/tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/delete', 'verb' => 'DELETE'],
+                ['pattern' => 'tasks/lists/container/<containerId:\d+>', 'route' => 'rest/tasks/task-list/index', 'verb' => 'GET'],
+                ['pattern' => 'tasks/lists/container/<containerId:\d+>', 'route' => 'rest/tasks/task-list/create', 'verb' => 'POST'],
+                ['pattern' => 'tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/update', 'verb' => 'PUT'],
+                ['pattern' => 'tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/delete', 'verb' => 'DELETE'],
 
-            ], true);
+            ]);
         } else {
             static::addModuleNotFoundRoutes('tasks');
         }
@@ -234,28 +245,30 @@ class Events
     private static function addCfilesModuleRules()
     {
         if (Yii::$app->getModule('cfiles')) {
-            Yii::$app->urlManager->addRules([
+            /* @var Module $module */
+            $module = Yii::$app->getModule('rest');
+            $module->addRules([
 
                 //File
-                ['pattern' => 'api/v1/cfiles/files/container/<containerId:\d+>', 'route' => 'rest/cfiles/file/find-by-container', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/cfiles/files/container/<containerId:\d+>', 'route' => 'rest/cfiles/file/upload', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/cfiles/file/<id:\d+>', 'route' => 'rest/cfiles/file/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/cfiles/file/<id:\d+>', 'route' => 'rest/cfiles/file/delete', 'verb' => 'DELETE'],
+                ['pattern' => 'cfiles/files/container/<containerId:\d+>', 'route' => 'rest/cfiles/file/find-by-container', 'verb' => 'GET'],
+                ['pattern' => 'cfiles/files/container/<containerId:\d+>', 'route' => 'rest/cfiles/file/upload', 'verb' => 'POST'],
+                ['pattern' => 'cfiles/file/<id:\d+>', 'route' => 'rest/cfiles/file/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'cfiles/file/<id:\d+>', 'route' => 'rest/cfiles/file/delete', 'verb' => 'DELETE'],
 
                 //Folder
-                ['pattern' => 'api/v1/cfiles/folders/container/<containerId:\d+>', 'route' => 'rest/cfiles/folder/find-by-container', 'verb' => 'GET'],
-                ['pattern' => 'api/v1/cfiles/folders/container/<containerId:\d+>', 'route' => 'rest/cfiles/folder/create', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'api/v1/cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/update', 'verb' => 'PUT'],
-                ['pattern' => 'api/v1/cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/delete', 'verb' => 'DELETE'],
+                ['pattern' => 'cfiles/folders/container/<containerId:\d+>', 'route' => 'rest/cfiles/folder/find-by-container', 'verb' => 'GET'],
+                ['pattern' => 'cfiles/folders/container/<containerId:\d+>', 'route' => 'rest/cfiles/folder/create', 'verb' => 'POST'],
+                ['pattern' => 'cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/view', 'verb' => ['GET', 'HEAD']],
+                ['pattern' => 'cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/update', 'verb' => 'PUT'],
+                ['pattern' => 'cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/delete', 'verb' => 'DELETE'],
 
                 //Items management
-                ['pattern' => 'api/v1/cfiles/items/container/<containerId:\d+>/make-public', 'route' => 'rest/cfiles/manage/make-public', 'verb' => 'PATCH'],
-                ['pattern' => 'api/v1/cfiles/items/container/<containerId:\d+>/make-private', 'route' => 'rest/cfiles/manage/make-private', 'verb' => 'PATCH'],
-                ['pattern' => 'api/v1/cfiles/items/container/<containerId:\d+>/move', 'route' => 'rest/cfiles/manage/move', 'verb' => 'POST'],
-                ['pattern' => 'api/v1/cfiles/items/container/<containerId:\d+>/delete', 'route' => 'rest/cfiles/manage/delete', 'verb' => 'DELETE'],
+                ['pattern' => 'cfiles/items/container/<containerId:\d+>/make-public', 'route' => 'rest/cfiles/manage/make-public', 'verb' => 'PATCH'],
+                ['pattern' => 'cfiles/items/container/<containerId:\d+>/make-private', 'route' => 'rest/cfiles/manage/make-private', 'verb' => 'PATCH'],
+                ['pattern' => 'cfiles/items/container/<containerId:\d+>/move', 'route' => 'rest/cfiles/manage/move', 'verb' => 'POST'],
+                ['pattern' => 'cfiles/items/container/<containerId:\d+>/delete', 'route' => 'rest/cfiles/manage/delete', 'verb' => 'DELETE'],
 
-            ], true);
+            ]);
         } else {
             static::addModuleNotFoundRoutes('cfiles');
         }
@@ -263,9 +276,11 @@ class Events
 
     private static function addModuleNotFoundRoutes($moduleId)
     {
-        Yii::$app->urlManager->addRules([
-            ['pattern' => "api/v1/{$moduleId}", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
-            ['pattern' => "api/v1/{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
-        ], true);
+        /* @var Module $module */
+        $module = Yii::$app->getModule('rest');
+        $module->addRules([
+            ['pattern' => $moduleId, 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
+            ['pattern' => "{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
+        ]);
     }
 }
