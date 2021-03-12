@@ -12,6 +12,7 @@ use humhub\modules\user\widgets\UserPickerField;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
+$apiModuleOptions = $model->getApiModuleOptions();
 ?>
 <div class="panel panel-default">
     <div class="panel-heading"><?= Yii::t('RestModule.base', '<strong>API</strong> Configuration'); ?></div>
@@ -30,7 +31,8 @@ use yii\helpers\Html;
 
         <br />
 
-        <?= $form->field($model, 'apiModules')->checkboxList($model->getApiModuleOptions()); ?>
+        <?= $form->field($model, 'apiModules')->checkboxList($apiModuleOptions)
+            ->hint(empty($apiModuleOptions) ? Yii::t('RestModule.base', 'No enabled modules found with additional REST API endpoints.') : false); ?>
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
