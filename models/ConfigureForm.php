@@ -75,7 +75,7 @@ class ConfigureForm extends Model
         $this->jwtKey = $settings->get('jwtKey');
         if (empty($this->jwtKey)) {
             $settings->set('jwtKey', Yii::$app->security->generateRandomString(86));
-            $this->jwtKey = $settings->getSerialized('jwtKey');
+            $this->jwtKey = $settings->get('jwtKey');
         }
 
         $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
