@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.1  (Unreleased)
+--------------------------
+- Enh: Use controller config for not intercepted actions
+
+
 0.3.0  (February 22, 2021)
 --------------------------
 - Fix #51: Remove group.space_id for compatible with Humhub 1.8
