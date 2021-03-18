@@ -137,44 +137,11 @@ class Events
 
         ], true);
 
-        static::addWikiModuleRules();
         static::addCalendarModuleRules();
         static::addTasksModuleRules();
         static::addCfilesModuleRules();
 
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
-    }
-
-    private static function addWikiModuleRules()
-    {
-        if (Yii::$app->getModule('wiki')) {
-            /* @var Module $module */
-            $module = Yii::$app->getModule('rest');
-            $module->addRules([
-
-                ['pattern' => 'wiki/', 'route' => 'rest/wiki/wiki/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/find-by-container', 'verb' => 'GET'],
-                ['pattern' => 'wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/delete-by-container', 'verb' => 'DELETE'],
-
-                //Wiki Page CRUD
-                ['pattern' => 'wiki/container/<containerId:\d+>', 'route' => 'rest/wiki/wiki/create', 'verb' => 'POST'],
-                ['pattern' => 'wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/update', 'verb' => 'PUT'],
-                ['pattern' => 'wiki/page/<id:\d+>', 'route' => 'rest/wiki/wiki/delete', 'verb' => ['DELETE']],
-
-                //Wiki Page Management
-                ['pattern' => 'wiki/page/<id:\d+>/change-index', 'route' => 'rest/wiki/wiki/change-index', 'verb' => 'PATCH'],
-                ['pattern' => 'wiki/page/<id:\d+>/move', 'route' => 'rest/wiki/wiki/move', 'verb' => 'PATCH'],
-
-                //Wiki Page Revision
-                ['pattern' => 'wiki/page/<pageId:\d+>/revisions', 'route' => 'rest/wiki/revision/index', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'wiki/revision/<id:\d+>', 'route' => 'rest/wiki/revision/view', 'verb' => 'GET'],
-                ['pattern' => 'wiki/revision/<id:\d+>/revert', 'route' => 'rest/wiki/revision/revert', 'verb' => 'PATCH'],
-
-            ]);
-        } else {
-            static::addModuleNotFoundRoutes('wiki');
-        }
     }
 
     private static function addCalendarModuleRules()
