@@ -44,6 +44,11 @@ abstract class BaseController extends Controller
     /**
      * @inheritdoc
      */
+    protected $doNotInterceptActionIds = ['*'];
+
+    /**
+     * @inheritdoc
+     */
     public function beforeAction($action)
     {
         $user = $this->authWithJwt();
