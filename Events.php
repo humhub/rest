@@ -137,40 +137,10 @@ class Events
 
         ], true);
 
-        static::addCalendarModuleRules();
         static::addTasksModuleRules();
         static::addCfilesModuleRules();
 
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
-    }
-
-    private static function addCalendarModuleRules()
-    {
-        if (Yii::$app->getModule('calendar')) {
-            /* @var Module $module */
-            $module = Yii::$app->getModule('rest');
-            $module->addRules([
-
-                ['pattern' => 'calendar/', 'route' => 'rest/calendar/calendar/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/find-by-container', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/delete-by-container', 'verb' => 'DELETE'],
-
-                //Calendar entry CRUD
-                ['pattern' => 'calendar/container/<containerId:\d+>', 'route' => 'rest/calendar/calendar/create', 'verb' => 'POST'],
-                ['pattern' => 'calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/update', 'verb' => 'PUT'],
-                ['pattern' => 'calendar/entry/<id:\d+>', 'route' => 'rest/calendar/calendar/delete', 'verb' => 'DELETE'],
-
-                //Calendar Entry Management
-                ['pattern' => 'calendar/entry/<id:\d+>/upload-files', 'route' => 'rest/calendar/calendar/attach-files', 'verb' => 'POST'],
-                ['pattern' => 'calendar/entry/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/calendar/calendar/remove-file', 'verb' => 'DELETE'],
-
-                //Participate
-                ['pattern' => 'calendar/entry/<id:\d+>/respond', 'route' => 'rest/calendar/calendar/respond', 'verb' => 'POST'],
-            ]);
-        } else {
-            static::addModuleNotFoundRoutes('calendar');
-        }
     }
 
     private static function addTasksModuleRules()
