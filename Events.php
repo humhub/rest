@@ -137,46 +137,9 @@ class Events
 
         ], true);
 
-        static::addTasksModuleRules();
         static::addCfilesModuleRules();
 
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
-    }
-
-    private static function addTasksModuleRules()
-    {
-        if (Yii::$app->getModule('tasks')) {
-            /* @var Module $module */
-            $module = Yii::$app->getModule('rest');
-            $module->addRules([
-
-                ['pattern' => 'tasks/', 'route' => 'rest/tasks/tasks/find', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/find-by-container', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/delete-by-container', 'verb' => 'DELETE'],
-
-                //Task CRUD
-                ['pattern' => 'tasks/container/<containerId:\d+>', 'route' => 'rest/tasks/tasks/create', 'verb' => 'POST'],
-                ['pattern' => 'tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/update', 'verb' => 'PUT'],
-                ['pattern' => 'tasks/task/<id:\d+>', 'route' => 'rest/tasks/tasks/delete', 'verb' => 'DELETE'],
-
-                //Task management
-                ['pattern' => 'tasks/task/<id:\d+>/processed', 'route' => 'rest/tasks/tasks/processed', 'verb' => 'PATCH'],
-                ['pattern' => 'tasks/task/<id:\d+>/revert', 'route' => 'rest/tasks/tasks/revert', 'verb' => 'PATCH'],
-                ['pattern' => 'tasks/task/<id:\d+>/upload-files', 'route' => 'rest/tasks/tasks/attach-files', 'verb' => 'POST'],
-                ['pattern' => 'tasks/task/<id:\d+>/remove-file/<fileId:\d+>', 'route' => 'rest/tasks/tasks/remove-file', 'verb' => 'DELETE'],
-
-                //Task List CRUD
-                ['pattern' => 'tasks/lists/container/<containerId:\d+>', 'route' => 'rest/tasks/task-list/index', 'verb' => 'GET'],
-                ['pattern' => 'tasks/lists/container/<containerId:\d+>', 'route' => 'rest/tasks/task-list/create', 'verb' => 'POST'],
-                ['pattern' => 'tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/update', 'verb' => 'PUT'],
-                ['pattern' => 'tasks/list/<id:\d+>', 'route' => 'rest/tasks/task-list/delete', 'verb' => 'DELETE'],
-
-            ]);
-        } else {
-            static::addModuleNotFoundRoutes('tasks');
-        }
     }
 
     private static function addCfilesModuleRules()
