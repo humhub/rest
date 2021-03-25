@@ -137,41 +137,7 @@ class Events
 
         ], true);
 
-        static::addCfilesModuleRules();
-
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
-    }
-
-    private static function addCfilesModuleRules()
-    {
-        if (Yii::$app->getModule('cfiles')) {
-            /* @var Module $module */
-            $module = Yii::$app->getModule('rest');
-            $module->addRules([
-
-                //File
-                ['pattern' => 'cfiles/files/container/<containerId:\d+>', 'route' => 'rest/cfiles/file/find-by-container', 'verb' => 'GET'],
-                ['pattern' => 'cfiles/files/container/<containerId:\d+>', 'route' => 'rest/cfiles/file/upload', 'verb' => 'POST'],
-                ['pattern' => 'cfiles/file/<id:\d+>', 'route' => 'rest/cfiles/file/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'cfiles/file/<id:\d+>', 'route' => 'rest/cfiles/file/delete', 'verb' => 'DELETE'],
-
-                //Folder
-                ['pattern' => 'cfiles/folders/container/<containerId:\d+>', 'route' => 'rest/cfiles/folder/find-by-container', 'verb' => 'GET'],
-                ['pattern' => 'cfiles/folders/container/<containerId:\d+>', 'route' => 'rest/cfiles/folder/create', 'verb' => 'POST'],
-                ['pattern' => 'cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/view', 'verb' => ['GET', 'HEAD']],
-                ['pattern' => 'cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/update', 'verb' => 'PUT'],
-                ['pattern' => 'cfiles/folder/<id:\d+>', 'route' => 'rest/cfiles/folder/delete', 'verb' => 'DELETE'],
-
-                //Items management
-                ['pattern' => 'cfiles/items/container/<containerId:\d+>/make-public', 'route' => 'rest/cfiles/manage/make-public', 'verb' => 'PATCH'],
-                ['pattern' => 'cfiles/items/container/<containerId:\d+>/make-private', 'route' => 'rest/cfiles/manage/make-private', 'verb' => 'PATCH'],
-                ['pattern' => 'cfiles/items/container/<containerId:\d+>/move', 'route' => 'rest/cfiles/manage/move', 'verb' => 'POST'],
-                ['pattern' => 'cfiles/items/container/<containerId:\d+>/delete', 'route' => 'rest/cfiles/manage/delete', 'verb' => 'DELETE'],
-
-            ]);
-        } else {
-            static::addModuleNotFoundRoutes('cfiles');
-        }
     }
 
     private static function addModuleNotFoundRoutes($moduleId)
