@@ -11,7 +11,6 @@ use humhub\components\bootstrap\ModuleAutoLoader;
 use \humhub\components\Module as BaseModule;
 use Yii;
 use yii\helpers\Url;
-use yii\web\JsonParser;
 
 class Module extends BaseModule
 {
@@ -30,20 +29,6 @@ class Module extends BaseModule
      * @inheritdoc
      */
     public $resourcesPath = 'resources';
-
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeAction($action)
-    {
-        Yii::$app->response->format = 'json';
-
-        Yii::$app->request->setBodyParams(null);
-        Yii::$app->request->parsers['application/json'] = JsonParser::class;
-
-        return parent::beforeAction($action);
-    }
 
     /**
      * @inheritdoc
