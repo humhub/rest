@@ -45,6 +45,11 @@ abstract class BaseController extends Controller
     /**
      * @inheritdoc
      */
+    protected $doNotInterceptActionIds = ['*'];
+
+    /**
+     * @inheritdoc
+     */
     public function beforeAction($action)
     {
         Yii::$app->response->format = 'json';
