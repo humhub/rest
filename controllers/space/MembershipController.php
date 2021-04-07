@@ -92,7 +92,7 @@ class MembershipController extends BaseController
             return $this->returnError(404, 'Membership not found!');
         }
 
-        $newRole = Yii::$app->request->get('role');
+        $newRole = Yii::$app->request->getBodyParam('role');
         if (!in_array($newRole, ['admin', 'moderator', 'member'])) {
             return $this->returnError(400, 'Invalid role given!');
         }
