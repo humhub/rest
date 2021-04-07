@@ -25,7 +25,7 @@ The base url for all APIs is: `https://yourhost/api/v1/`
 
 **Module APIs** 
 
-- [Calendar](https://www.humhub.com/en/marketplace/rest/docs/html/calendar.html)
+- [Calendar](https://www.humhub.com/en/marketplace/calendar/docs/swagger/calendar.html)
 - [CFiles](https://www.humhub.com/en/marketplace/rest/docs/html/cfiles.html)
 - [Tasks](https://www.humhub.com/en/marketplace/rest/docs/html/task.html)
 - [Wiki](https://www.humhub.com/en/marketplace/wiki/docs/swagger/wiki.html)
