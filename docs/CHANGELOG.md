@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.0  (Unreleased)
+--------------------------
+- Enh #33: Move endpoints to external modules
+
+
 0.3.1  (Unreleased)
 --------------------------
 - Enh: Use controller config for not intercepted actions

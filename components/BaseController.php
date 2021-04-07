@@ -19,6 +19,7 @@ use Yii;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\HttpException;
+use yii\web\JsonParser;
 
 
 /**
@@ -51,6 +52,11 @@ abstract class BaseController extends Controller
      */
     public function beforeAction($action)
     {
+        Yii::$app->response->format = 'json';
+
+        Yii::$app->request->setBodyParams(null);
+        Yii::$app->request->parsers['application/json'] = JsonParser::class;
+
         $user = $this->authWithJwt();
         $config = ConfigureForm::getInstance();
 

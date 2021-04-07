@@ -24,6 +24,8 @@ class ConfigureForm extends Model
 
     public $enableBasicAuth;
 
+    public $apiModules;
+
     /**
      * @inheritdoc
      */
@@ -31,7 +33,7 @@ class ConfigureForm extends Model
     {
         return [
             [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
-            [['enabledUsers'], 'safe'],
+            [['enabledUsers', 'apiModules'], 'safe'],
             [['enabledForAllUsers', 'enableBasicAuth'], 'boolean'],
             [['jwtExpire'], 'integer']
         ];
@@ -44,9 +46,10 @@ class ConfigureForm extends Model
     {
         return [
             'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
-            'jwtExpire' => 'JWT Token Expiration',
+            'jwtExpire' => Yii::t('RestModule.base','JWT Token Expiration'),
             'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
-            'enableBasicAuth' => 'Allow HTTP Basic Authentication'
+            'enableBasicAuth' => Yii::t('RestModule.base','Allow HTTP Basic Authentication'),
+            'apiModules' => Yii::t('RestModule.base', 'Active additional REST API endpoints from the modules'),
         ];
     }
 
@@ -67,19 +70,24 @@ class ConfigureForm extends Model
         /** @var Module $module */
         $module = Yii::$app->getModule('rest');
 
-
         $settings = $module->settings;
 
         $this->jwtKey = $settings->get('jwtKey');
         if (empty($this->jwtKey)) {
             $settings->set('jwtKey', Yii::$app->security->generateRandomString(86));
-            $this->jwtKey = $settings->getSerialized('jwtKey');
+            $this->jwtKey = $settings->get('jwtKey');
         }
 
         $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
         $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
         $this->jwtExpire = (int)$settings->get('jwtExpire');
         $this->enableBasicAuth = (boolean)$settings->get('enableBasicAuth');
+
+        foreach ($module->getModulesWithRestApi() as $apiModule) {
+            if ($module->isActiveModule($apiModule->id)) {
+                $this->apiModules[] = $apiModule->id;
+            }
+        }
 
         return true;
     }
@@ -95,6 +103,12 @@ class ConfigureForm extends Model
         $module->settings->set('enableBasicAuth', (boolean)$this->enableBasicAuth);
         $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
+        $apiModules = [];
+        foreach ($module->getModulesWithRestApi() as $apiModule) {
+            $apiModules[$apiModule->id] = is_array($this->apiModules) && in_array($apiModule->id, $this->apiModules);
+        }
+        $module->settings->setSerialized('apiModules', $apiModules);
+
         return true;
     }
 
@@ -104,6 +118,24 @@ class ConfigureForm extends Model
         $config->loadSettings();
 
         return $config;
+    }
+
+    /**
+     * Get options of modules with REST API endpoints
+     *
+     * @return array
+     */
+    public function getApiModuleOptions()
+    {
+        /** @var Module $module */
+        $module = Yii::$app->getModule('rest');
+
+        $options = [];
+        foreach ($module->getModulesWithRestApi() as $apiModule) {
+            $options[$apiModule->id] = $apiModule->getName();
+        }
+
+        return $options;
     }
 
 }
