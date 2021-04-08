@@ -29,7 +29,7 @@ The base url for all APIs is: `https://yourhost/api/v1/`
 - [CFiles](https://www.humhub.com/en/marketplace/rest/docs/html/cfiles.html)
 - [Tasks](https://www.humhub.com/en/marketplace/tasks/docs/swagger/task.html)
 - [Wiki](https://www.humhub.com/en/marketplace/wiki/docs/swagger/wiki.html)
-- [Mail](https://www.humhub.com/en/marketplace/rest/docs/html/mail.html)
+- [Mail](https://www.humhub.com/en/marketplace/mail/docs/swagger/mail.html)
 
 
 The folder `/docs/html`contains HTML rendered documentations for all available API endpoints.
