@@ -708,7 +708,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/space/1/membership/3/role?role=admin",
+							"raw": "{{API_URL}}/space/1/membership/3/role",
 							"host": [
 								"{{API_URL}}"
 							],
