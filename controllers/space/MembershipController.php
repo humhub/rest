@@ -93,6 +93,10 @@ class MembershipController extends BaseController
         }
 
         $newRole = Yii::$app->request->getBodyParam('role');
+        if ($newRole === null) {
+            // Support old approach
+            $newRole = Yii::$app->request->get('role');
+        }
         if (!in_array($newRole, ['admin', 'moderator', 'member'])) {
             return $this->returnError(400, 'Invalid role given!');
         }
