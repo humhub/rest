@@ -1,7 +1,6 @@
 <?php
-
-return [
-    '<strong>API</strong> Configuration' => '',
-    'Enabled for all registered users' => '',
-    'JWT Key' => '',
-];
+return array (
+  '<strong>API</strong> Configuration' => '<strong>API</strong> Конфигурация',
+  'Enabled for all registered users' => 'Активиран за всички регистрирани потребители',
+  'JWT Key' => 'Ключ JWT',
+);
