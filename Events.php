@@ -40,6 +40,14 @@ class Events
             ['pattern' => 'api/v1/user/<id:\d+>', 'route' => 'rest/user/user/delete', 'verb' => ['DELETE']],
             ['pattern' => 'api/v1/user/full/<id:\d+>', 'route' => 'rest/user/user/hard-delete', 'verb' => ['DELETE']],
             ['pattern' => 'api/v1/user/', 'route' => 'rest/user/user/create', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/user/auth', 'route' => 'rest/user/user/login', 'verb' => 'POST'],
+            
+            
+            // Friendship
+            ['pattern' => 'api/v1/friendship/send-request', 'route' => 'rest/friendship/friendship/sendrequest', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/friendship/accept-request', 'route' => 'rest/friendship/friendship/acceptrequest', 'verb' => 'POST'],
+            ['pattern' => 'api/v1/friendship/getrequests/<id:\d+>', 'route' => 'rest/friendship/friendship/getrequests', 'verb' => 'GET'],
+            ['pattern' => 'api/v1/friendship/getsentrequests/<id:\d+>', 'route' => 'rest/friendship/friendship/getsentrequests', 'verb' => 'GET'],
 
             // User: Group Controller
             ['pattern' => 'api/v1/user/group', 'route' => 'rest/user/group/index', 'verb' => ['GET', 'HEAD']],
