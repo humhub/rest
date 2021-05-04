@@ -14,7 +14,7 @@ use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\file\models\File;
 use humhub\modules\file\models\FileUpload;
-use humhub\modules\rest\controllers\task\TaskController;
+use humhub\modules\tasks\controllers\rest\TasksController;
 use humhub\modules\rest\definitions\ContentDefinitions;
 use Yii;
 use yii\web\HttpException;
@@ -283,39 +283,43 @@ abstract class BaseContentController extends BaseController
      * Helpers
      *********************************************************************************
      *
-     * /*
-     * @param $requestParams
-     * @param $formName
-     * @param $modelName
+    /*
+     * Prepare date formats for Calendar entries and Tasks
+     *
+     * @param array $requestParams
+     * @param string $formName
+     * @param string $modelName
      * @return array
      * @throws HttpException
      */
-    protected function prepareRequestParams($requestParams, $formName, $modelName)
+    protected function prepareRequestParams(array $requestParams, string $formName, string $modelName): array
     {
-        if ($this instanceof TaskController && empty($requestParams[$modelName]['scheduling'])) {
+        if ($this instanceof TasksController && empty($requestParams[$modelName]['scheduling'])) {
             return $requestParams;
         }
-        
-        if (empty($requestParams[$formName]['start_date']) || empty($requestParams[$formName]['end_date'])) {
-            $message = empty($requestParams[$formName]['start_date']) ? 'Start ' : 'End ';
-            $message .=  'date cannot be blank';
-            throw new HttpException(400, $message);
-        }
 
-        if (! empty($requestParams[$formName]['start_time'])) {
+        if (empty($requestParams[$formName]['start_date'])) {
+            throw new HttpException(400, 'Start date cannot be blank');
+        } else {
             $requestParams[$modelName]['all_day'] = 0;
         }
 
-        if (! empty($requestParams[$formName]['end_time'])) {
+        if (empty($requestParams[$formName]['end_date'])) {
+            throw new HttpException(400, 'End date cannot be blank');
+        } else {
             $requestParams[$modelName]['all_day'] = 0;
         }
 
-        if (preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['start_date']) ||
-            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['start_date']) ||
-            preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['end_date']) ||
-            preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['end_date'])) {
-            return $requestParams;
+        if (!preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['start_date']) &&
+            !preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['start_date'])) {
+            throw new HttpException(400, 'Wrong start date format.');
         }
-        throw new HttpException(400, 'Wrong calendar entry date format.');
+
+        if (!preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['end_date']) &&
+            !preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['end_date'])) {
+            throw new HttpException(400, 'Wrong end date format.');
+        }
+
+        return $requestParams;
     }
 }
