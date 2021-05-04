@@ -4,6 +4,7 @@ Changelog
 0.4.0  (Unreleased)
 --------------------------
 - Enh #33: Move endpoints to external modules
+- Fix #60: Cleanup code for prepare params
 
 
 0.3.1  (Unreleased)
