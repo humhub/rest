@@ -27,10 +27,20 @@ class ApiTester extends \ApiTester
      * Define custom actions here
      */
 
-    public function getUserDefinition($username)
+    public function getUserDefinition(string $username): array
     {
         $user = User::findOne(['username' => $username]);
         return ($user ? UserDefinitions::getUser($user) : []);
+    }
+
+    public function getUserDefinitions(array $usernames): array
+    {
+        $users = User::find()->where(['IN', 'username', $usernames])->all();
+        $userDefinitions = [];
+        foreach ($users as $user) {
+            $userDefinitions[] = UserDefinitions::getUser($user);
+        }
+        return $userDefinitions;
     }
 
     public function seeUserDefinition($username)
