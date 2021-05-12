@@ -12,9 +12,6 @@ class UserSessionCest extends HumHubApiTestCest
         $I->wantTo('delete all sessions by user id');
         $I->amAdmin();
 
-        $I->sendDelete('user/session/all/1');
-        $I->seeSuccessMessage('1 user sessions deleted!');
-
         $I->sendDelete('user/session/all/2');
         $I->seeSuccessMessage('0 user sessions deleted!');
 
