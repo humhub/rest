@@ -2,6 +2,7 @@
 namespace rest;
 
 use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\user\models\Group;
 use humhub\modules\user\models\User;
 
 /**
@@ -33,12 +34,12 @@ class ApiTester extends \ApiTester
         return ($user ? UserDefinitions::getUser($user) : []);
     }
 
-    public function getUserDefinitions(array $usernames): array
+    public function getUserDefinitions(array $usernames, string $type = 'full'): array
     {
         $users = User::find()->where(['IN', 'username', $usernames])->all();
         $userDefinitions = [];
         foreach ($users as $user) {
-            $userDefinitions[] = UserDefinitions::getUser($user);
+            $userDefinitions[] = $type == 'short' ? UserDefinitions::getUserShort($user) : UserDefinitions::getUser($user);
         }
         return $userDefinitions;
     }
@@ -46,5 +47,11 @@ class ApiTester extends \ApiTester
     public function seeUserDefinition($username)
     {
         $this->seeSuccessResponseContainsJson($this->getUserDefinition($username));
+    }
+
+    public function getGroupDefinition(int $groupId): array
+    {
+        $group = Group::findOne(['id' => $groupId]);
+        return ($group ? UserDefinitions::getGroup($group) : []);
     }
 }
