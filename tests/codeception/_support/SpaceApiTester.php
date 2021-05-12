@@ -2,6 +2,7 @@
 namespace rest;
 
 use humhub\modules\rest\definitions\SpaceDefinitions;
+use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
 
 /**
@@ -41,6 +42,16 @@ class SpaceApiTester extends ApiTester
             $spaceDefinitions[] = SpaceDefinitions::getSpace($space);
         }
         return $spaceDefinitions;
+    }
+
+    public function getSpaceMembershipDefinitions(int $spaceId): array
+    {
+        $memberships = Membership::findAll(['space_id' => $spaceId]);
+        $membershipDefinitions = [];
+        foreach ($memberships as $membership) {
+            $membershipDefinitions[] = SpaceDefinitions::getSpaceMembership($membership);
+        }
+        return $membershipDefinitions;
     }
 
 }
