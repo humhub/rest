@@ -2,26 +2,28 @@
 
 namespace rest\api;
 
-use rest\SpaceApiTester;
+use humhub\modules\rest\definitions\SpaceDefinitions;
+use humhub\modules\space\models\Space;
+use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
 class SpaceCest extends HumHubApiTestCest
 {
-    public function testList(SpaceApiTester $I)
+    public function testList(ApiTester $I)
     {
         $I->wantTo('see all spaces list');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('space', $I->getSpaceDefinitions([1,2,3,4,5]));
+        $I->seePaginationGetResponse('space', $this->getSpaceDefinitions([1,2,3,4,5]));
     }
 
-    public function testGetById(SpaceApiTester $I)
+    public function testGetById(ApiTester $I)
     {
         $I->wantTo('see all spaces list');
         $I->amAdmin();
 
         $I->sendGet('space/1');
-        $I->seeSuccessResponseContainsJson($I->getSpaceDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getSpaceDefinition(1));
 
         $I->sendGet('space/2');
         $I->seeForbiddenMessage('You don\'t have an access to this space!');
@@ -30,7 +32,7 @@ class SpaceCest extends HumHubApiTestCest
         $I->seeNotFoundMessage('Space not found!');
     }
 
-    public function testCreateWithoutPermission(SpaceApiTester $I)
+    public function testCreateWithoutPermission(ApiTester $I)
     {
         $I->wantTo('create a space by user without permission');
         $I->amUser3();
@@ -39,7 +41,7 @@ class SpaceCest extends HumHubApiTestCest
         $I->seeForbiddenMessage('You are not allowed to create spaces!');
     }
 
-    public function testCreateWithPermission(SpaceApiTester $I)
+    public function testCreateWithPermission(ApiTester $I)
     {
         $I->wantTo('create a space by user with permission');
         $I->amAdmin();
@@ -50,10 +52,10 @@ class SpaceCest extends HumHubApiTestCest
             'visibility' => 1,
             'join_policy' => 1,
         ]);
-        $I->seeSuccessResponseContainsJson($I->getSpaceDefinition(6));
+        $I->seeSuccessResponseContainsJson($this->getSpaceDefinition(6));
     }
 
-    public function testUpdate(SpaceApiTester $I)
+    public function testUpdate(ApiTester $I)
     {
         $I->wantTo('update a space');
         $I->amAdmin();
@@ -64,10 +66,10 @@ class SpaceCest extends HumHubApiTestCest
             'tags' => 'first, second, third',
             'color' => '#EE3300',
         ]);
-        $I->seeSuccessResponseContainsJson($I->getSpaceDefinition(2));
+        $I->seeSuccessResponseContainsJson($this->getSpaceDefinition(2));
     }
 
-    public function testDelete(SpaceApiTester $I)
+    public function testDelete(ApiTester $I)
     {
         $I->wantTo('delete a space');
         $I->amAdmin();
@@ -77,6 +79,22 @@ class SpaceCest extends HumHubApiTestCest
 
         $I->sendDelete('space/2');
         $I->seeNotFoundMessage('Space not found!');
+    }
+
+    private function getSpaceDefinition(int $id): array
+    {
+        $space = Space::findOne(['id' => $id]);
+        return ($space ? SpaceDefinitions::getSpace($space) : []);
+    }
+
+    private function getSpaceDefinitions(array $ids): array
+    {
+        $spaces = Space::find()->where(['IN', 'id', $ids])->all();
+        $spaceDefinitions = [];
+        foreach ($spaces as $space) {
+            $spaceDefinitions[] = SpaceDefinitions::getSpace($space);
+        }
+        return $spaceDefinitions;
     }
 
 }

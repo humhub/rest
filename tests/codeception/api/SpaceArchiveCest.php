@@ -2,12 +2,12 @@
 
 namespace rest\api;
 
-use rest\SpaceApiTester;
+use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
 class SpaceArchiveCest extends HumHubApiTestCest
 {
-    public function testArchive(SpaceApiTester $I)
+    public function testArchive(ApiTester $I)
     {
         $I->wantTo('archive a space');
         $I->amAdmin();
@@ -16,7 +16,7 @@ class SpaceArchiveCest extends HumHubApiTestCest
         $I->seeSuccessMessage('Space successfully archived!');
     }
 
-    public function testUnarchive(SpaceApiTester $I)
+    public function testUnarchive(ApiTester $I)
     {
         $I->wantTo('unarchive a space');
         $I->amAdmin();
