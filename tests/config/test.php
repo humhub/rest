@@ -8,7 +8,10 @@
 
 return [
     'modules' => ['rest'],
-    'fixtures' => ['default'],
+    'fixtures' => [
+        'default',
+        'humhub\modules\rest\tests\codeception\fixtures\CommentFixture'
+    ]
 ];
 
 
