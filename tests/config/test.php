@@ -10,7 +10,9 @@ return [
     'modules' => ['rest'],
     'fixtures' => [
         'default',
+        'humhub\modules\rest\tests\codeception\fixtures\ActivityFixture',
         'humhub\modules\rest\tests\codeception\fixtures\CommentFixture',
+        'humhub\modules\rest\tests\codeception\fixtures\ContentFixture',
         'humhub\modules\rest\tests\codeception\fixtures\LikeFixture',
         'humhub\modules\rest\tests\codeception\fixtures\TopicFixture',
     ]
