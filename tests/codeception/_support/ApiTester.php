@@ -2,7 +2,6 @@
 namespace rest;
 
 use humhub\modules\rest\definitions\UserDefinitions;
-use humhub\modules\user\models\Group;
 use humhub\modules\user\models\User;
 
 /**
@@ -47,11 +46,5 @@ class ApiTester extends \ApiTester
     public function seeUserDefinition($username)
     {
         $this->seeSuccessResponseContainsJson($this->getUserDefinition($username));
-    }
-
-    public function getGroupDefinition(int $groupId): array
-    {
-        $group = Group::findOne(['id' => $groupId]);
-        return ($group ? UserDefinitions::getGroup($group) : []);
     }
 }

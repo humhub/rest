@@ -10,17 +10,20 @@ use tests\codeception\_support\HumHubApiTestCest;
 
 class LikeCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Like::class;
+    protected $recordDefinitionFunction = [LikeDefinitions::class, 'getLike'];
+
     public function testFindByObject(ApiTester $I)
     {
         $I->wantTo('find a like by object id');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('like/find-by-object', $this->getLikeDefinitions([1,3]), [], [
+        $I->seePaginationGetResponse('like/find-by-object', $this->getRecordDefinitions([1,3]), [], [
             'model' => Post::class,
             'pk' => 1,
         ]);
 
-        $I->seePaginationGetResponse('like/find-by-object', $this->getLikeDefinitions([2]), [], [
+        $I->seePaginationGetResponse('like/find-by-object', $this->getRecordDefinitions([2]), [], [
             'model' => Post::class,
             'pk' => 2,
         ]);
@@ -38,7 +41,7 @@ class LikeCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendGet('like/1');
-        $I->seeSuccessResponseContainsJson($this->getLikeDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendGet('like/123');
         $I->seeNotFoundMessage('Like not found!');
@@ -63,26 +66,6 @@ class LikeCest extends HumHubApiTestCest
 
         $I->sendDelete('like/2');
         $I->seeForbiddenMessage('You cannot delete this content!');
-    }
-
-    private function getLikeDefinition(int $id): array
-    {
-        $like = Like::findOne(['id' => $id]);
-        return ($like ? LikeDefinitions::getLike($like) : []);
-    }
-
-    private function getLikeDefinitions(array $ids): array
-    {
-        $likes = Like::find()
-            ->where(['IN', 'id', $ids])
-            ->all();
-
-        $likeDefinitions = [];
-        foreach ($likes as $like) {
-            $likeDefinitions[] = LikeDefinitions::getLike($like);
-        }
-
-        return $likeDefinitions;
     }
 
 }

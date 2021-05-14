@@ -9,12 +9,15 @@ use tests\codeception\_support\HumHubApiTestCest;
 
 class SpaceCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Space::class;
+    protected $recordDefinitionFunction = [SpaceDefinitions::class, 'getSpace'];
+
     public function testList(ApiTester $I)
     {
         $I->wantTo('see all spaces list');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('space', $this->getSpaceDefinitions([1,2,3,4,5]));
+        $I->seePaginationGetResponse('space', $this->getRecordDefinitions([1,2,3,4,5]));
     }
 
     public function testGetById(ApiTester $I)
@@ -23,7 +26,7 @@ class SpaceCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendGet('space/1');
-        $I->seeSuccessResponseContainsJson($this->getSpaceDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendGet('space/2');
         $I->seeForbiddenMessage('You don\'t have an access to this space!');
@@ -52,7 +55,7 @@ class SpaceCest extends HumHubApiTestCest
             'visibility' => 1,
             'join_policy' => 1,
         ]);
-        $I->seeSuccessResponseContainsJson($this->getSpaceDefinition(6));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(6));
     }
 
     public function testUpdate(ApiTester $I)
@@ -66,7 +69,7 @@ class SpaceCest extends HumHubApiTestCest
             'tags' => 'first, second, third',
             'color' => '#EE3300',
         ]);
-        $I->seeSuccessResponseContainsJson($this->getSpaceDefinition(2));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(2));
     }
 
     public function testDelete(ApiTester $I)
@@ -79,22 +82,6 @@ class SpaceCest extends HumHubApiTestCest
 
         $I->sendDelete('space/2');
         $I->seeNotFoundMessage('Space not found!');
-    }
-
-    private function getSpaceDefinition(int $id): array
-    {
-        $space = Space::findOne(['id' => $id]);
-        return ($space ? SpaceDefinitions::getSpace($space) : []);
-    }
-
-    private function getSpaceDefinitions(array $ids): array
-    {
-        $spaces = Space::find()->where(['IN', 'id', $ids])->all();
-        $spaceDefinitions = [];
-        foreach ($spaces as $space) {
-            $spaceDefinitions[] = SpaceDefinitions::getSpace($space);
-        }
-        return $spaceDefinitions;
     }
 
 }

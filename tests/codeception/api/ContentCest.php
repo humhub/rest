@@ -10,6 +10,9 @@ use tests\codeception\_support\HumHubApiTestCest;
 
 class ContentCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Content::class;
+    protected $recordDefinitionFunction = [ContentDefinitions::class, 'getContent'];
+
     public function testListContainers(ApiTester $I)
     {
         $I->wantTo('see all containers');
@@ -23,7 +26,7 @@ class ContentCest extends HumHubApiTestCest
         $I->wantTo('find content by container');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('content/find-by-container/1', $this->getContentDefinitions([1,2]));
+        $I->seePaginationGetResponse('content/find-by-container/1', $this->getRecordDefinitions([1,2]));
 
         $I->sendGet('content/find-by-container/123');
         $I->seeNotFoundMessage('Content container not found!');
@@ -35,7 +38,7 @@ class ContentCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendGet('content/1');
-        $I->seeSuccessResponseContainsJson($this->getContentDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendGet('content/123');
         $I->seeNotFoundMessage('Content not found!');
@@ -52,16 +55,7 @@ class ContentCest extends HumHubApiTestCest
 
     private function getContainerDefinitions(array $ids): array
     {
-        $containers = ContentContainer::find()
-            ->where(['IN', 'id', $ids])
-            ->all();
-
-        $containerDefinitions = [];
-        foreach ($containers as $container) {
-            $containerDefinitions[] = ContentDefinitions::getContentContainer($container);
-        }
-
-        return $containerDefinitions;
+        return $this->getRecordDefinitions($ids, ContentContainer::class, [ContentDefinitions::class, 'getContentContainer']);
     }
 
     public function testDelete(ApiTester $I)
@@ -83,26 +77,6 @@ class ContentCest extends HumHubApiTestCest
 
         $I->sendDelete('content/1');
         $I->seeForbiddenMessage('You cannot delete this content!');
-    }
-
-    private function getContentDefinitions(array $ids): array
-    {
-        $contents = Content::find()
-            ->where(['IN', 'id', $ids])
-            ->all();
-
-        $contentDefinitions = [];
-        foreach ($contents as $content) {
-            $contentDefinitions[] = ContentDefinitions::getContent($content);
-        }
-
-        return $contentDefinitions;
-    }
-
-    private function getContentDefinition(int $id): array
-    {
-        $content = Content::findOne(['id' => $id]);
-        return ($content ? ContentDefinitions::getContent($content) : []);
     }
 
 }

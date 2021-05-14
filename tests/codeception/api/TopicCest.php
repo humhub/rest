@@ -9,12 +9,15 @@ use tests\codeception\_support\HumHubApiTestCest;
 
 class TopicCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Topic::class;
+    protected $recordDefinitionFunction = [TopicDefinitions::class, 'getTopic'];
+
     public function testList(ApiTester $I)
     {
         $I->wantTo('see all topics');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('topic', $this->getTopicDefinitions([1,2,3,4,5]));
+        $I->seePaginationGetResponse('topic', $this->getRecordDefinitions([1,2,3,4,5]));
     }
 
     public function testFindByContainer(ApiTester $I)
@@ -22,10 +25,10 @@ class TopicCest extends HumHubApiTestCest
         $I->wantTo('find topics by container');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('topic/container/1', $this->getTopicDefinitions([1]));
-        $I->seePaginationGetResponse('topic/container/2', $this->getTopicDefinitions([2,4]));
-        $I->seePaginationGetResponse('topic/container/3', $this->getTopicDefinitions([3]));
-        $I->seePaginationGetResponse('topic/container/4', $this->getTopicDefinitions([5]));
+        $I->seePaginationGetResponse('topic/container/1', $this->getRecordDefinitions([1]));
+        $I->seePaginationGetResponse('topic/container/2', $this->getRecordDefinitions([2,4]));
+        $I->seePaginationGetResponse('topic/container/3', $this->getRecordDefinitions([3]));
+        $I->seePaginationGetResponse('topic/container/4', $this->getRecordDefinitions([5]));
     }
 
     public function testView(ApiTester $I)
@@ -34,7 +37,7 @@ class TopicCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendGet('topic/1');
-        $I->seeSuccessResponseContainsJson($this->getTopicDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendGet('topic/123');
         $I->seeNotFoundMessage('Topic not found!');
@@ -56,7 +59,7 @@ class TopicCest extends HumHubApiTestCest
             'color' => '#06F',
             'sort_order' => 800,
         ]);
-        $I->seeSuccessResponseContainsJson($this->getTopicDefinition(6));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(6));
     }
 
     public function testUpdate(ApiTester $I)
@@ -69,7 +72,7 @@ class TopicCest extends HumHubApiTestCest
             'color' => '#9F0',
             'sort_order' => 200,
         ]);
-        $I->seeSuccessResponseContainsJson($this->getTopicDefinition(2));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(2));
 
         $I->sendPut('topic/123');
         $I->seeNotFoundMessage('Topic not found!');
@@ -85,22 +88,6 @@ class TopicCest extends HumHubApiTestCest
 
         $I->sendDelete('topic/123');
         $I->seeNotFoundMessage('Topic not found!');
-    }
-
-    private function getTopicDefinition(int $id): array
-    {
-        $topic = Topic::findOne(['id' => $id]);
-        return ($topic ? TopicDefinitions::getTopic($topic) : []);
-    }
-
-    private function getTopicDefinitions(array $ids): array
-    {
-        $topics = Topic::find()->where(['IN', 'id', $ids])->all();
-        $topicDefinitions = [];
-        foreach ($topics as $topic) {
-            $topicDefinitions[] = TopicDefinitions::getTopic($topic);
-        }
-        return $topicDefinitions;
     }
 
 }

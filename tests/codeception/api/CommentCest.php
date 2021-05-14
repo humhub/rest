@@ -9,13 +9,16 @@ use tests\codeception\_support\HumHubApiTestCest;
 
 class CommentCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Comment::class;
+    protected $recordDefinitionFunction = [CommentDefinitions::class, 'getComment'];
+
     public function testSeeComment(ApiTester $I)
     {
         $I->wantTo('see a comment by id');
         $I->amAdmin();
 
         $I->sendGet('comment/1');
-        $I->seeSuccessResponseContainsJson($this->getCommentDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendGet('comment/123');
         $I->seeNotFoundMessage('Comment not found!');
@@ -40,12 +43,6 @@ class CommentCest extends HumHubApiTestCest
 
         $I->sendDelete('comment/1');
         $I->seeForbiddenMessage('You cannot delete this comment!');
-    }
-
-    private function getCommentDefinition(int $id): array
-    {
-        $comment = Comment::findOne(['id' => $id]);
-        return ($comment ? CommentDefinitions::getComment($comment) : []);
     }
 
 }

@@ -2,20 +2,25 @@
 
 namespace rest\api;
 
+use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\user\models\Group;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
 class UserGroupCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Group::class;
+    protected $recordDefinitionFunction = [UserDefinitions::class, 'getGroup'];
+
     public function testList(ApiTester $I)
     {
         $I->wantTo('see all groups list');
         $I->amAdmin();
 
         $I->seePaginationGetResponse('user/group', [
-            $I->getGroupDefinition(1),
-            $I->getGroupDefinition(2),
-            $I->getGroupDefinition(3),
+            $this->getRecordDefinition(1),
+            $this->getRecordDefinition(2),
+            $this->getRecordDefinition(3),
         ]);
     }
 
@@ -25,7 +30,7 @@ class UserGroupCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendGet('user/group/3');
-        $I->seeSuccessResponseContainsJson($I->getGroupDefinition(3));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(3));
 
         $I->sendGet('user/group/123');
         $I->seeNotFoundMessage('Group not found!');
@@ -43,7 +48,7 @@ class UserGroupCest extends HumHubApiTestCest
             'show_at_registration' => false,
             'sort_order' => 1000,
         ]);
-        $I->seeSuccessResponseContainsJson($I->getGroupDefinition(4));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(4));
     }
 
     public function testUpdate(ApiTester $I)
@@ -55,7 +60,7 @@ class UserGroupCest extends HumHubApiTestCest
             'name' => 'Moderators - Updated',
             'sort_order' => 123,
         ]);
-        $I->seeSuccessResponseContainsJson($I->getGroupDefinition(3));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(3));
     }
 
     public function testDelete(ApiTester $I)

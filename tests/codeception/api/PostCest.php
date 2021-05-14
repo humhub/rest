@@ -9,12 +9,15 @@ use tests\codeception\_support\HumHubApiTestCest;
 
 class PostCest extends HumHubApiTestCest
 {
+    protected $recordModelClass = Post::class;
+    protected $recordDefinitionFunction = [PostDefinitions::class, 'getPost'];
+
     public function testList(ApiTester $I)
     {
         $I->wantTo('see all posts');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('post', $this->getPostDefinitions([1,2,4,6,7,8,9,10,12,13,14]));
+        $I->seePaginationGetResponse('post', $this->getRecordDefinitions([1,2,4,6,7,8,9,10,12,13,14]));
     }
 
     public function testFindByContainer(ApiTester $I)
@@ -22,8 +25,8 @@ class PostCest extends HumHubApiTestCest
         $I->wantTo('find posts by container');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('post/container/1', $this->getPostDefinitions([1,2]));
-        $I->seePaginationGetResponse('post/container/4', $this->getPostDefinitions([7,8,9]));
+        $I->seePaginationGetResponse('post/container/1', $this->getRecordDefinitions([1,2]));
+        $I->seePaginationGetResponse('post/container/4', $this->getRecordDefinitions([7,8,9]));
     }
 
     public function testView(ApiTester $I)
@@ -32,7 +35,7 @@ class PostCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendGet('post/1');
-        $I->seeSuccessResponseContainsJson($this->getPostDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendGet('post/3');
         $I->seeForbiddenMessage('You cannot view this content!');
@@ -51,7 +54,7 @@ class PostCest extends HumHubApiTestCest
                 'message' => 'New created message from API test',
             ]
         ]);
-        $I->seeSuccessResponseContainsJson($this->getPostDefinition(15));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(15));
     }
 
     public function testUpdate(ApiTester $I)
@@ -64,7 +67,7 @@ class PostCest extends HumHubApiTestCest
                 'message' => 'Updated message for Post 1',
             ]
         ]);
-        $I->seeSuccessResponseContainsJson($this->getPostDefinition(1));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 
         $I->sendPut('post/123');
         $I->seeNotFoundMessage('Request object not found!');
@@ -90,22 +93,5 @@ class PostCest extends HumHubApiTestCest
         $I->sendDelete('post/123');
         $I->seeNotFoundMessage('Content record not found!');
     }
-
-    private function getPostDefinition(int $id): array
-    {
-        $post = Post::findOne(['id' => $id]);
-        return ($post ? PostDefinitions::getPost($post) : []);
-    }
-
-    private function getPostDefinitions(array $ids): array
-    {
-        $posts = Post::find()->where(['IN', 'id', $ids])->all();
-        $postDefinitions = [];
-        foreach ($posts as $post) {
-            $postDefinitions[] = PostDefinitions::getPost($post);
-        }
-        return $postDefinitions;
-    }
-
 
 }
