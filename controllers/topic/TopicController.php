@@ -69,11 +69,11 @@ class TopicController extends BaseController
         $container = $contentContainer->getPolymorphicRelation();
         
         if ($contentContainer->class === User::class && ($contentContainer->pk !== Yii::$app->user->id && ! Yii::$app->user->isAdmin())) {
-            return $this->returnError(401, 'You are not allowed to create topic for user!');
+            return $this->returnError(403, 'You are not allowed to create topic for user!');
         }
 
         if ($contentContainer->class === Space::class && (! $container->isAdmin() && ! Yii::$app->user->isAdmin())) {
-            return $this->returnError(401, 'You are not allowed to create topic for space!');
+            return $this->returnError(403, 'You are not allowed to create topic for space!');
         }
 
         $topic = new Topic($container);

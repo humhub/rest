@@ -29,6 +29,7 @@ class PostController extends BaseContentController
     public function returnContentDefinition(ContentActiveRecord $contentRecord)
     {
         /** @var Post $contentRecord */
-        return PostDefinitions::getPost($contentRecord);
+        $post = Post::findOne(['id' => $contentRecord->id]);
+        return PostDefinitions::getPost($post);
     }
 }

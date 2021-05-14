@@ -10,10 +10,10 @@ namespace humhub\modules\rest\tests\codeception\fixtures;
 
 use yii\test\ActiveFixture;
 
-class CommentFixture extends ActiveFixture
+class TopicFixture extends ActiveFixture
 {
 
-    public $modelClass = 'humhub\modules\comment\models\Comment';
-    public $dataFile = '@rest/tests/codeception/fixtures/data/comment.php';
+    public $modelClass = 'humhub\modules\topic\models\Topic';
+    public $dataFile = '@rest/tests/codeception/fixtures/data/topic.php';
 
 }
