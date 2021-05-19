@@ -52,7 +52,7 @@ class SpaceController extends BaseController
     public function actionCreate()
     {
         if (!Yii::$app->user->permissionmanager->can(new CreatePublicSpace) && !Yii::$app->user->permissionmanager->can(new CreatePrivateSpace)) {
-            return $this->returnError(401, 'You are not allowed to create spaces!');
+            return $this->returnError(403, 'You are not allowed to create spaces!');
         }
 
         /** @var Space $module */
@@ -74,7 +74,7 @@ class SpaceController extends BaseController
         }
 
         if ($space->save()) {
-            return SpaceDefinitions::getSpace($space);
+            return $this->actionView($space->id);
         }
 
         Yii::error('Could not create validated space.', 'api');
