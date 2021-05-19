@@ -562,14 +562,51 @@ paths:
           description: The id of user
           required: true
           type: integer
-        - in: query
+        - in: body
           name: role
-          type: string
-          description: admin, member or moderator
+          description: Space membership role
           required: true
+          schema:
+            type: object
+            properties:
+              role:
+                type: string
+                description: admin, member or moderator
+                example: admin
       responses:
-        default:
-          description: Successful operation
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Member updated!
+        400:
+          description: Invalid role
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: Invalid role given!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Space not found!
 
 securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"

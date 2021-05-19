@@ -10,6 +10,7 @@ Changelog
 0.3.1  (Unreleased)
 --------------------------
 - Enh: Use controller config for not intercepted actions
+- Fix #57: Use getBodyParam() to extract the 'role' body parameter for the space membership
 
 
 0.3.0  (February 22, 2021)
