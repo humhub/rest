@@ -8,12 +8,13 @@
 
 namespace humhub\modules\rest\tests\codeception\fixtures;
 
+use humhub\modules\topic\models\Topic;
 use yii\test\ActiveFixture;
 
 class TopicFixture extends ActiveFixture
 {
 
-    public $modelClass = 'humhub\modules\topic\models\Topic';
+    public $modelClass = Topic::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/topic.php';
 
 }
