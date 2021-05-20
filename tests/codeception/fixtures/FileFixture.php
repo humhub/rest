@@ -8,12 +8,13 @@
 
 namespace humhub\modules\rest\tests\codeception\fixtures;
 
+use humhub\modules\file\models\File;
 use yii\test\ActiveFixture;
 
 class FileFixture extends ActiveFixture
 {
 
-    public $modelClass = 'humhub\modules\file\models\File';
+    public $modelClass = File::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/file.php';
 
 }

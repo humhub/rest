@@ -8,12 +8,13 @@
 
 namespace humhub\modules\rest\tests\codeception\fixtures;
 
+use humhub\modules\notification\models\Notification;
 use yii\test\ActiveFixture;
 
 class NotificationFixture extends ActiveFixture
 {
 
-    public $modelClass = 'humhub\modules\notification\models\Notification';
+    public $modelClass = Notification::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/notification.php';
 
 }

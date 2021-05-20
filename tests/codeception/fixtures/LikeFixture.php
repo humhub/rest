@@ -8,12 +8,13 @@
 
 namespace humhub\modules\rest\tests\codeception\fixtures;
 
+use humhub\modules\like\models\Like;
 use yii\test\ActiveFixture;
 
 class LikeFixture extends ActiveFixture
 {
 
-    public $modelClass = 'humhub\modules\like\models\Like';
+    public $modelClass = Like::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/like.php';
 
 }
