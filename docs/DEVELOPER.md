@@ -61,3 +61,17 @@ class UserController extends BaseController
     }
 }
 ```
+
+4) Modify your module initialization in order to avoid errors on CLI mode:
+
+```php
+public function init()
+{
+    parent::init();
+
+    if (Yii::$app instanceof \humhub\components\console\Application) {
+        // Prevents the Yii HelpCommand from crawling all web controllers and possibly throwing errors at REST endpoints if the REST module is not available.
+        $this->controllerNamespace = 'your_module/commands';
+    }
+}
+```
