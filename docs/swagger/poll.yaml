@@ -1,0 +1,790 @@
+swagger: '2.0'
+info:
+  description: |
+    Welcome to the HumHub polls module API reference.
+
+  version: 1.0.0
+  title: HumHub - Polls API
+  contact:
+    email: info@humhub.com
+  license:
+    name: AGPLv2
+    url: 'https://www.humhub.org/en/licences'
+basePath: /api/v1
+
+paths:
+  '/polls':
+    get:
+      tags:
+        - Polls
+      summary: Find all polls
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Poll'
+
+  '/polls/container/{id}':
+    get:
+      tags:
+        - Polls
+      summary: Find all polls by container
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: ID of content container
+          required: true
+          type: integer
+        - $ref: 'common.yaml#/components/parameters/pageParam'
+        - $ref: 'common.yaml#/components/parameters/limitParam'
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Poll'
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content container not found!
+
+    post:
+      tags:
+        - Poll
+      summary: Create new poll
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: The id of content container
+          required: true
+          type: integer
+        - $ref: "#/definitions/PollNewParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Poll"
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to create a poll!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content container not found!
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while save a poll!
+
+    delete:
+      tags:
+        - Polls
+      summary: Delete polls by container
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of content container
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Records successfully deleted!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content container not found!
+
+  '/polls/poll/{id}':
+    get:
+      tags:
+        - Poll
+      summary: Get a poll by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Poll"
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll not found
+
+    put:
+      tags:
+        - Poll
+      summary: Update a poll by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+        - $ref: "#/definitions/PollEditParams"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Poll"
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to update this poll!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll is not found!
+        422:
+          description: Validation failed
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while update poll!
+
+    delete:
+      tags:
+        - Poll
+      summary: Delete a poll by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Successfully deleted!
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to delete this content!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Content record not found!
+        500:
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while delete content!
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin Poll Management
+#-----------------------------------------------------------------------------------------------------------------------
+
+  '/polls/poll/{id}/close':
+    patch:
+      tags:
+        - Poll management
+      summary: Close a poll by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Poll has been successfully closed.
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to close this poll!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll not found
+        500:
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while close this poll!
+
+  '/polls/poll/{id}/open':
+    patch:
+      tags:
+        - Poll management
+      summary: Open a poll by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Poll has been successfully reopened.
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: You are not allowed to open this poll!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll is not found!
+        500:
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal error while open this poll!
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Begin Poll Voting
+#-----------------------------------------------------------------------------------------------------------------------
+
+  '/polls/vote/{id}':
+    put:
+      tags:
+        - Poll voting
+      summary: Vote on a poll by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              answers:
+                type: array
+                description: Selected answers
+                items:
+                  type: integer
+                example:
+                  - 1
+                  - 4
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: You have voted.
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: Voting for multiple answers is disabled!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll is not found!
+
+    delete:
+      tags:
+        - Poll voting
+      summary: Reset vote on a poll by id
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: You have reset your vote.
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: Voting for multiple answers is disabled!
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll is not found!
+
+    get:
+      tags:
+        - Poll voting
+      summary: Get votes on a poll for current user
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the poll
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: integer
+              example: [11,13,24]
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Poll is not found!
+
+securityDefinitions:
+  $ref: "common.yaml#/securityDefinitions"
+
+definitions:
+  Poll:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 4
+      contentcontainer_id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 2
+      question:
+        type: string
+        example: Poll question from API?
+      description:
+        type: string
+        example: Poll description from API
+      allow_multiple:
+        type: integer
+        format: int64
+        example: 1
+      created_at:
+        type: string
+        example: 2021-07-20 09:43:12
+      created_by:
+        $ref: "user.yaml#/definitions/UserShort"
+      updated_at:
+        type: string
+        example: 2021-07-20 09:43:12
+      updated_by:
+        $ref: "user.yaml#/definitions/UserShort"
+      is_random:
+        type: integer
+        format: int64
+        example: 1
+      closed:
+        type: integer
+        format: int64
+        example: 1
+      anonymous:
+        type: integer
+        format: int64
+        example: 0
+      show_result_after_close:
+        type: integer
+        format: int64
+        example: 0
+      answers:
+        type: array
+        items:
+          $ref: "#/definitions/Answer"
+
+  Answer:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 1
+      poll_id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 4
+      answer:
+        type: string
+        example: First answer text
+      created_at:
+        type: string
+        example: 2021-07-20 10:43:12
+      created_by:
+        $ref: "user.yaml#/definitions/UserShort"
+      updated_at:
+        type: string
+        example: 2021-07-20 10:43:12
+      updated_by:
+        $ref: "user.yaml#/definitions/UserShort"
+
+  PollNewParams:
+    in: body
+    name: body
+    required: true
+    description: Poll information
+    schema:
+      type: object
+      required:
+        - Poll
+        - newAnswers
+      properties:
+        Poll:
+          type: object
+          required:
+            - question
+          properties:
+            question:
+              type: string
+              example: New question from API?
+            description:
+              type: string
+              example: New description from API?
+            allow_multiple:
+              type: integer
+              format: int64
+              example: 0
+            is_random:
+              type: integer
+              format: int64
+              example: 1
+            anonymous:
+              type: integer
+              format: int64
+              example: 0
+            show_result_after_close:
+              type: integer
+              format: int64
+              example: 0
+        newAnswers:
+          type: array
+          description: New answers
+          items:
+            type: string
+          example:
+            - "First answer"
+            - "Second answer"
+            - "Third answer"
+
+  PollEditParams:
+    in: body
+    name: body
+    required: true
+    description: Poll information
+    schema:
+      type: object
+      required:
+        - Poll
+        - newAnswers
+      properties:
+        Poll:
+          type: object
+          required:
+            - question
+          properties:
+            question:
+              type: string
+              example: New question from API?
+            description:
+              type: string
+              example: New description from API?
+            allow_multiple:
+              type: integer
+              format: int64
+              example: 0
+            is_random:
+              type: integer
+              format: int64
+              example: 1
+            anonymous:
+              type: integer
+              format: int64
+              example: 0
+            show_result_after_close:
+              type: integer
+              format: int64
+              example: 0
+        answers:
+          type: array
+          description: Updating answers
+          items:
+            type: string
+          example:
+            - "1": "Updated first answer"
+            - "2": "Updated second answer"
+            - "3": "Updated third answer"
+        newAnswers:
+          type: array
+          description: New answers
+          items:
+            type: string
+          example:
+            - "Fourth answer"
+            - "Fifth answer"
