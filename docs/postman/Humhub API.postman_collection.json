@@ -3796,23 +3796,8 @@
 					"response": []
 				},
 				{
-					"name": "Delete Like by id Copy",
+					"name": "Delete Like by id",
 					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "username",
-									"value": "admin",
-									"type": "string"
-								},
-								{
-									"key": "password",
-									"value": "yb6pas",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
