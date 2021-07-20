@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9c760779-1f50-4f02-9024-cd520a16ce1f",
+		"_postman_id": "8cd645a3-817f-4ca4-9973-719e821b459b",
 		"name": "Humhub Rest API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -3593,6 +3593,716 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Get Comment by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/comment/5",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"comment",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/comment/41",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"comment",
+								"41"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Content",
+			"item": [
+				{
+					"name": "Get contents by Container id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/content/find-by-container/39",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"content",
+								"find-by-container",
+								"39"
+							],
+							"query": [
+								{
+									"key": "XDEBUG_SESSION_START",
+									"value": "PHPSTORM",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List all Containers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/content/container",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"content",
+								"container"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Content by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/content/283",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"content",
+								"283"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Content by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/content/300",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"content",
+								"300"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "Download File",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/file/download/26",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"file",
+								"download",
+								"26"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Like",
+			"item": [
+				{
+					"name": "Get Like by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/like/3",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"like",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Likes by content id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/like/find-by-object?model=humhub\\modules\\post\\models\\Post&pk=1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"like",
+								"find-by-object"
+							],
+							"query": [
+								{
+									"key": "model",
+									"value": "humhub\\modules\\post\\models\\Post"
+								},
+								{
+									"key": "pk",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Like by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/like/3",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"like",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Polls",
+			"item": [
+				{
+					"name": "Container",
+					"item": [
+						{
+							"name": "Get polls by container",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/polls/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete polls by container",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/tasks/container/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"tasks",
+										"container",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Poll",
+					"item": [
+						{
+							"name": "Get poll by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/polls/poll/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"poll",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create new poll",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Poll\": {\n\t\t\"question\": \"First Space api poll question\",\n\t\t\"description\": \"First Space api poll description\",\n\t\t\"allow_multiple\": 0,\n\t\t\"is_random\": 1,\n\t\t\"anonymous\": 0,\n        \"show_result_after_close\": 0\n\t},\n    \"newAnswers\": [\n        \"First answer.\",\n        \"Second answer.\",\n        \"Third answer.\"\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/polls/container/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"container",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update poll by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"Poll\": {\n\t\t\"question\": \"Updated poll question from API\",\n\t\t\"description\": \"Updated poll description from API\",\n\t\t\"allow_multiple\": 0,\n\t\t\"is_random\": 1,\n\t\t\"anonymous\": 0,\n        \"show_result_after_close\": 0\n\t},\n    \"answers\": {\n        \"31\": \"First answer.\",\n        \"32\": \"Second answer.\",\n        \"3\": \"Third answer.\"\n    },\n    \"newAnswers\": [\"New answer 1\", \"New answer 2\"]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/polls/poll/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"poll",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete poll by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/polls/poll/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"poll",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Close poll by id",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/polls/poll/1/close",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"poll",
+										"1",
+										"close"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Open poll by id",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}",
+										"disabled": true
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{API_URL}}/polls/poll/1/open",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"poll",
+										"1",
+										"open"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Vote",
+					"item": [
+						{
+							"name": "Get votes poll by id",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/polls/vote/5",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"vote",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Vote poll by id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"answers\": [13,15,1,44]\n}"
+								},
+								"url": {
+									"raw": "{{API_URL}}/polls/vote/5",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"vote",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset vote on poll by id",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "admin",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_ADMIN}}"
+									},
+									{
+										"description": "test",
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{AUTHORIZATION_TEST}}",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/polls/vote/5",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"polls",
+										"vote",
+										"5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all polls",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "admin",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_ADMIN}}",
+								"disabled": true
+							},
+							{
+								"description": "test",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{AUTHORIZATION_TEST}}"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/polls",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"polls"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
