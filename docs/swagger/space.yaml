@@ -187,9 +187,11 @@ paths:
               description:
                 type: string
                 example: Your first sample space to discover the platform.
-              tags:
-                type: string
-                example: First tag, Second tag
+              tagsField:
+                type: array
+                items:
+                  type: string
+                example: ["First tag", "Second tag"]
               color:
                 type: string
                 example: "#eeeeee"
@@ -666,8 +668,10 @@ definitions:
         type: integer
         example: 1
       tags:
-        type: string
-        example: 'first tag, second tag'
+        type: array
+        items:
+          type: string
+        example: ["First tag", "Second tag"]
       owner:
         $ref: "user.yaml#/definitions/UserShort"
 

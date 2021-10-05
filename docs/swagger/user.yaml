@@ -537,9 +537,17 @@ definitions:
         type: integer
         example: 1
       tags:
-        type: string
-        example: Administration, Support, HumHub
+        type: array
+        items:
+          type: string
+        example: ["Administration", "Support", "HumHub"]
         readOnly: true
+      tagsField:
+        type: array
+        items:
+          type: string
+        example: ["Administration", "Support", "HumHub"]
+        writeOnly: true
       language:
         type: string
         example: DE
