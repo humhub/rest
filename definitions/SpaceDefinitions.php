@@ -37,6 +37,7 @@ class SpaceDefinitions
             'name' => $space->name,
             'description' => $space->description,
             'url' => Url::to(['/', 'container' => $space], true),
+            'contentcontainer_id' => $space->contentcontainer_id,
             'visibility' => $space->visibility,
             'join_policy' => $space->join_policy,
             'status' => $space->status,

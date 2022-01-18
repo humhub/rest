@@ -7,6 +7,7 @@ Changelog
 - Fix #60: Cleanup code for prepare params
 - Enh #86: Docs for polls module
 - Fix #67: Update docs for container(space/user) tags
+- Enh #: Response space container ID 
 
 
 0.3.1  (Unreleased)
