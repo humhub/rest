@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.4.0  (Unreleased)
---------------------------
+0.4.0  (January 19, 2022)
+-------------------------
 - Enh #33: Move endpoints to external modules
 - Fix #60: Cleanup code for prepare params
 - Enh #86: Docs for polls module
