@@ -658,6 +658,9 @@ definitions:
       url:
         type: string
         example: http://humhub.localhost/s/welcome-space/
+      contentcontainer_id:
+        type: integer
+        example: 1
       visibility:
         type: integer
         example: 1
