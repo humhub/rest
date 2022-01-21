@@ -100,6 +100,7 @@ class Events
             ['pattern' => 'post/<id:\d+>', 'route' => 'rest/post/post/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'post/<id:\d+>', 'route' => 'rest/post/post/update', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'post/<id:\d+>', 'route' => 'rest/post/post/delete', 'verb' => ['DELETE']],
+            ['pattern' => 'post/<id:\d+>/upload-files', 'route' => 'rest/post/post/attach-files', 'verb' => 'POST'],
             ['pattern' => 'post/container/<containerId:\d+>', 'route' => 'rest/post/post/create', 'verb' => 'POST'],
             ['pattern' => 'post/container/<containerId:\d+>', 'route' => 'rest/post/post/find-by-container', 'verb' => 'GET'],
 

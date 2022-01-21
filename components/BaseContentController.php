@@ -235,9 +235,13 @@ abstract class BaseContentController extends BaseController
 
         $files = [];
         File::getDb()->transaction(function ($db) use ($uploadedFiles, & $files) {
+            $hiddenInStream = Yii::$app->request->post('hiddenInStream', []);
             foreach ($uploadedFiles as $cFile) {
                 $file = Yii::createObject(FileUpload::class);
                 $file->setUploadedFile($cFile);
+                if (in_array($file->file_name, $hiddenInStream)) {
+                    $file->show_in_stream = 0;
+                }
                 if (! $file->save()) {
                     return false;
                 }
