@@ -15,6 +15,7 @@ use humhub\modules\content\models\Content;
 use humhub\modules\file\models\File;
 use humhub\modules\file\models\FileUpload;
 use humhub\modules\rest\controllers\auth\AuthController;
+use humhub\modules\rest\definitions\FileDefinitions;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\Module;
 use humhub\modules\user\models\User;
@@ -230,6 +231,13 @@ abstract class BaseController extends Controller
         return array_merge(['code' => $statusCode, 'message' => $message], $additional);
     }
 
+
+    /**
+     * Attach files to Content
+     *
+     * @param Content|null $content
+     * @return array
+     */
     protected function attachFilesToContent(?Content $content): array
     {
         if ($content === null) {
@@ -268,7 +276,12 @@ abstract class BaseController extends Controller
 
         $content->getModel()->fileManager->attach($files);
 
-        return $this->returnSuccess('Files successfully uploaded.', 200, ['files' => $files]);
+        $fileDefinitions = [];
+        foreach ($files as $file) {
+            $fileDefinitions[] = FileDefinitions::getFile($file);
+        }
+
+        return $this->returnSuccess('Files successfully uploaded.', 200, ['files' => $fileDefinitions]);
     }
 
 }

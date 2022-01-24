@@ -148,6 +148,56 @@ paths:
         '404':
           description: Content not found
 
+  '/content/{id}/attach-files':
+    post:
+      tags:
+        - Content
+      summary: Attach files to content by id
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: id
+          in: path
+          description: The id of the content
+          required: true
+          type: integer
+        - in: body
+          schema:
+            type: object
+            properties:
+              hiddenInStream:
+                type: array
+                description: Names of the attached files which should be hidden in stream
+                example: [ "scheme.jpg", "picture.png", "info.txt"]
+        - in: formData
+          name: files
+          description: The files to upload.
+          required: true
+          type: array
+          items:
+            type: file
+      responses:
+        '200':
+          description: Files successfully uploaded.
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  $ref: "file.yaml#/definitions/File"
+        '400':
+          description: Invalid content id supplied
+        '403':
+          description: You are not allowed to upload files to this content!
+        '404':
+          description: Content is not found!
+        '500':
+          description: Internal error while saving file.
+
 securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
 
