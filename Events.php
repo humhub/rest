@@ -81,6 +81,7 @@ class Events
             ['pattern' => 'content/container', 'route' => 'rest/content/container/list', 'verb' => 'GET'],
             ['pattern' => 'content/<id:\d+>', 'route' => 'rest/content/content/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'content/<id:\d+>', 'route' => 'rest/content/content/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'content/<id:\d+>/attach-files', 'route' => 'rest/content/content/attach-files', 'verb' => 'POST'],
             //['pattern' => 'content/pin/<id:\d+>', 'route' => 'api/user/content/pin', 'verb' => 'POST'],
             //['pattern' => 'content/unpin/<id:\d+>', 'route' => 'api/user/content/unpin', 'verb' => 'POST'],
             //['pattern' => 'content/archive/<id:\d+>', 'route' => 'api/user/content/archive', 'verb' => 'POST'],

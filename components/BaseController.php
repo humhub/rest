@@ -11,6 +11,9 @@ use Exception;
 use Firebase\JWT\JWT;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
+use humhub\modules\content\models\Content;
+use humhub\modules\file\models\File;
+use humhub\modules\file\models\FileUpload;
 use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\Module;
@@ -20,6 +23,7 @@ use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\HttpException;
 use yii\web\JsonParser;
+use yii\web\UploadedFile;
 
 
 /**
@@ -225,4 +229,46 @@ abstract class BaseController extends Controller
         Yii::$app->response->statusCode = $statusCode;
         return array_merge(['code' => $statusCode, 'message' => $message], $additional);
     }
+
+    protected function attachFilesToContent(?Content $content): array
+    {
+        if ($content === null) {
+            return $this->returnError(404, 'Content is not found!');
+        }
+        if (!$content->canEdit()) {
+            return $this->returnError(403, 'You are not allowed to upload files to this content!');
+        }
+
+        $uploadedFiles = UploadedFile::getInstancesByName('files');
+
+        if (empty($uploadedFiles)) {
+            return $this->returnError(400, 'No files to upload.');
+        }
+
+        $files = [];
+        File::getDb()->transaction(function ($db) use ($uploadedFiles, & $files) {
+            $hiddenInStream = Yii::$app->request->post('hiddenInStream', []);
+            foreach ($uploadedFiles as $cFile) {
+                $file = Yii::createObject(FileUpload::class);
+                $file->setUploadedFile($cFile);
+                if (in_array($file->file_name, $hiddenInStream)) {
+                    $file->show_in_stream = 0;
+                }
+                if (!$file->save()) {
+                    return false;
+                }
+                $files[] = $file;
+            }
+            return true;
+        });
+
+        if (empty($files)) {
+            return $this->returnError(500, 'Internal error while saving file.');
+        }
+
+        $content->getModel()->fileManager->attach($files);
+
+        return $this->returnSuccess('Files successfully uploaded.', 200, ['files' => $files]);
+    }
+
 }

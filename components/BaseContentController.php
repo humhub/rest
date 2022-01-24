@@ -13,12 +13,10 @@ use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\file\models\File;
-use humhub\modules\file\models\FileUpload;
 use humhub\modules\tasks\controllers\rest\TasksController;
 use humhub\modules\rest\definitions\ContentDefinitions;
 use Yii;
 use yii\web\HttpException;
-use yii\web\UploadedFile;
 
 
 /**
@@ -219,43 +217,15 @@ abstract class BaseContentController extends BaseController
 
     public function actionAttachFiles($id)
     {
+        /* @var ContentActiveRecord $class */
         $class = $this->getContentActiveRecordClass();
         $contentRecord = $class::findOne(['id' => $id]);
+
         if ($contentRecord === null) {
             return $this->returnError(404, 'Content record not found!');
         }
-        if (!$contentRecord->content->canEdit()) {
-            return $this->returnError(403, 'You are not allowed to upload files to this content!');
-        }
-        $uploadedFiles = UploadedFile::getInstancesByName('files');
 
-        if (empty($uploadedFiles)) {
-            return $this->returnError(400, 'No files to upload.');
-        }
-
-        $files = [];
-        File::getDb()->transaction(function ($db) use ($uploadedFiles, & $files) {
-            $hiddenInStream = Yii::$app->request->post('hiddenInStream', []);
-            foreach ($uploadedFiles as $cFile) {
-                $file = Yii::createObject(FileUpload::class);
-                $file->setUploadedFile($cFile);
-                if (in_array($file->file_name, $hiddenInStream)) {
-                    $file->show_in_stream = 0;
-                }
-                if (! $file->save()) {
-                    return false;
-                }
-                $files[] = $file->guid;
-            }
-            return true;
-        });
-
-        if (! empty($files)) {
-            $contentRecord->fileManager->attach($files);
-            return $this->returnSuccess('Files successfully uploaded.');
-        } else {
-            return $this->returnError(500, 'Internal error while saving file.');
-        }
+        return $this->attachFilesToContent($contentRecord->content);
     }
 
     public function actionRemoveFile($id, $fileId)

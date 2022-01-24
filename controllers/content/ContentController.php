@@ -81,6 +81,10 @@ class ContentController extends BaseController
         return $this->returnError(500, 'Internal error while delete content!');
     }
 
+    public function actionAttachFiles($id)
+    {
+        $content = Content::findOne($id);
 
-
+        return $this->attachFilesToContent($content);
+    }
 }
