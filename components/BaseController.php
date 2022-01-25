@@ -11,6 +11,7 @@ use Exception;
 use Firebase\JWT\JWT;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
+use humhub\modules\content\models\Content;
 use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\Module;
@@ -225,4 +226,16 @@ abstract class BaseController extends Controller
         Yii::$app->response->statusCode = $statusCode;
         return array_merge(['code' => $statusCode, 'message' => $message], $additional);
     }
+
+
+    /**
+     * Attach files to Content
+     *
+     * @param Content|null $content
+     * @return array
+     */
+    protected function attachFilesToContent(?Content $content): array
+    {
+    }
+
 }
