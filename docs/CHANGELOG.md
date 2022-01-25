@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4.1 (January 25, 2022)
+------------------------
+- Enh #74: Response space container ID
+- Enh #75: Attach files to content
+
+
 0.4.0  (January 19, 2022)
 -------------------------
 - Enh #33: Move endpoints to external modules
