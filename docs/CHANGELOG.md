@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.3 (January 31, 2022)
+------------------------
+- Enh #73: Added "mustChangePassword" flag for users created using the API 
+
 0.4.2 (January 31, 2022)
 ------------------------
 - Enh #72: Added Visibility as Content MetaData

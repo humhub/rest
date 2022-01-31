@@ -196,6 +196,9 @@ class UserController extends BaseController
             $password->user_id = $user->id;
             $password->setPassword($password->newPassword);
             if ($profile->save() && $password->save()) {
+                if($password->mustChangePassword) {
+                    $user->setMustChangePassword(true);
+                }
                 return $this->actionView($user->id);
             }
         }
