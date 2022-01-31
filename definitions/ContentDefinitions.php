@@ -43,6 +43,7 @@ class ContentDefinitions
             'guid' => $content->guid,
             'object_model' => $content->object_model,
             'object_id' => $content->object_id,
+            'visibility' => $content->visibility,
             'created_by' => UserDefinitions::getUserShort($content->createdBy),
             'created_at' => $content->created_at,
             'url' => $content->getUrl(true),
