@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.2 (January 31, 2022)
+------------------------
+- Enh #72: Added Visibility as Content MetaData
+
 0.4.1 (January 25, 2022)
 ------------------------
 - Enh #74: Response space container ID
