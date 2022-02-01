@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.3 (Unreleased)
+------------------------
+- Enh: Don't provide auth token for disabled users on REST module side
+
 0.4.2 (January 31, 2022)
 ------------------------
 - Enh #72: Added Visibility as Content MetaData
