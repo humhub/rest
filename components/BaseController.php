@@ -130,9 +130,8 @@ abstract class BaseController extends Controller
      * @param User $user
      * @return bool
      */
-    private function isUserEnabled(User $user)
+    public function isUserEnabled(User $user)
     {
-
         $config = new ConfigureForm();
         $config->loadSettings();
 
