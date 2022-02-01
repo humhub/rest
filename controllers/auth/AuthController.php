@@ -31,6 +31,10 @@ class AuthController extends BaseController
             return $this->returnError(400, 'Wrong username or password');
         }
 
+        if (!$this->isUserEnabled($user)) {
+            return $this->returnError(401, 'Invalid user!');
+        }
+
         $issuedAt = time();
         $data = [
             'iat' => $issuedAt,
