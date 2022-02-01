@@ -1,8 +1,9 @@
 Changelog
 =========
 
-0.4.3 (Unreleased)
+0.4.3 (February 1, 2022)
 ------------------------
+- Enh #73: Added "mustChangePassword" flag for users created using the API 
 - Enh: Don't provide auth token for disabled users on REST module side
 
 0.4.2 (January 31, 2022)

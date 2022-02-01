@@ -664,5 +664,8 @@ definitions:
       newPassword:
         type: string
         example: SuperSecretPassword
+      mustChangePassword:
+        type: boolean
+        example: true
     xml:
       name: Password
