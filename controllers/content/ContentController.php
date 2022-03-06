@@ -18,7 +18,7 @@ use humhub\modules\content\models\Content;
 class ContentController extends BaseController
 {
 
-    public function actionFindByContainer($id)
+    public function actionFindByContainer($id, $order_by = 'created_at', $date_updated_from = null, $date_updated_to = null)
     {
         $contentContainer = ContentContainer::findOne(['id' => (int) $id]);
         if ($contentContainer === null) {
@@ -30,8 +30,23 @@ class ContentController extends BaseController
             ->leftJoin(ContentContainer::tableName(), ContentContainer::tableName() . '.id = ' . Content::tableName() . '.contentcontainer_id')
             ->where([Content::tableName() . '.contentcontainer_id' => (int) $id])
             ->andWhere(['!=', Content::tableName() . '.object_model', Activity::class])
-            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
+            ->orderBy([Content::tableName() . '.' . $order_by => SORT_DESC])
             ->readable();
+
+        if(!empty($date_updated_from)) {
+            $date_updated_from = is_numeric($date_updated_from) ? (int) $date_updated_from : strtotime($date_updated_from);
+            $query->andWhere([
+                '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $date_updated_from)
+            ]);
+        }
+
+        if(!empty($date_updated_to)) {
+            $date_updated_to = is_numeric($date_updated_to) ? (int) $date_updated_to : strtotime($date_updated_to);
+            $query->andWhere([
+                '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $date_updated_to)
+            ]);
+        }
+
         // Remove "Join with Content" from \humhub\modules\content\components\ActiveQueryContent::readable(),
         // because here main table is already Content:
         foreach ($query->joinWith as $j => $joinWith) {

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Unreleased 0.4.4 (March 6, 2022)
+-----------------------
+- Enh #70: Content: Add sorting option
+
 0.4.3 (February 1, 2022)
 ------------------------
 - Enh #73: Added "mustChangePassword" flag for users created using the API 
