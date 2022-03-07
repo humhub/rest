@@ -18,11 +18,19 @@ use humhub\modules\content\models\Content;
 class ContentController extends BaseController
 {
 
-    public function actionFindByContainer($id, $order_by = 'created_at', $date_updated_from = null, $date_updated_to = null)
+    public function actionFindByContainer($id, $orderBy = 'creationTime', $dateUpdatedFrom = null, $dateUpdatedTo = null)
     {
         $contentContainer = ContentContainer::findOne(['id' => (int) $id]);
         if ($contentContainer === null) {
             return $this->returnError(404, 'Content container not found!');
+        }
+
+        switch ($orderBy) {
+            case 'lastUpdate':
+                $orderByColumn = 'updated_at';
+                break;
+            default:
+                $orderByColumn = 'created_at';
         }
 
         $results = [];
@@ -30,20 +38,20 @@ class ContentController extends BaseController
             ->leftJoin(ContentContainer::tableName(), ContentContainer::tableName() . '.id = ' . Content::tableName() . '.contentcontainer_id')
             ->where([Content::tableName() . '.contentcontainer_id' => (int) $id])
             ->andWhere(['!=', Content::tableName() . '.object_model', Activity::class])
-            ->orderBy([Content::tableName() . '.' . $order_by => SORT_DESC])
+            ->orderBy([Content::tableName() . '.' . $orderByColumn => SORT_DESC])
             ->readable();
 
-        if(!empty($date_updated_from)) {
-            $date_updated_from = is_numeric($date_updated_from) ? (int) $date_updated_from : strtotime($date_updated_from);
+        if(!empty($dateUpdatedFrom)) {
+            $dateUpdatedFrom = is_numeric($dateUpdatedFrom) ? (int) $dateUpdatedFrom : strtotime($dateUpdatedFrom);
             $query->andWhere([
-                '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $date_updated_from)
+                '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedFrom)
             ]);
         }
 
-        if(!empty($date_updated_to)) {
-            $date_updated_to = is_numeric($date_updated_to) ? (int) $date_updated_to : strtotime($date_updated_to);
+        if(!empty($dateUpdatedTo)) {
+            $dateUpdatedTo = is_numeric($dateUpdatedTo) ? (int) $dateUpdatedTo : strtotime($dateUpdatedTo);
             $query->andWhere([
-                '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $date_updated_to)
+                '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedTo)
             ]);
         }
 

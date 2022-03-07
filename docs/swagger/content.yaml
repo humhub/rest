@@ -84,13 +84,17 @@ paths:
           type: integer
         - $ref: 'common.yaml#/components/parameters/pageParam'
         - $ref: 'common.yaml#/components/parameters/limitParam'
-        - name: order_by
+        - name: orderBy
           in: query
           required: false
           type: string
-          default: 'created_at'
-          description: Column by which items are ordered.
-        - name: date_updated_from
+          enum: [creationTime, lastUpdate]
+          default: creationTime
+          description: >
+            Order by:
+              * creationTime - Descending, from most recently created
+              * lastUpdate - Descending, from last updated
+        - name: dateUpdatedFrom
           in: query
           type: string
           examples:
@@ -101,7 +105,7 @@ paths:
               value: 1609498800
               summary: Value can be a unix timestamp.
           description: Filter by latest update time from date.
-        - name: date_updated_to
+        - name: dateUpdatedTo
           in: query
           type: string
           examples:
