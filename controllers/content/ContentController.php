@@ -18,11 +18,19 @@ use humhub\modules\content\models\Content;
 class ContentController extends BaseController
 {
 
-    public function actionFindByContainer($id)
+    public function actionFindByContainer($id, $orderBy = 'creationTime', $dateUpdatedFrom = null, $dateUpdatedTo = null)
     {
         $contentContainer = ContentContainer::findOne(['id' => (int) $id]);
         if ($contentContainer === null) {
             return $this->returnError(404, 'Content container not found!');
+        }
+
+        switch ($orderBy) {
+            case 'lastUpdate':
+                $orderByColumn = 'updated_at';
+                break;
+            default:
+                $orderByColumn = 'created_at';
         }
 
         $results = [];
@@ -30,8 +38,23 @@ class ContentController extends BaseController
             ->leftJoin(ContentContainer::tableName(), ContentContainer::tableName() . '.id = ' . Content::tableName() . '.contentcontainer_id')
             ->where([Content::tableName() . '.contentcontainer_id' => (int) $id])
             ->andWhere(['!=', Content::tableName() . '.object_model', Activity::class])
-            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
+            ->orderBy([Content::tableName() . '.' . $orderByColumn => SORT_DESC])
             ->readable();
+
+        if(!empty($dateUpdatedFrom)) {
+            $dateUpdatedFrom = is_numeric($dateUpdatedFrom) ? (int) $dateUpdatedFrom : strtotime($dateUpdatedFrom);
+            $query->andWhere([
+                '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedFrom)
+            ]);
+        }
+
+        if(!empty($dateUpdatedTo)) {
+            $dateUpdatedTo = is_numeric($dateUpdatedTo) ? (int) $dateUpdatedTo : strtotime($dateUpdatedTo);
+            $query->andWhere([
+                '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedTo)
+            ]);
+        }
+
         // Remove "Join with Content" from \humhub\modules\content\components\ActiveQueryContent::readable(),
         // because here main table is already Content:
         foreach ($query->joinWith as $j => $joinWith) {
