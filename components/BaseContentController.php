@@ -17,6 +17,8 @@ use humhub\modules\file\models\FileUpload;
 use humhub\modules\rest\definitions\FileDefinitions;
 use humhub\modules\tasks\controllers\rest\TasksController;
 use humhub\modules\rest\definitions\ContentDefinitions;
+use humhub\modules\topic\models\Topic;
+use humhub\modules\topic\permissions\AddTopic;
 use Yii;
 use yii\web\HttpException;
 use yii\web\UploadedFile;
@@ -137,9 +139,9 @@ abstract class BaseContentController extends BaseController
         $contentRecord = Yii::createObject(['class' => $this->getContentActiveRecordClass()]);
 
         $contentRecord->content->container = $container;
-        $contentRecord->load(Yii::$app->request->getBodyParam('data', []), '');
 
-        if ($contentRecord->save()) {
+        $data = Yii::$app->request->getBodyParam('data', []);
+        if ($contentRecord->load($data, '') && $contentRecord->save() && $this->updateContent($contentRecord, $data)) {
             return $this->returnContentDefinition($contentRecord);
         }
 
@@ -150,6 +152,7 @@ abstract class BaseContentController extends BaseController
     {
         $class = $this->getContentActiveRecordClass();
 
+        /* @var ContentActiveRecord $contentRecord */
         $contentRecord = $class::findOne(['id' => $id]);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Request object not found!');
@@ -158,7 +161,8 @@ abstract class BaseContentController extends BaseController
             return $this->returnError(403, 'You are not allowed to update this content!');
         }
 
-        if ($contentRecord->load(Yii::$app->request->getBodyParam('data', []), '') && $contentRecord->save()) {
+        $data = Yii::$app->request->getBodyParam('data', []);
+        if ($contentRecord->load($data, '') && $contentRecord->save() && $this->updateContent($contentRecord, $data)) {
             return $this->returnContentDefinition($contentRecord);
         }
 
@@ -335,5 +339,61 @@ abstract class BaseContentController extends BaseController
         }
 
         return $requestParams;
+    }
+
+    private function updateContent($activeRecord, $data): bool
+    {
+        if (!($activeRecord instanceof ContentActiveRecord)) {
+            return false;
+        }
+
+        if (empty($data['content']) || !is_array($data['content'])) {
+            return true;
+        }
+
+        if (isset($data['content']['topics']) &&
+            is_array($data['content']['topics']) &&
+            !$this->updateTopics($activeRecord, $data['content']['topics'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function updateTopics(ContentActiveRecord $activeRecord, array $topics): bool
+    {
+        Topic::deleteContentRelations($activeRecord->content);
+
+        if (empty($topics)) {
+            return true;
+        }
+
+        $canAdd = $activeRecord->content->container->can(AddTopic::class);
+
+        $updatedTopics = [];
+        foreach ($topics as $topicName) {
+            if (!is_string($topicName)) {
+                continue;
+            }
+
+            $topic = Topic::findOne($topicData = [
+                'module_id' => 'topic',
+                'contentcontainer_id' => $activeRecord->content->contentcontainer_id,
+                'name' => $topicName,
+            ]);
+
+            if ($topic) {
+                $updatedTopics[] = $topic;
+            } elseif ($canAdd) {
+                $topic = new Topic($topicData);
+                if ($topic->save()) {
+                    $updatedTopics[] = $topic;
+                }
+            }
+        }
+
+        $activeRecord->content->addTags($updatedTopics);
+
+        return true;
     }
 }

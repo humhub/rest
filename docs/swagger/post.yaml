@@ -68,7 +68,7 @@ paths:
               - data
             properties:
               data:
-                $ref: "#/definitions/Post"
+                $ref: "#/definitions/PostForm"
       responses:
         '200':
           description: successful operation
@@ -138,9 +138,22 @@ paths:
           description: The id of post
           required: true
           type: integer
+        - name: body
+          in: body
+          description: The post
+          required: true
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                $ref: "#/definitions/PostForm"
       responses:
         '200':
           description: successful operation
+          schema:
+            $ref: "#/definitions/Post"
         '404':
           description: Post not found
     delete:
@@ -211,6 +224,23 @@ securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
 
 definitions:
+  PostForm:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      message:
+        type: string
+        example: "Calvin Klein – Between love and madness lies obsession."
+      content:
+        type: object
+        properties:
+          topics:
+            type: array
+            example: ["First", "Second", "Third"]
   Post:
     type: object
     properties:
