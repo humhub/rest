@@ -341,7 +341,7 @@ abstract class BaseContentController extends BaseController
         return $requestParams;
     }
 
-    private function updateContent($activeRecord, $data): bool
+    protected function updateContent($activeRecord, $data): bool
     {
         if (!($activeRecord instanceof ContentActiveRecord)) {
             return false;
@@ -360,8 +360,15 @@ abstract class BaseContentController extends BaseController
         return true;
     }
 
-    private function updateTopics(ContentActiveRecord $activeRecord, array $topics): bool
+    protected function updateTopics(ContentActiveRecord $activeRecord, array $topics): bool
     {
+        foreach ($topics as $topicName) {
+            if (!is_string($topicName)) {
+                $activeRecord->addError('topics', 'Wrong topic format!');
+                return false;
+            }
+        }
+
         Topic::deleteContentRelations($activeRecord->content);
 
         if (empty($topics)) {
@@ -372,10 +379,6 @@ abstract class BaseContentController extends BaseController
 
         $updatedTopics = [];
         foreach ($topics as $topicName) {
-            if (!is_string($topicName)) {
-                continue;
-            }
-
             $topic = Topic::findOne($topicData = [
                 'module_id' => 'topic',
                 'contentcontainer_id' => $activeRecord->content->contentcontainer_id,

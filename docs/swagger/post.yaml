@@ -236,11 +236,7 @@ definitions:
         type: string
         example: "Calvin Klein – Between love and madness lies obsession."
       content:
-        type: object
-        properties:
-          topics:
-            type: array
-            example: ["First", "Second", "Third"]
+        $ref: "content.yaml#/definitions/ContentForm"
   Post:
     type: object
     properties:

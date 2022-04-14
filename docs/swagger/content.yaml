@@ -203,6 +203,13 @@ definitions:
         type: object
         $ref: "#/definitions/Topics"
 
+  ContentForm:
+    type: object
+    properties:
+      topics:
+        type: array
+        example: ["First topic", "Second tag"]
+
   ContentMetadata:
     type: object
     properties:
@@ -235,11 +242,11 @@ definitions:
         example: default
 
   Topics:
-    type: object
-    properties:
-      topic:
-        type: array
-        $ref: "#/definitions/Topic"
+    type: array
+    example: [
+      {"id": 1, "name": "First topic"},
+      {"id": 2, "name": "Second tag"}
+    ]
 
   Topic:
     type: object
