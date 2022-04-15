@@ -8,10 +8,8 @@
 namespace humhub\modules\rest\definitions;
 
 use humhub\modules\content\components\ActiveQueryContent;
-use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\models\Content;
 use humhub\modules\content\models\ContentContainer;
-use humhub\modules\file\components\FileManager;
 use humhub\modules\topic\models\Topic;
 use Yii;
 
@@ -43,7 +41,10 @@ class ContentDefinitions
             'guid' => $content->guid,
             'object_model' => $content->object_model,
             'object_id' => $content->object_id,
-            'visibility' => $content->visibility,
+            'visibility' => (int) $content->visibility,
+            'archived' => (int) $content->archived,
+            'pinned' => (int) $content->pinned,
+            'locked_comments' => (int) $content->locked_comments,
             'created_by' => UserDefinitions::getUserShort($content->createdBy),
             'created_at' => $content->created_at,
             'url' => $content->getUrl(true),
@@ -64,7 +65,6 @@ class ContentDefinitions
 
     public static function getTopics(Content $content)
     {
-
         $topics = [];
 
         foreach (Topic::findByContent($content)->all() as $topic) {

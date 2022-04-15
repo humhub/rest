@@ -209,6 +209,22 @@ definitions:
       topics:
         type: array
         example: ["First topic", "Second tag"]
+      visibility:
+        type: integer
+        minimum: 0
+        maximum: 2
+      archived:
+        type: integer
+        minimum: 0
+        maximum: 1
+      pinned:
+        type: integer
+        minimum: 0
+        maximum: 1
+      locked_comments:
+        type: integer
+        minimum: 0
+        maximum: 1
 
   ContentMetadata:
     type: object
@@ -222,16 +238,45 @@ definitions:
         type: string
         readOnly: true
         example: cd081891-d2e2-40d5-84a4-b47309e71c80
-      url:
+      object_model:
         type: string
         readOnly: true
-        example: "http://localhost/p/humhub/master/content/perma?id=109"
+        example: "humhub\\modules\\post\\models\\Post"
+      object_id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 12
+      visibility:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 1
+      archived:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 1
+      pinned:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 0
+      locked_comments:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 0
       created_by:
         $ref: "user.yaml#/definitions/UserShort"
       created_at:
         type: string
         readOnly: true
-        example:
+        example: "2022-04-13 05:15:43"
+      url:
+        type: string
+        readOnly: true
+        example: "http://localhost/p/humhub/master/content/perma?id=109"
       contentcontainer_id:
         type: integer
         format: int64
