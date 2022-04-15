@@ -140,8 +140,7 @@ abstract class BaseContentController extends BaseController
 
         $contentRecord->content->container = $container;
 
-        $data = Yii::$app->request->getBodyParam('data', []);
-        if ($contentRecord->load($data, '') && $contentRecord->save() && $this->updateContent($contentRecord, $data)) {
+        if ($this->saveRecord($contentRecord)) {
             return $this->returnContentDefinition($contentRecord);
         }
 
@@ -161,8 +160,7 @@ abstract class BaseContentController extends BaseController
             return $this->returnError(403, 'You are not allowed to update this content!');
         }
 
-        $data = Yii::$app->request->getBodyParam('data', []);
-        if ($contentRecord->load($data, '') && $contentRecord->save() && $this->updateContent($contentRecord, $data)) {
+        if ($this->saveRecord($contentRecord)) {
             return $this->returnContentDefinition($contentRecord);
         }
 
@@ -339,6 +337,14 @@ abstract class BaseContentController extends BaseController
         }
 
         return $requestParams;
+    }
+
+    protected function saveRecord(ContentActiveRecord $contentRecord): bool
+    {
+        $data = Yii::$app->request->getBodyParam('data', []);
+        return $contentRecord->load($data, '') &&
+            $contentRecord->save() &&
+            $this->updateContent($contentRecord, $data);
     }
 
     protected function updateContent($activeRecord, $data): bool
