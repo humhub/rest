@@ -188,41 +188,57 @@ definitions:
   Content:
     type: object
     properties:
+      # Only Response params:
       metadata:
-        $ref: "#/definitions/ContentMetadata"
+        type: object
+        readOnly: true
+        allOf:
+          - $ref: "#/definitions/ContentMetadata"
       comments:
         type: object
-        $ref: "comment.yaml#/definitions/CommentsSummary"
+        readOnly: true
+        allOf:
+          - $ref: "comment.yaml#/definitions/CommentsSummary"
       likes:
         type: object
-        $ref: "like.yaml#/definitions/LikesSummary"
+        readOnly: true
+        allOf:
+          - $ref: "like.yaml#/definitions/LikesSummary"
       files:
         type: object
-        $ref: "file.yaml#/definitions/Files"
-      topics:
-        type: object
-        $ref: "#/definitions/Topics"
-
-  ContentForm:
-    type: object
-    properties:
+        readOnly: true
+        allOf:
+          - $ref: "file.yaml#/definitions/Files"
       topics:
         type: array
+        readOnly: true
+        example: [
+          { "id": 1, "name": "First topic" },
+          { "id": 2, "name": "Second tag" }
+        ]
+      # Only Request params:
+      topics-array:
+        type: array
+        writeOnly: true
         example: ["First topic", "Second tag"]
       visibility:
         type: integer
+        writeOnly: true
         minimum: 0
         maximum: 2
       archived:
         type: integer
+        writeOnly: true
         minimum: 0
         maximum: 1
       pinned:
         type: integer
+        writeOnly: true
         minimum: 0
         maximum: 1
       locked_comments:
         type: integer
+        writeOnly: true
         minimum: 0
         maximum: 1
 
@@ -279,19 +295,13 @@ definitions:
         example: "http://localhost/p/humhub/master/content/perma?id=109"
       contentcontainer_id:
         type: integer
+        readOnly: true
         format: int64
         example: 5
       stream_channel:
         type: string
         readOnly: true
         example: default
-
-  Topics:
-    type: array
-    example: [
-      {"id": 1, "name": "First topic"},
-      {"id": 2, "name": "Second tag"}
-    ]
 
   Topic:
     type: object

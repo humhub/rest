@@ -68,7 +68,7 @@ paths:
               - data
             properties:
               data:
-                $ref: "#/definitions/PostForm"
+                $ref: "#/definitions/Post"
       responses:
         '200':
           description: successful operation
@@ -148,7 +148,7 @@ paths:
               - data
             properties:
               data:
-                $ref: "#/definitions/PostForm"
+                $ref: "#/definitions/Post"
       responses:
         '200':
           description: successful operation
@@ -224,19 +224,6 @@ securityDefinitions:
   $ref: "common.yaml#/securityDefinitions"
 
 definitions:
-  PostForm:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14
-      message:
-        type: string
-        example: "Calvin Klein – Between love and madness lies obsession."
-      content:
-        $ref: "content.yaml#/definitions/ContentForm"
   Post:
     type: object
     properties:
