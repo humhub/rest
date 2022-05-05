@@ -362,19 +362,7 @@ abstract class BaseContentController extends BaseController
             return false;
         }
 
-        if (!$this->updateVisibility($activeRecord, $data['content'])) {
-            return false;
-        }
-
-        if (!$this->updateArchived($activeRecord, $data['content'])) {
-            return false;
-        }
-
-        if (!$this->updatePinned($activeRecord, $data['content'])) {
-            return false;
-        }
-
-        if (!$this->updateLockedComments($activeRecord, $data['content'])) {
+        if (!$this->updateMetadata($activeRecord, $data['content'])) {
             return false;
         }
 
@@ -392,8 +380,8 @@ abstract class BaseContentController extends BaseController
             return false;
         }
 
-        foreach ($data['topics'] as $t => $topicName) {
-            if (!is_string($topicName)) {
+        foreach ($data['topics'] as $t => $topic) {
+            if (!isset($topic['name'])) {
                 $activeRecord->addError('topics', 'Wrong topic #' . ($t + 1) . ' format!');
                 return false;
             }
@@ -408,11 +396,11 @@ abstract class BaseContentController extends BaseController
         $canAdd = $activeRecord->content->container->can(AddTopic::class);
 
         $updatedTopics = [];
-        foreach ($data['topics'] as $topicName) {
+        foreach ($data['topics'] as $topic) {
             $topic = Topic::findOne($topicData = [
                 'module_id' => 'topic',
                 'contentcontainer_id' => $activeRecord->content->contentcontainer_id,
-                'name' => $topicName,
+                'name' => $topic['name'],
             ]);
 
             if ($topic) {
@@ -426,6 +414,31 @@ abstract class BaseContentController extends BaseController
         }
 
         $activeRecord->content->addTags($updatedTopics);
+
+        return true;
+    }
+
+    protected function updateMetadata(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['metadata'])) {
+            return true;
+        }
+
+        if (!$this->updateVisibility($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updateArchived($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updatePinned($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updateLockedComments($activeRecord, $data['metadata'])) {
+            return false;
+        }
 
         return true;
     }

@@ -188,12 +188,8 @@ definitions:
   Content:
     type: object
     properties:
-      # Only Response params:
       metadata:
-        type: object
-        readOnly: true
-        allOf:
-          - $ref: "#/definitions/ContentMetadata"
+        $ref: "#/definitions/ContentMetadata"
       comments:
         type: object
         readOnly: true
@@ -211,36 +207,8 @@ definitions:
           - $ref: "file.yaml#/definitions/Files"
       topics:
         type: array
-        readOnly: true
-        example: [
-          { "id": 1, "name": "First topic" },
-          { "id": 2, "name": "Second tag" }
-        ]
-      # Only Request params:
-      topics-array:
-        type: array
-        writeOnly: true
-        example: ["First topic", "Second tag"]
-      visibility:
-        type: integer
-        writeOnly: true
-        minimum: 0
-        maximum: 2
-      archived:
-        type: integer
-        writeOnly: true
-        minimum: 0
-        maximum: 1
-      pinned:
-        type: integer
-        writeOnly: true
-        minimum: 0
-        maximum: 1
-      locked_comments:
-        type: integer
-        writeOnly: true
-        minimum: 0
-        maximum: 1
+        items:
+          $ref: "#/definitions/Topic"
 
   ContentMetadata:
     type: object
@@ -266,25 +234,31 @@ definitions:
       visibility:
         type: integer
         format: int64
-        readOnly: true
+        minimum: 0
+        maximum: 2
         example: 1
       archived:
         type: integer
         format: int64
-        readOnly: true
+        minimum: 0
+        maximum: 1
         example: 1
       pinned:
         type: integer
         format: int64
-        readOnly: true
+        minimum: 0
+        maximum: 1
         example: 0
       locked_comments:
         type: integer
         format: int64
-        readOnly: true
+        minimum: 0
+        maximum: 1
         example: 0
       created_by:
-        $ref: "user.yaml#/definitions/UserShort"
+        readOnly: true
+        allOf:
+          - $ref: "user.yaml#/definitions/UserShort"
       created_at:
         type: string
         readOnly: true
@@ -313,7 +287,6 @@ definitions:
         example: 135
       name:
         type: string
-        readOnly: true
         example: News
 
   ContentContainer:

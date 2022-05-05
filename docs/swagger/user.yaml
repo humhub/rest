@@ -483,9 +483,11 @@ definitions:
         example: cd081891-d2e2-40d5-84a4-b47309e71c80
       display_name:
         type: string
+        readOnly: true
         example: John Doe
       url:
         type: string
+        readOnly: true
         example: http://localhost/p/humhub/master/u/j.doe/
 
   User:
