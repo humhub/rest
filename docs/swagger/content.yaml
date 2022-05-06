@@ -238,23 +238,14 @@ definitions:
         maximum: 2
         example: 1
       archived:
-        type: integer
-        format: int64
-        minimum: 0
-        maximum: 1
-        example: 1
+        type: boolean
+        example: true
       pinned:
-        type: integer
-        format: int64
-        minimum: 0
-        maximum: 1
-        example: 0
+        type: boolean
+        example: false
       locked_comments:
-        type: integer
-        format: int64
-        minimum: 0
-        maximum: 1
-        example: 0
+        type: boolean
+        example: false
       created_by:
         readOnly: true
         allOf:
