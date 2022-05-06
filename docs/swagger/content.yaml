@@ -192,16 +192,23 @@ definitions:
         $ref: "#/definitions/ContentMetadata"
       comments:
         type: object
-        $ref: "comment.yaml#/definitions/CommentsSummary"
+        readOnly: true
+        allOf:
+          - $ref: "comment.yaml#/definitions/CommentsSummary"
       likes:
         type: object
-        $ref: "like.yaml#/definitions/LikesSummary"
+        readOnly: true
+        allOf:
+          - $ref: "like.yaml#/definitions/LikesSummary"
       files:
         type: object
-        $ref: "file.yaml#/definitions/Files"
+        readOnly: true
+        allOf:
+          - $ref: "file.yaml#/definitions/Files"
       topics:
-        type: object
-        $ref: "#/definitions/Topics"
+        type: array
+        items:
+          $ref: "#/definitions/Topic"
 
   ContentMetadata:
     type: object
@@ -215,31 +222,51 @@ definitions:
         type: string
         readOnly: true
         example: cd081891-d2e2-40d5-84a4-b47309e71c80
+      object_model:
+        type: string
+        readOnly: true
+        example: "humhub\\modules\\post\\models\\Post"
+      object_id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 12
+      visibility:
+        type: integer
+        format: int64
+        minimum: 0
+        maximum: 2
+        example: 1
+      archived:
+        type: boolean
+        example: true
+      pinned:
+        type: boolean
+        example: false
+      locked_comments:
+        type: boolean
+        example: false
+      created_by:
+        readOnly: true
+        allOf:
+          - $ref: "user.yaml#/definitions/UserShort"
+      created_at:
+        type: string
+        readOnly: true
+        example: "2022-04-13 05:15:43"
       url:
         type: string
         readOnly: true
         example: "http://localhost/p/humhub/master/content/perma?id=109"
-      created_by:
-        $ref: "user.yaml#/definitions/UserShort"
-      created_at:
-        type: string
-        readOnly: true
-        example:
       contentcontainer_id:
         type: integer
+        readOnly: true
         format: int64
         example: 5
       stream_channel:
         type: string
         readOnly: true
         example: default
-
-  Topics:
-    type: object
-    properties:
-      topic:
-        type: array
-        $ref: "#/definitions/Topic"
 
   Topic:
     type: object
@@ -251,7 +278,6 @@ definitions:
         example: 135
       name:
         type: string
-        readOnly: true
         example: News
 
   ContentContainer:

@@ -11,12 +11,15 @@ use humhub\libs\DbDateValidator;
 use humhub\modules\content\components\ActiveQueryContent;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
+use humhub\modules\content\models\Content;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\file\models\File;
 use humhub\modules\file\models\FileUpload;
 use humhub\modules\rest\definitions\FileDefinitions;
 use humhub\modules\tasks\controllers\rest\TasksController;
 use humhub\modules\rest\definitions\ContentDefinitions;
+use humhub\modules\topic\models\Topic;
+use humhub\modules\topic\permissions\AddTopic;
 use Yii;
 use yii\web\HttpException;
 use yii\web\UploadedFile;
@@ -137,9 +140,8 @@ abstract class BaseContentController extends BaseController
         $contentRecord = Yii::createObject(['class' => $this->getContentActiveRecordClass()]);
 
         $contentRecord->content->container = $container;
-        $contentRecord->load(Yii::$app->request->getBodyParam('data', []), '');
 
-        if ($contentRecord->save()) {
+        if ($this->saveRecord($contentRecord)) {
             return $this->returnContentDefinition($contentRecord);
         }
 
@@ -150,6 +152,7 @@ abstract class BaseContentController extends BaseController
     {
         $class = $this->getContentActiveRecordClass();
 
+        /* @var ContentActiveRecord $contentRecord */
         $contentRecord = $class::findOne(['id' => $id]);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Request object not found!');
@@ -158,7 +161,7 @@ abstract class BaseContentController extends BaseController
             return $this->returnError(403, 'You are not allowed to update this content!');
         }
 
-        if ($contentRecord->load(Yii::$app->request->getBodyParam('data', []), '') && $contentRecord->save()) {
+        if ($this->saveRecord($contentRecord)) {
             return $this->returnContentDefinition($contentRecord);
         }
 
@@ -335,5 +338,192 @@ abstract class BaseContentController extends BaseController
         }
 
         return $requestParams;
+    }
+
+    protected function saveRecord(ContentActiveRecord $contentRecord): bool
+    {
+        $data = Yii::$app->request->getBodyParam('data', []);
+        return $contentRecord->load($data, '') &&
+            $contentRecord->save() &&
+            $this->updateContent($contentRecord, $data);
+    }
+
+    protected function updateContent($activeRecord, $data): bool
+    {
+        if (!($activeRecord instanceof ContentActiveRecord)) {
+            return false;
+        }
+
+        if (empty($data['content']) || !is_array($data['content'])) {
+            return true;
+        }
+
+        if (!$this->updateTopics($activeRecord, $data['content'])) {
+            return false;
+        }
+
+        if (!$this->updateMetadata($activeRecord, $data['content'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function updateTopics(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['topics'])) {
+            return true;
+        }
+
+        if (!is_array($data['topics'])) {
+            $activeRecord->addError('topics', 'Wrong field "topics" format!');
+            return false;
+        }
+
+        foreach ($data['topics'] as $t => $topic) {
+            if (!isset($topic['name'])) {
+                $activeRecord->addError('topics', 'Wrong topic #' . ($t + 1) . ' format!');
+                return false;
+            }
+        }
+
+        Topic::deleteContentRelations($activeRecord->content);
+
+        if (empty($data['topics'])) {
+            return true;
+        }
+
+        $canAdd = $activeRecord->content->container->can(AddTopic::class);
+
+        $updatedTopics = [];
+        foreach ($data['topics'] as $topic) {
+            $topic = Topic::findOne($topicData = [
+                'module_id' => 'topic',
+                'contentcontainer_id' => $activeRecord->content->contentcontainer_id,
+                'name' => $topic['name'],
+            ]);
+
+            if ($topic) {
+                $updatedTopics[] = $topic;
+            } elseif ($canAdd) {
+                $topic = new Topic($topicData);
+                if ($topic->save()) {
+                    $updatedTopics[] = $topic;
+                }
+            }
+        }
+
+        $activeRecord->content->addTags($updatedTopics);
+
+        return true;
+    }
+
+    protected function updateMetadata(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['metadata'])) {
+            return true;
+        }
+
+        if (!$this->updateVisibility($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updateArchived($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updatePinned($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updateLockedComments($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function updatePinned(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['pinned'])) {
+            return true;
+        }
+
+        if (!in_array($data['pinned'], [0, 1])) {
+            $activeRecord->addError('pinned', 'Wrong field "pinned" value!');
+            return false;
+        }
+
+        if ($data['pinned']) {
+            if (!$activeRecord->content->canPin()) {
+                $activeRecord->addError('archived', 'You cannot pin the Content!');
+                return false;
+            }
+            $activeRecord->content->pin();
+        } else {
+            $activeRecord->content->unpin();
+        }
+
+        return true;
+    }
+
+    protected function updateArchived(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['archived'])) {
+            return true;
+        }
+
+        if (!in_array($data['archived'], [0, 1])) {
+            $activeRecord->addError('archived', 'Wrong field "archived" value!');
+            return false;
+        }
+
+        if (!$activeRecord->content->canArchive()) {
+            $activeRecord->addError('archived', 'You cannot archive the Content!');
+            return false;
+        }
+
+        if ($data['archived']) {
+            $activeRecord->content->archive();
+        } else {
+            $activeRecord->content->unarchive();
+        }
+
+        return true;
+    }
+
+    protected function updateVisibility(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['visibility'])) {
+            return true;
+        }
+
+        if (!in_array($data['visibility'], [Content::VISIBILITY_PRIVATE, Content::VISIBILITY_PUBLIC, Content::VISIBILITY_OWNER])) {
+            $activeRecord->addError('archived', 'Wrong field "visibility" value!');
+            return false;
+        }
+
+        $activeRecord->content->visibility = $data['visibility'];
+        return $activeRecord->content->save();
+    }
+
+    protected function updateLockedComments(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['locked_comments'])) {
+            return true;
+        }
+
+        if (!in_array($data['locked_comments'], [0, 1])) {
+            $activeRecord->addError('locked_comments', 'Wrong field "locked_comments" value!');
+            return false;
+        }
+
+        if (!$activeRecord->content->canLockComments()) {
+            $activeRecord->addError('locked_comments', 'You cannot lock comments of the Content!');
+            return false;
+        }
+
+        $activeRecord->content->locked_comments = $data['locked_comments'];
+        return $activeRecord->content->save();
     }
 }

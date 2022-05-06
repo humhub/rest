@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.4.5 (Unreleased)
+-----------------------
+- Enh #85: Allow update topics for a post
+
 Unreleased 0.4.4 (March 6, 2022)
 -----------------------
 - Enh #70: Content: Add sorting option
