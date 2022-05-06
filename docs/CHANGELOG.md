@@ -1,12 +1,10 @@
 Changelog
 =========
 
-0.4.5 (Unreleased)
------------------------
-- Enh #85: Allow update topics for a post
-
-Unreleased 0.4.4 (March 6, 2022)
------------------------
+0.5.0 (May 6, 2022)
+-------------------
+- Enh #85: Allow update of Content Topics
+- Enh #85: Allow update of Content Metadata (Visibility, Archived, Pinned)
 - Enh #70: Content: Add sorting option
 
 0.4.3 (February 1, 2022)
