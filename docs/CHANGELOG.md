@@ -6,6 +6,7 @@ Changelog
 - Enh #85: Allow update of Content Topics
 - Enh #85: Allow update of Content Metadata (Visibility, Archived, Pinned)
 - Enh #70: Content: Add sorting option
+- Fix #88: Increase min version for new field Content::locked_comments
 
 0.4.3 (February 1, 2022)
 ------------------------
