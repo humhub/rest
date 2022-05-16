@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.1 (May 16, 2022)
+-------------------
+- Fix #88: Increase min version for new field Content::locked_comments
+
 0.5.0 (May 6, 2022)
 -------------------
 - Enh #85: Allow update of Content Topics
