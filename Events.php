@@ -87,7 +87,9 @@ class Events
             //['pattern' => 'content/unarchive/<id:\d+>', 'route' => 'api/user/content/unarchive', 'verb' => 'POST'],
 
             // Comment
+            ['pattern' => 'comment', 'route' => 'rest/comment/comment/create', 'verb' => 'POST'],
             ['pattern' => 'comment/<id:\d+>', 'route' => 'rest/comment/comment/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'comment/<id:\d+>', 'route' => 'rest/comment/comment/update', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'comment/<id:\d+>', 'route' => 'rest/comment/comment/delete', 'verb' => 'DELETE'],
 
             // Like

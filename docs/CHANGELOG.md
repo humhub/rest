@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.2 (Unreleased)
+-------------------
+- Fix #41: Add comment endpoints: "Create", "Update", "List by content"
+
 0.5.1 (May 16, 2022)
 -------------------
 - Fix #88: Increase min version for new field Content::locked_comments
