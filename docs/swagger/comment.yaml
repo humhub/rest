@@ -13,6 +13,112 @@ info:
 basePath: /api/v1
 
 paths:
+  '/comment/find-by-object':
+    get:
+      summary: Find comments by object
+      produces:
+        - application/json
+      parameters:
+        - name: objectModel
+          in: query
+          description: The object model class name
+          required: true
+          type: string
+        - name: objectId
+          in: query
+          description: The primary key of the object
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Comment'
+        403:
+          description: You cannot view this content!
+        404:
+          description: Content not found!
+  '/comment/content/{id}':
+    get:
+      summary: Find comments by content
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The primary key of the content
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              pages:
+                $ref: 'common.yaml#/components/properties/pagesProperty'
+              links:
+                $ref: 'common.yaml#/components/properties/linksProperty'
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Comment'
+        403:
+          description: You cannot view this content!
+        404:
+          description: Content not found!
+  '/comment':
+    post:
+      summary: Create a comment
+      produces:
+        - application/json
+      parameters:
+        - name: Comment
+          in: body
+          description: The comment data
+          required: true
+          schema:
+            type: object
+            required:
+              - objectModel
+              - objectId
+              - Comment
+            properties:
+              objectModel:
+                type: string
+                example: "humhub\\modules\\post\\models\\Post"
+              objectId:
+                type: integer
+                format: int64
+                example: 123
+              Comment:
+                $ref: "#/definitions/Comment"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Comment"
+        400:
+          description: Validation failed
+        403:
+          description: You cannot comment the content!
   '/comment/{id}':
     get:
       summary: Get comment by id
@@ -34,6 +140,38 @@ paths:
           description: Invalid comment id supplied
         '404':
           description: Comment not found
+    put:
+      summary: Update a comment by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Id of the updated comment
+          required: true
+          type: integer
+        - name: Comment
+          in: body
+          description: The comment data
+          required: true
+          schema:
+            type: object
+            required:
+              - Comment
+            properties:
+              Comment:
+                $ref: "#/definitions/Comment"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Comment"
+        400:
+          description: Validation failed
+        403:
+          description: You cannot update this comment!
+        404:
+          description: Comment not found!
     delete:
       summary: Deletes a comment by id
       produces:
@@ -79,9 +217,29 @@ definitions:
       message:
         type: string
         example: "Calvin Klein – Between love and madness lies obsession."
+      objectModel:
+        type: string
+        readOnly: true
+        example: "humhub\\modules\\post\\models\\Post"
+      objectId:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 123
       createdBy:
-        $ref: "user.yaml#/definitions/UserShort"
+        readOnly: true
+        allOf:
+          - $ref: "user.yaml#/definitions/UserShort"
       createdAt:
         type: string
         readOnly: true
         example: 2018-08-09 14:22:03
+      commentsCount:
+        type: integer
+        readOnly: true
+        example: 5
+      comments:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/Comment'
