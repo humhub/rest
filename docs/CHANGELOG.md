@@ -1,9 +1,9 @@
 Changelog
 =========
 
-0.5.2 (Unreleased)
+0.6.0 (May 26, 2022)
 -------------------
-- Fix #41: Add comment endpoints: "Create", "Update", "Find by Object", "Find by Content"
+- Enh #41: Add Comment API endpoints
 
 0.5.1 (May 16, 2022)
 -------------------
