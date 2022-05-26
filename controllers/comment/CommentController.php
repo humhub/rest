@@ -41,7 +41,7 @@ class CommentController extends BaseController
     public function actionCreate()
     {
         if (!$this->commentModule->canComment($this->object)) {
-            throw new ForbiddenHttpException();
+            throw new ForbiddenHttpException('You cannot comment the content!');
         }
 
         return Comment::getDb()->transaction(function () {
@@ -105,12 +105,23 @@ class CommentController extends BaseController
 
     public function actionFindByObject($objectModel, $objectId)
     {
-        return $this->getPagedComments($objectModel, $objectId);
+        $content = Content::findOne([
+            'object_model' => $objectModel,
+            'object_id' => $objectId
+        ]);
+
+        return $this->getPagedComments($content);
     }
 
     public function actionFindByContent($id)
     {
         $content = Content::findOne(['id' => $id]);
+
+        return $this->getPagedComments($content);
+    }
+
+    private function getPagedComments(?Content $content): array
+    {
         if ($content === null) {
             return $this->returnError(404, 'Content not found!');
         }
@@ -118,14 +129,9 @@ class CommentController extends BaseController
             return $this->returnError(403, 'You cannot view this content!');
         }
 
-        return $this->getPagedComments($content->object_model, $content->object_id);
-    }
-
-    private function getPagedComments($objectModel, $objectId): array
-    {
         $query = Comment::find()
-            ->where(['object_model' => $objectModel])
-            ->andWhere(['object_id' => $objectId])
+            ->where(['object_model' => $content->object_model])
+            ->andWhere(['object_id' => $content->object_id])
             ->orderBy(['created_at' => SORT_ASC]);
 
         $results = [];
