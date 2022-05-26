@@ -6,10 +6,10 @@
  */
 
 namespace humhub\modules\rest\definitions;
+
 use humhub\components\ActiveRecord;
 use humhub\modules\comment\models\Comment;
 use humhub\modules\content\models\Content;
-
 
 /**
  * Class CommentDefinitions
@@ -43,13 +43,49 @@ class CommentDefinitions
 
     public static function getComment(Comment $comment)
     {
-        return [
+        $result = [
             'id' => $comment->id,
             'message' => $comment->message,
+            'objectModel' => $comment->object_model,
+            'objectId' => $comment->object_id,
             'createdBy' => UserDefinitions::getUserShort($comment->user),
             'createdAt' => $comment->created_at,
-            'likes' => LikeDefinitions::getLikesSummary($comment)
+            'likes' => LikeDefinitions::getLikesSummary($comment),
         ];
+
+        $subComments = static::getSubComments($comment);
+        $subCommentsCount = count($subComments );
+        if ($subCommentsCount) {
+            $result['commentsCount'] = $subCommentsCount;
+            $result['comments'] = $subComments;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Comment $comment
+     * @return Comment[]
+     */
+    public static function getSubComments(Comment $comment): array
+    {
+        $comments = [];
+
+        if (Comment::isSubComment($comment)) {
+            // Sub-comment doesn't have sub-comments with level 2
+            return $comments;
+        }
+
+        $query = Comment::find()
+            ->where(['object_model' => Comment::class])
+            ->andWhere(['object_id' => $comment->id])
+            ->orderBy(['created_at' => SORT_ASC]);
+
+        foreach ($query->all() as $comment) {
+            $comments[] = static::getComment($comment);
+        }
+
+        return $comments;
     }
 
 }

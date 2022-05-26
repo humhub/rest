@@ -11,6 +11,7 @@ use humhub\libs\Helpers;
 use humhub\modules\comment\models\forms\CommentForm;
 use humhub\modules\comment\Module;
 use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\content\models\Content;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\CommentDefinitions;
 use humhub\modules\comment\models\Comment;
@@ -77,7 +78,7 @@ class CommentController extends BaseController
             return $this->returnError(403, 'You cannot update this comment!');
         }
 
-        $form = new CommentForm($comment->getCommentedRecord(), $comment);
+        $form = new CommentForm($comment->getSource(), $comment);
 
         if ($form->load(Yii::$app->request->post()) && $form->save()) {
             return CommentDefinitions::getComment($form->comment);
@@ -100,6 +101,41 @@ class CommentController extends BaseController
             return $this->returnSuccess('Comment successfully deleted!');
         }
         return $this->returnError(500, 'Internal error while delete comment!');
+    }
+
+    public function actionFindByObject($objectModel, $objectId)
+    {
+        return $this->getPagedComments($objectModel, $objectId);
+    }
+
+    public function actionFindByContent($id)
+    {
+        $content = Content::findOne(['id' => $id]);
+        if ($content === null) {
+            return $this->returnError(404, 'Content not found!');
+        }
+        if (!$content->canView()) {
+            return $this->returnError(403, 'You cannot view this content!');
+        }
+
+        return $this->getPagedComments($content->object_model, $content->object_id);
+    }
+
+    private function getPagedComments($objectModel, $objectId): array
+    {
+        $query = Comment::find()
+            ->where(['object_model' => $objectModel])
+            ->andWhere(['object_id' => $objectId])
+            ->orderBy(['created_at' => SORT_ASC]);
+
+        $results = [];
+
+        $pagination = $this->handlePagination($query);
+        foreach ($query->all() as $comment) {
+            $results[] = CommentDefinitions::getComment($comment);
+        }
+
+        return $this->returnPagination($query, $pagination, $results);
     }
 
     public function getCommentModule(): Module
