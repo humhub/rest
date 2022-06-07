@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.1 (May 06, 2022)
+--------------------
+- Fix #91: Use Content-Type "application/json" for endpoint auth/login in request
+
 0.6.0 (May 26, 2022)
 -------------------
 - Enh #41: Add Comment API endpoints
