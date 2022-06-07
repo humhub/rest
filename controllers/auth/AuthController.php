@@ -15,12 +15,21 @@ use humhub\modules\user\authclient\AuthClientHelpers;
 use humhub\modules\user\models\forms\Login;
 use humhub\modules\user\models\User;
 use Yii;
+use yii\web\JsonParser;
 
 class AuthController extends BaseController
 {
     public function beforeAction($action)
     {
-        return $action->id == 'current' ? parent::beforeAction($action) : true;
+        if ($action->id == 'current') {
+            return parent::beforeAction($action);
+        }
+
+        Yii::$app->response->format = 'json';
+        Yii::$app->request->setBodyParams(null);
+        Yii::$app->request->parsers['application/json'] = JsonParser::class;
+
+        return true;
     }
 
     public function actionIndex()
