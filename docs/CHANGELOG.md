@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.2 (Unreleased)
+--------------------
+- Fix #95: Add `updated_at` in metadata
+
 0.6.1 (June 06, 2022)
 --------------------
 - Fix #91: Use Content-Type "application/json" for endpoint auth/login in request

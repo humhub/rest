@@ -47,6 +47,8 @@ class ContentDefinitions
             'locked_comments' => (bool) $content->locked_comments,
             'created_by' => UserDefinitions::getUserShort($content->createdBy),
             'created_at' => $content->created_at,
+            'updated_by' => UserDefinitions::getUserShort($content->updatedBy),
+            'updated_at' => $content->updated_at,
             'url' => $content->getUrl(true),
             'contentcontainer_id' => $content->contentcontainer_id,
             'stream_channel' => $content->stream_channel
