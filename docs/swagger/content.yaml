@@ -254,6 +254,14 @@ definitions:
         type: string
         readOnly: true
         example: "2022-04-13 05:15:43"
+      updated_by:
+        readOnly: true
+        allOf:
+          - $ref: "user.yaml#/definitions/UserShort"
+      updated_at:
+        type: string
+        readOnly: true
+        example: "2022-05-21 06:20:18"
       url:
         type: string
         readOnly: true
