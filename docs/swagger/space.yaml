@@ -198,12 +198,6 @@ paths:
               url:
                 type: string
                 example: welcome-space
-              indexUrl:
-                type: string
-                example: "/s/welcome-space/space/space/home"
-              indexGuestUrl:
-                type: string
-                example: "/s/welcome-space/space/space/home"
               visibility:
                 type: integer
                 format: int64
@@ -216,6 +210,24 @@ paths:
                 type: integer
                 format: int64
                 example: 1
+              hideMembers:
+                type: boolean
+                example: true
+              hideAbout:
+                type: boolean
+                example: false
+              hideActivities:
+                type: boolean
+                example: true
+              hideFollowers:
+                type: boolean
+                example: false
+              indexUrl:
+                type: string
+                example: "/s/welcome-space/space/space/home"
+              indexGuestUrl:
+                type: string
+                example: "/s/welcome-space/space/space/home"
       responses:
         200:
           description: Success
@@ -677,6 +689,24 @@ definitions:
         example: ["First tag", "Second tag"]
       owner:
         $ref: "user.yaml#/definitions/UserShort"
+      hideMembers:
+        type: integer
+        example: 1
+      hideAbout:
+        type: integer
+        example: 0
+      hideActivities:
+        type: integer
+        example: 1
+      hideFollowers:
+        type: integer
+        example: 0
+      indexUrl:
+        type: string
+        example: "/s/welcome-space/space/space/home"
+      indexGuestUrl:
+        type: string
+        example: "/s/welcome-space/space/space/home"
 
   SpaceMembership:
     type: object

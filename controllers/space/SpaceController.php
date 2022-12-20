@@ -11,7 +11,6 @@ use Colors\RandomColor;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Space;
-use humhub\modules\space\modules\manage\models\AdvancedSettingsSpace;
 use humhub\modules\space\permissions\CreatePrivateSpace;
 use humhub\modules\space\permissions\CreatePublicSpace;
 use Yii;
@@ -83,7 +82,7 @@ class SpaceController extends BaseController
 
     public function actionUpdate($id)
     {
-        $space = AdvancedSettingsSpace::findOne(['id' => $id]);
+        $space = Space::findOne(['id' => $id]);
 
         if ($space === null) {
             return $this->returnError(404, 'Space not found!');
@@ -103,7 +102,16 @@ class SpaceController extends BaseController
             ]);
         }
 
-        if ($space->save()) {
+        $space->getAdvancedSettings()->load(Yii::$app->request->getBodyParams(), '');
+        $space->getAdvancedSettings()->validate();
+
+        if ($space->getAdvancedSettings()->hasErrors()) {
+            return $this->returnError(422, 'Validation failed', [
+                'space' => $space->getAdvancedSettings()->getErrors(),
+            ]);
+        }
+
+        if ($space->save() && $space->getAdvancedSettings()->save()) {
             return SpaceDefinitions::getSpace($space);
         }
 
