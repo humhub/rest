@@ -3,7 +3,7 @@ Changelog
 
 0.7.0 (Unreleased)
 --------------------
-- Fix: Update for version 1.13
+- Fix #102: Update for version 1.13
 
 0.6.2 (Unreleased)
 --------------------
