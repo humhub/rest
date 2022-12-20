@@ -43,6 +43,12 @@ class SpaceDefinitions
             'status' => $space->status,
             'tags' => $space->tags,
             'owner' => UserDefinitions::getUserShort($space->ownerUser),
+            'hideMembers' => (int)$space->getAdvancedSettings()->hideMembers,
+            'hideAbout' => (int)$space->getAdvancedSettings()->hideAbout,
+            'hideActivities' => (int)$space->getAdvancedSettings()->hideActivities,
+            'hideFollowers' => (int)$space->getAdvancedSettings()->hideFollowers,
+            'indexUrl' => (string)$space->getAdvancedSettings()->indexUrl,
+            'indexGuestUrl' => (string)$space->getAdvancedSettings()->indexGuestUrl,
         ];
     }
 

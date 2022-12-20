@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.7.0 (Unreleased)
+--------------------
+- Fix #102: Update for version 1.13
+
 0.6.2 (Unreleased)
 --------------------
 - Fix #95: Add `updated_at` in metadata

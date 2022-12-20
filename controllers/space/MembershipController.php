@@ -7,14 +7,10 @@
 
 namespace humhub\modules\rest\controllers\space;
 
-use Colors\RandomColor;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
-use humhub\modules\space\modules\manage\models\AdvancedSettingsSpace;
-use humhub\modules\space\permissions\CreatePrivateSpace;
-use humhub\modules\space\permissions\CreatePublicSpace;
 use Yii;
 
 /**
@@ -22,8 +18,6 @@ use Yii;
  */
 class MembershipController extends BaseController
 {
-
-
     public function actionIndex($spaceId)
     {
         $space = Space::findOne(['id' => (int)$spaceId]);
@@ -106,6 +100,4 @@ class MembershipController extends BaseController
 
         return $this->returnSuccess('Member updated!');
     }
-
-
 }
