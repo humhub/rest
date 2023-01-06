@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.7.0 (January 6, 2023)
+0.7.1 (January 6, 2023)
 -----------------------
 - Fix #102: Update for version 1.13
 - Fix #95: Add `updated_at` in metadata
