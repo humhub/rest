@@ -1,12 +1,9 @@
 Changelog
 =========
 
-0.7.0 (Unreleased)
---------------------
+0.7.0 (January 6, 2022)
+-----------------------
 - Fix #102: Update for version 1.13
-
-0.6.2 (Unreleased)
---------------------
 - Fix #95: Add `updated_at` in metadata
 
 0.6.1 (June 06, 2022)
