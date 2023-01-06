@@ -11,27 +11,27 @@ The base url for all APIs is: `https://yourhost/api/v1/`
 
 **Core APIs:**
 
-- [User](https://www.humhub.com/en/marketplace/rest/docs/html/user.html)
-- [Content](https://www.humhub.com/en/marketplace/rest/docs/html/content.html)
-- [Post](https://www.humhub.com/en/marketplace/rest/docs/html/post.html)
-- [Comment](https://www.humhub.com/en/marketplace/rest/docs/html/comment.html)
-- [Like](https://www.humhub.com/en/marketplace/rest/docs/html/like.html)
-- [Activity](https://www.humhub.com/en/marketplace/rest/docs/html/activity.html)
-- [Authentication](https://www.humhub.com/en/marketplace/rest/docs/html/auth.html)
-- [File](https://www.humhub.com/en/marketplace/rest/docs/html/file.html)
-- [Notification](https://www.humhub.com/en/marketplace/rest/docs/html/notification.html)
-- [Space](https://www.humhub.com/en/marketplace/rest/docs/html/space.html)
-- [Content Topics](https://www.humhub.com/en/marketplace/rest/docs/html/topic.html)
+- [User](https://marketplace.humhub.com/module/rest/docs/html/user.html)
+- [Content](https://marketplace.humhub.com/module/rest/docs/html/content.html)
+- [Post](https://marketplace.humhub.com/module/rest/docs/html/post.html)
+- [Comment](https://marketplace.humhub.com/module/rest/docs/html/comment.html)
+- [Like](https://marketplace.humhub.com/module/rest/docs/html/like.html)
+- [Activity](https://marketplace.humhub.com/module/rest/docs/html/activity.html)
+- [Authentication](https://marketplace.humhub.com/module/rest/docs/html/auth.html)
+- [File](https://marketplace.humhub.com/module/rest/docs/html/file.html)
+- [Notification](https://marketplace.humhub.com/module/rest/docs/html/notification.html)
+- [Space](https://marketplace.humhub.com/module/rest/docs/html/space.html)
+- [Content Topics](https://marketplace.humhub.com/module/rest/docs/html/topic.html)
 
 **Module APIs** 
 
-- [Calendar](https://www.humhub.com/en/marketplace/calendar/docs/swagger/calendar.html)
-- [CFiles](https://www.humhub.com/en/marketplace/cfiles/docs/swagger/cfiles.html)
-- [Tasks](https://www.humhub.com/en/marketplace/tasks/docs/swagger/task.html)
-- [Wiki](https://www.humhub.com/en/marketplace/wiki/docs/swagger/wiki.html)
-- [Mail](https://www.humhub.com/en/marketplace/mail/docs/swagger/mail.html)
-- [Polls](https://www.humhub.com/en/marketplace/polls/docs/swagger/polls.html)
-- [Survey](https://www.humhub.com/en/marketplace/survey/docs/swagger/survey.html)
+- [Calendar](https://marketplace.humhub.com/module/calendar/docs/swagger/calendar.html)
+- [CFiles](https://marketplace.humhub.com/module/cfiles/docs/swagger/cfiles.html)
+- [Tasks](https://marketplace.humhub.com/module/tasks/docs/swagger/task.html)
+- [Wiki](https://marketplace.humhub.com/module/wiki/docs/swagger/wiki.html)
+- [Mail](https://marketplace.humhub.com/module/mail/docs/swagger/mail.html)
+- [Polls](https://marketplace.humhub.com/module/polls/docs/swagger/polls.html)
+- [Survey](https://marketplace.humhub.com/module/survey/docs/swagger/survey.html)
 
 
 The folder `/docs/html`contains HTML rendered documentations for all available API endpoints.
