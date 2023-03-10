@@ -11,9 +11,9 @@ use Firebase\JWT\JWT;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\ConfigureForm;
-use humhub\modules\user\authclient\AuthClientHelpers;
 use humhub\modules\user\models\forms\Login;
 use humhub\modules\user\models\User;
+use humhub\modules\user\services\AuthClientService;
 use Yii;
 use yii\web\JsonParser;
 
@@ -74,7 +74,7 @@ class AuthController extends BaseController
             return null;
         }
 
-        $user = AuthClientHelpers::getUserByAuthClient($login->authClient);
+        $user = (new AuthClientService($login->authClient))->getUser();
         return $user;
     }
 

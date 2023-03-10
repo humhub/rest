@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.8.0 (March 10, 2023)
+----------------------
+- Fix: Update for HumHub version 1.14
+
 0.7.1 (January 6, 2023)
 -----------------------
 - Fix #102: Update for version 1.13
