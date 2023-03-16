@@ -234,6 +234,16 @@ definitions:
         type: string
         readOnly: true
         example: 2018-08-09 14:22:03
+      likes:
+        type: object
+        readOnly: true
+        allOf:
+          - $ref: "like.yaml#/definitions/LikesSummary"
+      files:
+        type: object
+        readOnly: true
+        allOf:
+          - $ref: "file.yaml#/definitions/Files"
       commentsCount:
         type: integer
         readOnly: true
