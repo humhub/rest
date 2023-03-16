@@ -51,6 +51,7 @@ class CommentDefinitions
             'createdBy' => UserDefinitions::getUserShort($comment->user),
             'createdAt' => $comment->created_at,
             'likes' => LikeDefinitions::getLikesSummary($comment),
+            'files' => FileDefinitions::getFiles($comment),
         ];
 
         $subComments = static::getSubComments($comment);
