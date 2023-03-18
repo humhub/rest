@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.8.1 (Unreleased)
+----------------------
+- Fix #110: Fix PHP Error in UserDefinition
+
 0.8.0 (March 10, 2023)
 ----------------------
 - Fix: Update for HumHub version 1.14
