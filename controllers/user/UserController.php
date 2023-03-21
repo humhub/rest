@@ -10,6 +10,7 @@ namespace humhub\modules\rest\controllers\user;
 use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\rest\models\ApiUser;
 use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
@@ -50,7 +51,7 @@ class UserController extends BaseController
      * Get User by username
      * 
      * @param string $username the username searched
-     * @return UserDefinitions
+     * @return array
      * @throws HttpException
      */
     public function actionGetByUsername($username)
@@ -64,12 +65,11 @@ class UserController extends BaseController
         return $this->actionView($user->id);
     }
 
-
     /**
      * Get User by email
      * 
      * @param string $email the email searched
-     * @return UserDefinitions
+     * @return array
      * @throws HttpException
      */
     public function actionGetByEmail($email)
@@ -83,6 +83,24 @@ class UserController extends BaseController
         return $this->actionView($user->id);
     }
 
+    /**
+     * Get User by authclient
+     *
+     * @param string $name Name of auth client
+     * @param string $id ID of auth client
+     * @return array
+     * @throws HttpException
+     */
+    public function actionGetByAuthclient($name, $id)
+    {
+        $user = User::findOne(['auth_mode' => $name, 'authclient_id' => $id]);
+
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
+
+        return $this->actionView($user->id);
+    }
 
     public function actionView($id)
     {
@@ -96,30 +114,29 @@ class UserController extends BaseController
 
     public function actionUpdate($id)
     {
-        $user = User::findOne(['id' => $id]);
+        $user = ApiUser::findOne(['id' => $id]);
         if ($user === null) {
             return $this->returnError(404, 'User not found!');
         }
 
-        $user->scenario = 'editAdmin';
-        $userData = Yii::$app->request->getBodyParam("account", []);
+        $userData = Yii::$app->request->getBodyParam('account', []);
         if (!empty($userData)) {
             $user->load($userData, '');
             $user->validate();
         }
 
         $profile = null;
-        $profileData = Yii::$app->request->getBodyParam("profile", []);
+        $profileData = Yii::$app->request->getBodyParam('profile', []);
 
         if (!empty($profileData)) {
             $profile = $user->profile;
-            $profile->scenario = 'editAdmin';
+            $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
             $profile->load($profileData, '');
             $profile->validate();
         }
 
         $password = null;
-        $passwordData = Yii::$app->request->getBodyParam("password", []);
+        $passwordData = Yii::$app->request->getBodyParam('password', []);
         if (!empty($passwordData)) {
             $password = new Password();
             $password->scenario = 'registration';
@@ -167,19 +184,18 @@ class UserController extends BaseController
      */
     public function actionCreate()
     {
-        $user = new User();
-        $user->scenario = 'editAdmin';
-        $user->load(Yii::$app->request->getBodyParam("account", []), '');
+        $user = new ApiUser();
+        $user->load(Yii::$app->request->getBodyParam('account', []), '');
         $user->validate();
 
         $profile = new Profile();
-        $profile->scenario = 'editAdmin';
-        $profile->load(Yii::$app->request->getBodyParam("profile", []), '');
+        $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
+        $profile->load(Yii::$app->request->getBodyParam('profile', []), '');
         $profile->validate();
 
         $password = new Password();
         $password->scenario = 'registration';
-        $password->load(Yii::$app->request->getBodyParam("password", []), '');
+        $password->load(Yii::$app->request->getBodyParam('password', []), '');
         $password->newPasswordConfirm = $password->newPassword;
         $password->validate();
 

@@ -553,7 +553,6 @@ definitions:
       language:
         type: string
         example: DE
-        readOnly: true
       time_zone:
         type: string
         example: Europe/Paris
@@ -561,6 +560,13 @@ definitions:
       contentcontainer_id:
         type: integer
         example: 5
+        readOnly: true
+      authclient:
+        type: string
+        example: local
+      authclient_id:
+        type: string
+        example: "0123456789"
     xml:
       name: Account
 
