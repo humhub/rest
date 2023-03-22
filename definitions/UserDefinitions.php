@@ -61,6 +61,8 @@ class UserDefinitions
             'language' => $user->language,
             'time_zone' => $user->time_zone,
             'contentcontainer_id' => $user->contentcontainer_id,
+            'authclient' => $user->auth_mode,
+            'authclient_id' => $user->authclient_id,
         ];
     }
 
