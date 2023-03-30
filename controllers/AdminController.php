@@ -7,10 +7,12 @@
 
 namespace humhub\modules\rest\controllers;
 
+use Yii;
+use yii\data\ActiveDataProvider;
 use humhub\components\Response;
 use humhub\modules\admin\components\Controller;
 use humhub\modules\rest\models\ConfigureForm;
-use Yii;
+use humhub\modules\rest\models\RestUserBearerToken;
 
 class AdminController extends Controller
 {
@@ -28,7 +30,33 @@ class AdminController extends Controller
             return $this->redirect(['index']);
         }
 
-        return $this->render('index', ['model' => $model]);
+        $bearerTokenModel = new RestUserBearerToken();
+
+        if ($bearerTokenModel->load(Yii::$app->request->post()) && $bearerTokenModel->save()) {
+            $this->view->saved();
+            $bearerTokenModel->loadDefaultValues();
+        }
+
+//        echo '<pre>';var_dump(Yii::$app->request->post());die;
+
+        return $this->render('index', [
+            'model' => $model,
+            'bearerTokenModel' => $bearerTokenModel,
+            'bearerTokensProvider' => new ActiveDataProvider([
+                'query' => RestUserBearerToken::find()->with('user'),
+                'sort'=> [
+                    'defaultOrder' => ['id' => SORT_ASC]
+                ],
+            ])
+        ]);
     }
 
+    public function actionRevokeAccessToken($id)
+    {
+        RestUserBearerToken::deleteAll(['id' => $id]);
+
+        $this->view->success(Yii::t('RestModule.base','Bearer Access Token Successfully Revoked'));
+
+        return $this->redirect(['index']);
+    }
 }

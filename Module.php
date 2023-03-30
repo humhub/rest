@@ -9,6 +9,8 @@ namespace humhub\modules\rest;
 
 use humhub\components\bootstrap\ModuleAutoLoader;
 use \humhub\components\Module as BaseModule;
+use humhub\modules\user\models\User as UserModel;
+use humhub\modules\rest\components\User as UserComponent;
 use Yii;
 use yii\helpers\Url;
 
@@ -29,6 +31,16 @@ class Module extends BaseModule
      * @inheritdoc
      */
     public $resourcesPath = 'resources';
+
+    public function init()
+    {
+        Yii::$app->set('user', [
+            'class' => UserComponent::class,
+            'identityClass' => UserModel::class,
+        ]);
+
+        parent::init();
+    }
 
     /**
      * @inheritdoc
@@ -107,5 +119,4 @@ class Module extends BaseModule
 
         return !isset($apiModules[$moduleId]) || $apiModules[$moduleId];
     }
-
 }

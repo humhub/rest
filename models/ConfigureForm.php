@@ -24,6 +24,12 @@ class ConfigureForm extends Model
 
     public $enableBasicAuth;
 
+
+    public $enableBearerAuth;
+
+
+    public $enableQueryParamAuth;
+
     public $apiModules;
 
     /**
@@ -34,7 +40,7 @@ class ConfigureForm extends Model
         return [
             [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
             [['enabledUsers', 'apiModules'], 'safe'],
-            [['enabledForAllUsers', 'enableBasicAuth'], 'boolean'],
+            [['enabledForAllUsers', 'enableBasicAuth', 'enableBearerAuth', 'enableQueryParamAuth'], 'boolean'],
             [['jwtExpire'], 'integer']
         ];
     }
@@ -49,6 +55,8 @@ class ConfigureForm extends Model
             'jwtExpire' => Yii::t('RestModule.base','JWT Token Expiration'),
             'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
             'enableBasicAuth' => Yii::t('RestModule.base','Allow HTTP Basic Authentication'),
+            'enableBearerAuth' => Yii::t('RestModule.base','Allow Bearer Authentication'),
+            'enableQueryParamAuth' => Yii::t('RestModule.base','Allow Query Param Bearer Authentication'),
             'apiModules' => Yii::t('RestModule.base', 'Active additional REST API endpoints from the modules'),
         ];
     }
@@ -82,6 +90,8 @@ class ConfigureForm extends Model
         $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
         $this->jwtExpire = (int)$settings->get('jwtExpire');
         $this->enableBasicAuth = (boolean)$settings->get('enableBasicAuth');
+        $this->enableBearerAuth = (boolean)$settings->get('enableBearerAuth');
+        $this->enableQueryParamAuth = (boolean)$settings->get('enableQueryParamAuth');
 
         foreach ($module->getModulesWithRestApi() as $apiModule) {
             if ($module->isActiveModule($apiModule->id)) {
@@ -97,10 +107,16 @@ class ConfigureForm extends Model
         /** @var Module $module */
         $module = Yii::$app->getModule('rest');
 
+        if (!$this->enableBearerAuth ) {
+            $this->enableQueryParamAuth = false;
+        }
+
         $module->settings->set('jwtExpire', (int)$this->jwtExpire);
         $module->settings->set('jwtKey', $this->jwtKey);
         $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
         $module->settings->set('enableBasicAuth', (boolean)$this->enableBasicAuth);
+        $module->settings->set('enableBearerAuth', (boolean)$this->enableBearerAuth);
+        $module->settings->set('enableQueryParamAuth', (boolean)$this->enableQueryParamAuth);
         $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
         $apiModules = [];
