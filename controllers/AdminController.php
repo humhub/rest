@@ -37,8 +37,6 @@ class AdminController extends Controller
             $bearerTokenModel->loadDefaultValues();
         }
 
-//        echo '<pre>';var_dump(Yii::$app->request->post());die;
-
         return $this->render('index', [
             'model' => $model,
             'bearerTokenModel' => $bearerTokenModel,

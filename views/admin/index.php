@@ -81,8 +81,6 @@ $apiModuleOptions = $model->getApiModuleOptions();
                                                 ->link(['revoke-access-token', 'id' => $id])
                                                 ->icon('trash')
                                                 ->xs();
-
-//                                        return Html::a(Yii::t('RestModule.base','Revoke'), ['revoke-access-token', 'id' => $id], ['class' => 'btn btn-danger', 'data' => ['method' => 'post']]);
                                     },
                                 ],
                             ],
