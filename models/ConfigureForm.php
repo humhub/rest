@@ -7,26 +7,17 @@
 
 namespace humhub\modules\rest\models;
 
-use humhub\modules\rest\Module;
 use Yii;
 use yii\base\Model;
+use humhub\modules\rest\Module;
 
 class ConfigureForm extends Model
 {
-
-    public $enabledForAllUsers;
-
-    public $enabledUsers;
-
-    public $jwtKey;
-
-    public $jwtExpire;
+    public $enableJwtAuth;
 
     public $enableBasicAuth;
 
-
     public $enableBearerAuth;
-
 
     public $enableQueryParamAuth;
 
@@ -38,10 +29,8 @@ class ConfigureForm extends Model
     public function rules()
     {
         return [
-            [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
-            [['enabledUsers', 'apiModules'], 'safe'],
-            [['enabledForAllUsers', 'enableBasicAuth', 'enableBearerAuth', 'enableQueryParamAuth'], 'boolean'],
-            [['jwtExpire'], 'integer']
+            [['enableJwtAuth', 'enableBasicAuth', 'enableBearerAuth', 'enableQueryParamAuth'], 'boolean'],
+            [['apiModules'], 'safe'],
         ];
     }
 
@@ -51,25 +40,11 @@ class ConfigureForm extends Model
     public function attributeLabels()
     {
         return [
-            'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
-            'jwtExpire' => Yii::t('RestModule.base','JWT Token Expiration'),
-            'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
+            'enableJwtAuth' => Yii::t('RestModule.base','Allow JWT Authentication'),
             'enableBasicAuth' => Yii::t('RestModule.base','Allow HTTP Basic Authentication'),
             'enableBearerAuth' => Yii::t('RestModule.base','Allow Bearer Authentication'),
             'enableQueryParamAuth' => Yii::t('RestModule.base','Allow Query Param Bearer Authentication'),
             'apiModules' => Yii::t('RestModule.base', 'Active additional REST API endpoints from the modules'),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeHints()
-    {
-        return [
-            'jwtKey' => 'If empty, a random key is generated automatically.',
-            'jwtExpire' => 'in seconds. 0 for no JWT token expiration.',
-            'enabledForAllUsers' => 'Please note, it is not recommended to enable the API for all users yet.',
         ];
     }
 
@@ -80,15 +55,7 @@ class ConfigureForm extends Model
 
         $settings = $module->settings;
 
-        $this->jwtKey = $settings->get('jwtKey');
-        if (empty($this->jwtKey)) {
-            $settings->set('jwtKey', Yii::$app->security->generateRandomString(86));
-            $this->jwtKey = $settings->get('jwtKey');
-        }
-
-        $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
-        $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
-        $this->jwtExpire = (int)$settings->get('jwtExpire');
+        $this->enableJwtAuth = (boolean)$settings->get('enableJwtAuth');
         $this->enableBasicAuth = (boolean)$settings->get('enableBasicAuth');
         $this->enableBearerAuth = (boolean)$settings->get('enableBearerAuth');
         $this->enableQueryParamAuth = (boolean)$settings->get('enableQueryParamAuth');
@@ -111,13 +78,10 @@ class ConfigureForm extends Model
             $this->enableQueryParamAuth = false;
         }
 
-        $module->settings->set('jwtExpire', (int)$this->jwtExpire);
-        $module->settings->set('jwtKey', $this->jwtKey);
-        $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
+        $module->settings->set('enableJwtAuth', (boolean)$this->enableJwtAuth);
         $module->settings->set('enableBasicAuth', (boolean)$this->enableBasicAuth);
         $module->settings->set('enableBearerAuth', (boolean)$this->enableBearerAuth);
         $module->settings->set('enableQueryParamAuth', (boolean)$this->enableQueryParamAuth);
-        $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
         $apiModules = [];
         foreach ($module->getModulesWithRestApi() as $apiModule) {
