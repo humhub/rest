@@ -24,6 +24,7 @@ use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\user\models\User;
+use humhub\modules\rest\models\JwtAuthForm;
 
 /**
  * Class BaseController
@@ -109,7 +110,7 @@ abstract class BaseController extends Controller
      */
     public function isUserEnabled(User $user)
     {
-        $config = new ConfigureForm();
+        $config = new JwtAuthForm();
         $config->loadSettings();
 
         if (!empty($config->enabledForAllUsers)) {
