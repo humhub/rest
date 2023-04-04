@@ -56,7 +56,9 @@ abstract class BaseController extends Controller
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => ArrayHelper::merge(
-                    [JwtAuth::class],
+                    ConfigureForm::getInstance()->enableJwtAuth ? [[
+                        'class' => JwtAuth::class,
+                    ]] : [],
                     ConfigureForm::getInstance()->enableBearerAuth ? [[
                         'class' => HttpBearerAuth::class,
                     ]] : [],
