@@ -10,7 +10,7 @@ namespace humhub\modules\rest\controllers\auth;
 use Firebase\JWT\JWT;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
-use humhub\modules\rest\models\ConfigureForm;
+use humhub\modules\rest\models\JwtAuthForm;
 use humhub\modules\user\models\forms\Login;
 use humhub\modules\user\models\User;
 use humhub\modules\user\services\AuthClientService;
@@ -53,7 +53,7 @@ class AuthController extends BaseController
             'email' => $user->email
         ];
 
-        $config = ConfigureForm::getInstance();
+        $config = JwtAuthForm::getInstance();
         if (!empty($config->jwtExpire)) {
             $data['exp'] = $issuedAt + (int)$config->jwtExpire;
         }
