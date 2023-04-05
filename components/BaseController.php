@@ -53,11 +53,11 @@ abstract class BaseController extends Controller
 
     public function behaviors()
     {
-        return ArrayHelper::merge(parent::behaviors() , [
+        return ArrayHelper::merge([
             'authenticator' => [
                 'class' => CompositeAuth::class,
                 'authMethods' => ArrayHelper::merge(
-                    ConfigureForm::getInstance()->enableJwtAuth ? [[
+                    ConfigureForm::getInstance()->enableJwtAuth || 1 /* temporary for tests */ ? [[
                         'class' => JwtAuth::class,
                     ]] : [],
                     ConfigureForm::getInstance()->enableBearerAuth ? [[
@@ -69,12 +69,16 @@ abstract class BaseController extends Controller
                     ConfigureForm::getInstance()->enableBasicAuth ? [[
                         'class' => HttpBasicAuth::class,
                         'auth' => function($username, $password) {
-                            return AuthController::authByUserAndPassword($username, $password);
+                            if (($identity = AuthController::authByUserAndPassword($username, $password)) && $this->isUserEnabled($identity)) {
+                                return $identity;
+                            }
+
+                            return null;
                         },
                     ]] : [],
                 ),
             ],
-        ]);
+        ], parent::behaviors());
     }
 
     /**
@@ -85,6 +89,7 @@ abstract class BaseController extends Controller
         Yii::$app->response->format = 'json';
 
         Yii::$app->request->setBodyParams(null);
+        Yii::$app->request->enableCsrfCookie = false;
         Yii::$app->request->parsers['application/json'] = JsonParser::class;
 
         return parent::beforeAction($action);

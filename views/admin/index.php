@@ -12,6 +12,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use humhub\modules\user\widgets\UserPickerField;
 
 $apiModuleOptions = $model->getApiModuleOptions();
 ?>
@@ -20,6 +21,13 @@ $apiModuleOptions = $model->getApiModuleOptions();
 
 <?= $form->field($model, 'enableBasicAuth')->checkbox(); ?>
 <?= $form->field($model, 'enableJwtAuth')->checkbox(); ?>
+
+<?= Html::tag(
+    'blockquote',
+    $form->field($model, 'enabledForAllUsers')->checkbox() . $form->field($model, 'enabledUsers')->widget(UserPickerField::class),
+    ['id' => 'enabledusers', 'style' => ['font-size' => 'inherit']]
+) ?>
+
 <?= $form->field($model, 'enableBearerAuth')->checkbox(); ?>
 <?= $form->field($model, 'enableQueryParamAuth')->checkbox(); ?>
 
@@ -33,3 +41,49 @@ $apiModuleOptions = $model->getApiModuleOptions();
 </div>
 
 <?php ActiveForm::end(); ?>
+
+<?php
+
+$js = <<<JS
+function enabledUsers() {
+    if ($('#configureform-enabledforallusers').prop('checked')) {
+        $('.field-configureform-enabledusers').hide()
+    } else {
+        $('.field-configureform-enabledusers').show()
+    }
+}
+
+function enabledUsersBlockquote() {
+    if ($('#configureform-enablebasicauth').prop('checked') || $('#configureform-enablejwtauth').prop('checked')) {
+        $('#enabledusers').show()
+        
+        $('#enabledusers').insertAfter($('#configureform-enablejwtauth').prop('checked') ? $('.field-configureform-enablejwtauth') : $('.field-configureform-enablebasicauth'))
+    } else {
+        $('#enabledusers').hide()
+    }
+}
+
+function checkBearerAuth() {
+    if (!$('#configureform-enablebearerauth').prop('checked')) {
+        $('#configureform-enablequeryparamauth').prop('checked', false)
+    }
+}
+
+function checkQueryParamBearerAuth() {
+    if ($('#configureform-enablequeryparamauth').prop('checked')) {
+        $('#configureform-enablebearerauth').prop('checked', true)
+    }
+}
+
+enabledUsers()
+enabledUsersBlockquote()
+
+$('#configureform-enabledforallusers').change(enabledUsers)
+$('#configureform-enablebasicauth').change(enabledUsersBlockquote)
+$('#configureform-enablejwtauth').change(enabledUsersBlockquote)
+$('#configureform-enablebearerauth').change(checkBearerAuth)
+$('#configureform-enablequeryparamauth').change(checkQueryParamBearerAuth)
+JS;
+
+$this->registerJs($js);
+

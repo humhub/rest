@@ -21,6 +21,10 @@ class ConfigureForm extends Model
 
     public $enableQueryParamAuth;
 
+    public $enabledForAllUsers;
+
+    public $enabledUsers;
+
     public $apiModules;
 
     /**
@@ -29,8 +33,8 @@ class ConfigureForm extends Model
     public function rules()
     {
         return [
-            [['enableJwtAuth', 'enableBasicAuth', 'enableBearerAuth', 'enableQueryParamAuth'], 'boolean'],
-            [['apiModules'], 'safe'],
+            [['enableJwtAuth', 'enableBasicAuth', 'enableBearerAuth', 'enableQueryParamAuth', 'enabledForAllUsers'], 'boolean'],
+            [['enabledUsers', 'apiModules'], 'safe'],
         ];
     }
 
@@ -44,7 +48,15 @@ class ConfigureForm extends Model
             'enableBasicAuth' => Yii::t('RestModule.base','Allow HTTP Basic Authentication'),
             'enableBearerAuth' => Yii::t('RestModule.base','Allow Bearer Authentication'),
             'enableQueryParamAuth' => Yii::t('RestModule.base','Allow Query Param Bearer Authentication'),
-            'apiModules' => Yii::t('RestModule.base', 'Active additional REST API endpoints from the modules'),
+            'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
+        ];
+    }
+
+    public function attributeHints()
+    {
+        return [
+            'enabledForAllUsers' => 'Please note, it is not recommended to enable the API for all users yet.<br/> This option affects JWT and HTTP Basic Authentication methods only.',
+            'enabledUsers' => 'This option affects JWT and HTTP Basic Authentication methods only.',
         ];
     }
 
@@ -59,6 +71,8 @@ class ConfigureForm extends Model
         $this->enableBasicAuth = (boolean)$settings->get('enableBasicAuth');
         $this->enableBearerAuth = (boolean)$settings->get('enableBearerAuth');
         $this->enableQueryParamAuth = (boolean)$settings->get('enableQueryParamAuth');
+        $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
+        $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
 
         foreach ($module->getModulesWithRestApi() as $apiModule) {
             if ($module->isActiveModule($apiModule->id)) {
@@ -82,6 +96,8 @@ class ConfigureForm extends Model
         $module->settings->set('enableBasicAuth', (boolean)$this->enableBasicAuth);
         $module->settings->set('enableBearerAuth', (boolean)$this->enableBearerAuth);
         $module->settings->set('enableQueryParamAuth', (boolean)$this->enableQueryParamAuth);
+        $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
+        $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
         $apiModules = [];
         foreach ($module->getModulesWithRestApi() as $apiModule) {

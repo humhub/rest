@@ -43,7 +43,7 @@ class AuthCest extends HumHubApiTestCest
         $I->seeSuccessMessage('Success');
     }
 
-    public function testLoginByBearerToken(ApiTester $I)
+    public function testLoginByJwtBearerToken(ApiTester $I)
     {
         $I->wantTo('login by bearer token');
 
@@ -52,7 +52,7 @@ class AuthCest extends HumHubApiTestCest
         list($auth_token) = $I->grabDataFromResponseByJsonPath('auth_token');
 
         $I->sendGet('auth/current');
-        $I->seeCodeResponseContainsJson(HttpCode::UNAUTHORIZED, ['message' => 'Invalid token!']);
+        $I->seeCodeResponseContainsJson(HttpCode::UNAUTHORIZED, ['message' => 'Your request was made with invalid credentials.']);
 
         $I->amBearerAuthenticated($auth_token);
         $I->sendGet('auth/current');

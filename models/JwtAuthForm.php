@@ -13,10 +13,6 @@ use yii\base\Model;
 
 class JwtAuthForm extends Model
 {
-    public $enabledForAllUsers;
-
-    public $enabledUsers;
-
     public $jwtKey;
 
     public $jwtExpire;
@@ -25,8 +21,7 @@ class JwtAuthForm extends Model
     {
         return [
             [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
-            [['enabledUsers'], 'safe'],
-            [['enabledForAllUsers', 'enableJwtAuth'], 'boolean'],
+            [['enableJwtAuth'], 'boolean'],
             [['jwtExpire'], 'integer']
         ];
     }
@@ -36,8 +31,6 @@ class JwtAuthForm extends Model
         return [
             'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
             'jwtExpire' => Yii::t('RestModule.base','JWT Token Expiration'),
-            'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
-            'enableJwtAuth' => Yii::t('RestModule.base','Allow JWT Authentication'),
         ];
     }
 
@@ -46,7 +39,6 @@ class JwtAuthForm extends Model
         return [
             'jwtKey' => 'If empty, a random key is generated automatically.',
             'jwtExpire' => 'in seconds. 0 for no JWT token expiration.',
-            'enabledForAllUsers' => 'Please note, it is not recommended to enable the API for all users yet.',
         ];
     }
 
@@ -63,8 +55,6 @@ class JwtAuthForm extends Model
             $this->jwtKey = $settings->get('jwtKey');
         }
 
-        $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
-        $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
         $this->jwtExpire = (int)$settings->get('jwtExpire');
 
         return true;
@@ -81,8 +71,6 @@ class JwtAuthForm extends Model
 
         $module->settings->set('jwtExpire', (int)$this->jwtExpire);
         $module->settings->set('jwtKey', $this->jwtKey);
-        $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
-        $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
         return true;
     }

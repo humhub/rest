@@ -12,7 +12,6 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-use humhub\modules\user\widgets\UserPickerField;
 
 ?>
 
@@ -20,29 +19,9 @@ use humhub\modules\user\widgets\UserPickerField;
 
 <?= $form->field($model, 'jwtKey'); ?>
 <?= $form->field($model, 'jwtExpire'); ?>
-<?= $form->field($model, 'enabledForAllUsers')->checkbox(); ?>
-<?= $form->field($model, 'enabledUsers')->widget(UserPickerField::class); ?>
 
 <div class="form-group">
     <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
-
-<?php
-
-$js = <<<JS
-function enabledusers() {
-    if ($("#jwtauthform-enabledforallusers").prop("checked")) {
-        $(".field-jwtauthform-enabledusers").hide()
-    } else {
-        $(".field-jwtauthform-enabledusers").show()
-    }
-}
-
-enabledusers()
-
-$("#jwtauthform-enabledforallusers").click(enabledusers)
-JS;
-
-$this->registerJs($js);
