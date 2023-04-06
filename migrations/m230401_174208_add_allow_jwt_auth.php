@@ -11,6 +11,7 @@ class m230401_174208_add_allow_jwt_auth extends Migration
         $module = Yii::$app->getModule('rest');
 
         $module->settings->set('enableJwtAuth', !empty($module->settings->get('jwtKey')));
+        $module->settings->set('enableBasicAuth', 1);
     }
 
     public function safeDown()
