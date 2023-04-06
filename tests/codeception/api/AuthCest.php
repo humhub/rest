@@ -45,7 +45,7 @@ class AuthCest extends HumHubApiTestCest
 
     public function testLoginByJwtBearerToken(ApiTester $I)
     {
-        $I->wantTo('login by bearer token');
+        $I->wantTo('login by Basic auth and JWT bearer token');
 
         $I->sendPost('auth/login', ['username' => 'User3', 'password' => '123qwe']);
         $I->seeSuccessMessage('Success');
@@ -57,6 +57,27 @@ class AuthCest extends HumHubApiTestCest
         $I->amBearerAuthenticated($auth_token);
         $I->sendGet('auth/current');
         $I->seeUserDefinition('User3');
+    }
+
+    public function testLoginByBearerAccessToken(ApiTester $I)
+    {
+        $accessToken = '_sB714dci3pUh6FZw5BFA0wB2ri5TfQ-dxs32iaK920BI1eHn7SX0UphARYr4J-duJbF-ZuULdjOuqc1DSH3DB';
+
+        $I->wantTo('login by Bearer Access Token');
+
+        $I->amBearerAuthenticated($accessToken);
+        $I->sendGet('auth/current');
+        $I->seeUserDefinition('User1');
+    }
+
+    public function testLoginByQueryParamBearerAccessToken(ApiTester $I)
+    {
+        $accessToken = '_sB714dci3pUh6FZw5BFA0wB2ri5TfQ-dxs32iaK920BI1eHn7SX0UphARYr4J-duJbF-ZuULdjOuqc1DSH3DB';
+
+        $I->wantTo('login by Bearer Access Token');
+
+        $I->sendGet("auth/current?access-token=$accessToken");
+        $I->seeUserDefinition('User1');
     }
 
     public function testCurrent(ApiTester $I)

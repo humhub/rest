@@ -7,13 +7,13 @@
 
 namespace humhub\modules\rest\controllers;
 
-use humhub\modules\rest\models\JwtAuthForm;
 use Yii;
 use yii\data\ActiveDataProvider;
 use humhub\components\Response;
 use humhub\modules\admin\components\Controller;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\models\RestUserBearerToken;
+use humhub\modules\rest\models\JwtAuthForm;
 
 class AdminController extends Controller
 {

@@ -17,7 +17,9 @@ return [
         'humhub\modules\rest\tests\codeception\fixtures\LikeFixture',
         'humhub\modules\rest\tests\codeception\fixtures\NotificationFixture',
         'humhub\modules\rest\tests\codeception\fixtures\TopicFixture',
-    ]
+        'humhub\modules\rest\tests\codeception\fixtures\SettingFixture',
+        'humhub\modules\rest\tests\codeception\fixtures\BearerAccessTokenFixture',
+    ],
 ];
 
 
