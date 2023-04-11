@@ -14,7 +14,7 @@ $testRoot = dirname(__DIR__);
 \Codeception\Configuration::append(['test_root' => $testRoot]);
 codecept_debug('Module root: ' . $testRoot);
 
-$humhubPath =  getenv('HUMHUB_PATH');
+$humhubPath = getenv('HUMHUB_PATH');
 if ($humhubPath === false) {
     // If no environment path was set, we assume residing in default the modules directory
     $moduleConfig = require $testRoot . '/config/test.php';
