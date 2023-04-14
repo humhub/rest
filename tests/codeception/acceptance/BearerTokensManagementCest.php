@@ -16,23 +16,22 @@ class BearerTokensManagementCest
     
     public function addNewBearerToken(AcceptanceTester $I)
     {
+        $expiration = (new \Datetime('tomorrow'));
+
         $I->amAdmin();
-
-        $I->wantToTest('Check bearer access tokens');
-        $I->amGoingTo('Add new access token');
-
+        $I->wantToTest('Add new access token');
         $I->amOnPage('/rest/admin/bearer-auth');
         $I->selectUserFromPicker('#restuserbearertoken-userguid', 'Peter Tester');
-        $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asTime((new \Datetime('tomorrow')), 'short'));
+        $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asDate($expiration, 'short'));
+        $I->fillField('RestUserBearerToken[expirationTime]', Yii::$app->formatter->asTime($expiration, 'short'));
         $I->click('Add');
-        $I->waitForText('Saved');
+        $I->waitForText(Yii::$app->formatter->asDate($expiration));
     }
 
     public function revokeBearerToken(AcceptanceTester $I)
     {
         $I->amAdmin();
-
-        $I->wantToTest('Check bearer access tokens');
+        $I->wantToTest('Revoke access token');
         $I->amGoingTo('Revoke access token');
     }
 }
