@@ -21,7 +21,7 @@ class BearerTokensManagementCest
         $I->amGoingTo('Add new token');
 
         $I->amOnPage('/rest/admin/bearer-auth');
-        $I->selectUserFromPicker('#restuserbearertoken-userguid', 'User1');
+        $I->selectUserFromPicker('#restuserbearertoken-userguid', 'Peter Tester');
 //        $I->fillField('#contentFormBody .humhub-ui-richtext[contenteditable]', $postContent);
 
 //        $I->click('');
