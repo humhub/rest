@@ -9,6 +9,7 @@
 namespace rest\acceptance;
 
 use rest\AcceptanceTester;
+use Yii;
 
 class BearerTokensManagementCest
 {
@@ -22,7 +23,7 @@ class BearerTokensManagementCest
 
         $I->amOnPage('/rest/admin/bearer-auth');
         $I->selectUserFromPicker('#restuserbearertoken-userguid', 'Peter Tester');
-        $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asTime((new Datetime('tomorrow')), 'short'));
+        $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asTime((new \Datetime('tomorrow')), 'short'));
         $I->click('Add');
         $I->waitForText('Saved');
     }
