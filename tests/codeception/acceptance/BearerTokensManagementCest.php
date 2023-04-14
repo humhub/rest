@@ -16,7 +16,6 @@ class BearerTokensManagementCest
     public function test(AcceptanceTester $I)
     {
         $I->amAdmin();
-        $I->enableModule(1, 'rest');
 
         $I->wantToTest('Check bearer access tokens');
         $I->amGoingTo('Add new token');
