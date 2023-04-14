@@ -31,6 +31,7 @@ class BearerTokensManagementCest
     public function revokeBearerToken(AcceptanceTester $I)
     {
         $I->amAdmin();
+        $I->amOnPage('/rest/admin/bearer-auth');
         $I->wantToTest('Revoke access token');
         $I->click('.fa-trash');
         $I->waitForText('No results found.');
