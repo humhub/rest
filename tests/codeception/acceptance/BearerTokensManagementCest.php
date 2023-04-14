@@ -13,18 +13,25 @@ use rest\AcceptanceTester;
 class BearerTokensManagementCest
 {
     
-    public function test(AcceptanceTester $I)
+    public function addNewBearerToken(AcceptanceTester $I)
     {
         $I->amAdmin();
 
         $I->wantToTest('Check bearer access tokens');
-        $I->amGoingTo('Add new token');
+        $I->amGoingTo('Add new access token');
 
         $I->amOnPage('/rest/admin/bearer-auth');
         $I->selectUserFromPicker('#restuserbearertoken-userguid', 'Peter Tester');
-//        $I->fillField('#contentFormBody .humhub-ui-richtext[contenteditable]', $postContent);
+        $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asTime((new Datetime('tomorrow')), 'short'));
+        $I->click('Add');
+        $I->waitForText('Saved');
+    }
 
-//        $I->click('');
+    public function revokeBearerToken(AcceptanceTester $I)
+    {
+        $I->amAdmin();
 
+        $I->wantToTest('Check bearer access tokens');
+        $I->amGoingTo('Revoke access token');
     }
 }
