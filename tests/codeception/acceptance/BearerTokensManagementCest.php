@@ -32,6 +32,7 @@ class BearerTokensManagementCest
     {
         $I->amAdmin();
         $I->wantToTest('Revoke access token');
-        $I->amGoingTo('Revoke access token');
+        $I->click('.fa-trash');
+        $I->waitForText('No results found.');
     }
 }
