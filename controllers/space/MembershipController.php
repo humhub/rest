@@ -101,14 +101,6 @@ class MembershipController extends BaseController
             return $this->returnError(400, 'Invalid role given!');
         }
 
-        if ($showAtDashboard = Yii::$app->request->get('showAtDashboard')) {
-            $membership->show_at_dashboard = (int) $showAtDashboard;
-        }
-
-        if ($canLeave = Yii::$app->request->get('canLeave')) {
-            $membership->can_cancel_membership = !! $canLeave;
-        }
-
         $membership->group_id = $newRole;
         $membership->save();
 
