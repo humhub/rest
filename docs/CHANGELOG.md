@@ -1,10 +1,11 @@
 Changelog
 =========
 
-0.8.1 (Unreleased)
+0.9.0 (Unreleased)
 ----------------------
 - Fix #110: Fix PHP Error in UserDefinition
 - Enh #106: Allow to set `authclient` and `authclient_id` on user creating and updating
+- Enh #112: Added support of HttpBearer and QueryParam auth methods
 - Enh #116: Allow to set `show_at_dashboard` and `can_cancel_membership` on space membership creating
 
 0.8.0 (March 10, 2023)
