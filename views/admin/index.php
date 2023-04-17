@@ -5,57 +5,85 @@
  * @license https://www.humhub.com/licences
  */
 
-/* @var $this \humhub\modules\ui\view\components\View */
-/* @var $model \humhub\modules\rest\models\ConfigureForm */
+/**
+ * @var \humhub\modules\ui\view\components\View $this
+ * @var \humhub\modules\rest\models\ConfigureForm $model
+ */
 
-use humhub\modules\user\widgets\UserPickerField;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use humhub\modules\user\widgets\UserPickerField;
 
 $apiModuleOptions = $model->getApiModuleOptions();
 ?>
-<div class="panel panel-default">
-    <div class="panel-heading"><?= Yii::t('RestModule.base', '<strong>API</strong> Configuration'); ?></div>
-    <div class="panel-body">
-        <?php $form = ActiveForm::begin(['id' => 'configure-form', 'enableClientValidation' => false, 'enableClientScript' => false]); ?>
 
-        <?= $form->field($model, 'enabledForAllUsers')->checkbox(); ?>
+<?php $form = ActiveForm::begin(['id' => 'configure-form', 'enableClientValidation' => false, 'enableClientScript' => false]); ?>
 
-        <?= $form->field($model, 'enabledUsers')->widget(UserPickerField::class); ?>
-        <br />
-        <?= $form->field($model, 'jwtKey'); ?>
-        <?= $form->field($model, 'jwtExpire'); ?>
+<?= $form->field($model, 'enableBasicAuth')->checkbox(); ?>
+<?= $form->field($model, 'enableJwtAuth')->checkbox(); ?>
 
-        <br />
-        <?= $form->field($model, 'enableBasicAuth')->checkbox(); ?>
+<?= Html::tag(
+    'blockquote',
+    $form->field($model, 'enabledForAllUsers')->checkbox() . $form->field($model, 'enabledUsers')->widget(UserPickerField::class),
+    ['id' => 'enabledusers', 'style' => ['font-size' => 'inherit']]
+) ?>
 
-        <br />
+<?= $form->field($model, 'enableBearerAuth')->checkbox(); ?>
+<?= $form->field($model, 'enableQueryParamAuth')->checkbox(); ?>
 
-        <?= $form->field($model, 'apiModules')->checkboxList($apiModuleOptions)
-            ->hint(empty($apiModuleOptions) ? Yii::t('RestModule.base', 'No enabled modules found with additional REST API endpoints.') : false); ?>
+<br/>
 
-        <div class="form-group">
-            <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
-        </div>
+<?= $form->field($model, 'apiModules')->checkboxList($apiModuleOptions)
+    ->hint(empty($apiModuleOptions) ? Yii::t('RestModule.base', 'No enabled modules found with additional REST API endpoints.') : false); ?>
 
-        <?php ActiveForm::end(); ?>
-
-    </div>
+<div class="form-group">
+    <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
 </div>
 
-<script>
-    $(document).ready(function() {
-        $("#configureform-enabledforallusers").click(function() {
-            if ($(this).prop("checked")) {
-                $(".field-configureform-enabledusers").hide();
-            } else {
-                $(".field-configureform-enabledusers").show();
-            }
-        });
-        if ($(this).prop("checked")) {
-            $(".field-configureform-enabledusers").hide();
-        } else {
-            $(".field-configureform-enabledusers").show();
-        }
-    });
-</script>
+<?php ActiveForm::end(); ?>
+
+<?php
+
+$js = <<<JS
+function enabledUsers() {
+    if ($('#configureform-enabledforallusers').prop('checked')) {
+        $('.field-configureform-enabledusers').hide()
+    } else {
+        $('.field-configureform-enabledusers').show()
+    }
+}
+
+function enabledUsersBlockquote() {
+    if ($('#configureform-enablebasicauth').prop('checked') || $('#configureform-enablejwtauth').prop('checked')) {
+        $('#enabledusers').show()
+        
+        $('#enabledusers').insertAfter($('#configureform-enablejwtauth').prop('checked') ? $('.field-configureform-enablejwtauth') : $('.field-configureform-enablebasicauth'))
+    } else {
+        $('#enabledusers').hide()
+    }
+}
+
+function checkBearerAuth() {
+    if (!$('#configureform-enablebearerauth').prop('checked')) {
+        $('#configureform-enablequeryparamauth').prop('checked', false)
+    }
+}
+
+function checkQueryParamBearerAuth() {
+    if ($('#configureform-enablequeryparamauth').prop('checked')) {
+        $('#configureform-enablebearerauth').prop('checked', true)
+    }
+}
+
+enabledUsers()
+enabledUsersBlockquote()
+
+$('#configureform-enabledforallusers').change(enabledUsers)
+$('#configureform-enablebasicauth').change(enabledUsersBlockquote)
+$('#configureform-enablejwtauth').change(enabledUsersBlockquote)
+$('#configureform-enablebearerauth').change(checkBearerAuth)
+$('#configureform-enablequeryparamauth').change(checkQueryParamBearerAuth)
+JS;
+
+$this->registerJs($js);
+
