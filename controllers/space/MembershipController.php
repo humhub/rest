@@ -49,7 +49,13 @@ class MembershipController extends BaseController
             return $this->returnError(400, 'You cannot administer this space!');
         }
 
-        $space->addMember($userId, Yii::$app->request->get('canLeave', true), Yii::$app->request->get('silent', false));
+        $space->addMember(
+            $userId,
+            Yii::$app->request->get('canLeave', true),
+            Yii::$app->request->get('silent', false),
+            Space::USERGROUP_MEMBER,
+            Yii::$app->request->get('showAtDashboard', true),
+        );
 
         return $this->returnSuccess('Member added!');
     }

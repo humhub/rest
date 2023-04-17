@@ -531,6 +531,16 @@ paths:
           type: boolean
           description: Send added notification to the user
           default: false
+        - in: query
+          name: canLeave
+          type: integer
+          description: '0: user cannot cancel membership | 1: can cancel membership | 2: depending on space flag members_can_leave'
+          default: 1
+        - in: query
+          name: showAtDashboard
+          type: boolean
+          description: Show at dashboard
+          default: true
       responses:
         default:
           description: Successful operation
