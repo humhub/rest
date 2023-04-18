@@ -104,7 +104,7 @@ class AuthCest extends HumHubApiTestCest
     public function testImpersonateByUser(ApiTester $I)
     {
         $I->wantTo('Check Impersonate by User');
-        $I->amAdmin();
+        $I->amUser1();
         $I->sendPost('auth/impersonate', ['userId' => 2]);
         $I->canSeeResponseCodeIs(403);
     }
