@@ -99,7 +99,6 @@ class AuthController extends BaseController
     public function actionImpersonate()
     {
         if (!Yii::$app->user->isAdmin()) {
-            var_dump(Yii::$app->user->isAdmin(), Yii::$app->user->identity);
             throw new ForbiddenHttpException();
         }
 
