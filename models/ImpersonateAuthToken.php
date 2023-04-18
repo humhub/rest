@@ -10,7 +10,6 @@ namespace humhub\modules\rest\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\helpers\ArrayHelper;
 use humhub\libs\DbDateValidator;
 use humhub\modules\user\models\User;
 
@@ -43,6 +42,13 @@ class ImpersonateAuthToken extends ActiveRecord
                 return 'impersonate-' . Yii::$app->security->generateRandomString(74);
             }],
         ];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        self::deleteAll(['<=', 'expiration', new Expression('NOW()')]);
     }
 
     public function getUser()
