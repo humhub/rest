@@ -88,4 +88,25 @@ class AuthCest extends HumHubApiTestCest
         $I->seeUserDefinition('Admin');
     }
 
+    public function testImpersonateByAdmin(ApiTester $I)
+    {
+        $I->wantTo('Check Impersonate by Admin');
+        $I->amAdmin();
+        $I->sendPost('auth/impersonate', ['userId' => 2]);
+        $I->canSeeResponseCodeIs(200);
+        [$auth_token] = $I->grabDataFromResponseByJsonPath('token');
+        $I->amUser(null);
+        $I->haveHttpHeader('Authorization', "Impersonate $auth_token");
+        $I->sendGet('auth/current');
+        $I->seeUserDefinition('User1');
+    }
+
+    public function testImpersonateByUser(ApiTester $I)
+    {
+        $I->wantTo('Check Impersonate by User');
+        $I->amUser1();
+        $I->sendPost('auth/impersonate', ['userId' => 2]);
+        $I->canSeeResponseCodeIs(403);
+    }
+
 }

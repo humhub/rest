@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\components;
 
+use humhub\modules\rest\components\auth\ImpersonateAuth;
 use Yii;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
@@ -75,6 +76,9 @@ abstract class BaseController extends Controller
                             return null;
                         },
                     ]] : [],
+                    [[
+                        'class' => ImpersonateAuth::class,
+                    ]]
                 ),
             ],
         ], parent::behaviors());
