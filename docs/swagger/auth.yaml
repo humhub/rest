@@ -89,3 +89,46 @@ paths:
             $ref: "user.yaml#/definitions/User"
         '401':
           description: Unauthorized
+
+  '/auth/impersonate':
+    get:
+      tags:
+        - User
+      summary: Impersonate user
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: id of user to Impersonate
+          required: true
+          schema:
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: integer
+                description: id of user to Impersonate
+                example: 1
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: 'Use in header: "Authorization: Impersonate $token"'
+                example: 'impersonate-YvyEVcbzCvg0wLjb9yXylj1bkbotlCwkKjNKTZD9xeMO86o1G-V9p-wklm5pUdXhdkSGj5dk-l'
+              expires:
+                type: integer
+                description: Expiration timestamp of token
+                example: 1681671865
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: User not Found

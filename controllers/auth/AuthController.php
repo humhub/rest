@@ -10,18 +10,21 @@ namespace humhub\modules\rest\controllers\auth;
 use Firebase\JWT\JWT;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
-use humhub\modules\rest\models\ConfigureForm;
+use humhub\modules\rest\models\ImpersonateAuthToken;
+use humhub\modules\rest\models\JwtAuthForm;
 use humhub\modules\user\models\forms\Login;
 use humhub\modules\user\models\User;
 use humhub\modules\user\services\AuthClientService;
 use Yii;
+use yii\web\ForbiddenHttpException;
 use yii\web\JsonParser;
+use yii\web\NotFoundHttpException;
 
 class AuthController extends BaseController
 {
     public function beforeAction($action)
     {
-        if ($action->id == 'current') {
+        if (in_array($action->id, ['current', 'impersonate'])) {
             return parent::beforeAction($action);
         }
 
@@ -53,7 +56,7 @@ class AuthController extends BaseController
             'email' => $user->email
         ];
 
-        $config = ConfigureForm::getInstance();
+        $config = JwtAuthForm::getInstance();
         if (!empty($config->jwtExpire)) {
             $data['exp'] = $issuedAt + (int)$config->jwtExpire;
         }
@@ -91,5 +94,31 @@ class AuthController extends BaseController
         }
 
         return UserDefinitions::getUser($user);
+    }
+
+    public function actionImpersonate()
+    {
+        if (!Yii::$app->user->isAdmin()) {
+            throw new ForbiddenHttpException();
+        }
+
+        $user = User::findOne(['id' => Yii::$app->request->getBodyParam('userId')]);
+
+        if ($user === null) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($token = ImpersonateAuthToken::findOne(['user_id' => $user->id])) {
+            $token->delete();
+        }
+
+        $token = new ImpersonateAuthToken();
+        $token->user_id = $user->id;
+        $token->save();
+
+        return [
+            'token' => $token->token,
+            'expires' => $token->expiration,
+        ];
     }
 }

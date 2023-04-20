@@ -30,7 +30,8 @@ class Events
         $module->addRules([
 
             // Auth
-            ['pattern' => 'auth/login/', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
+            ['pattern' => 'auth/login', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
+            ['pattern' => 'auth/impersonate', 'route' => 'rest/auth/auth/impersonate', 'verb' => ['POST']],
             ['pattern' => 'auth/current', 'route' => 'rest/auth/auth/current', 'verb' => ['GET', 'HEAD']],
 
             // User: Default Controller

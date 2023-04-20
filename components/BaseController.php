@@ -7,21 +7,24 @@
 
 namespace humhub\modules\rest\components;
 
-use Exception;
+use humhub\modules\rest\components\auth\ImpersonateAuth;
+use Yii;
+use yii\data\Pagination;
+use yii\db\ActiveQuery;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBasicAuth;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
+use yii\helpers\ArrayHelper;
+use yii\web\JsonParser;
 use Firebase\JWT\JWT;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
+use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
-use humhub\modules\rest\Module;
 use humhub\modules\user\models\User;
-use Yii;
-use yii\data\Pagination;
-use yii\db\ActiveQuery;
-use yii\web\HttpException;
-use yii\web\JsonParser;
-
 
 /**
  * Class BaseController
@@ -48,6 +51,39 @@ abstract class BaseController extends Controller
      */
     protected $doNotInterceptActionIds = ['*'];
 
+    public function behaviors()
+    {
+        return ArrayHelper::merge([
+            'authenticator' => [
+                'class' => CompositeAuth::class,
+                'authMethods' => ArrayHelper::merge(
+                    ConfigureForm::getInstance()->enableJwtAuth ? [[
+                        'class' => JwtAuth::class,
+                    ]] : [],
+                    ConfigureForm::getInstance()->enableBearerAuth ? [[
+                        'class' => HttpBearerAuth::class,
+                    ]] : [],
+                    ConfigureForm::getInstance()->enableBearerAuth && ConfigureForm::getInstance()->enableQueryParamAuth ? [[
+                        'class' => QueryParamAuth::class,
+                    ]] : [],
+                    ConfigureForm::getInstance()->enableBasicAuth ? [[
+                        'class' => HttpBasicAuth::class,
+                        'auth' => function($username, $password) {
+                            if (($identity = AuthController::authByUserAndPassword($username, $password)) && $this->isUserEnabled($identity)) {
+                                return $identity;
+                            }
+
+                            return null;
+                        },
+                    ]] : [],
+                    [[
+                        'class' => ImpersonateAuth::class,
+                    ]]
+                ),
+            ],
+        ], parent::behaviors());
+    }
+
     /**
      * @inheritdoc
      */
@@ -56,26 +92,8 @@ abstract class BaseController extends Controller
         Yii::$app->response->format = 'json';
 
         Yii::$app->request->setBodyParams(null);
+        Yii::$app->request->enableCsrfCookie = false;
         Yii::$app->request->parsers['application/json'] = JsonParser::class;
-
-        $user = $this->authWithJwt();
-        $config = ConfigureForm::getInstance();
-
-        if ($user === null && !empty($config->enableBasicAuth)) {
-            // Try login by username and password
-            list($username, $password) = Yii::$app->request->getAuthCredentials();
-            $user = AuthController::authByUserAndPassword($username, $password);
-        }
-
-        if ($user === null) {
-            throw new HttpException('401', 'Invalid token!');
-        }
-
-        if (!$this->isUserEnabled($user)) {
-            throw new HttpException('401', 'Invalid user!');
-        }
-
-        Yii::$app->user->login($user);
 
         return parent::beforeAction($action);
     }
@@ -91,38 +109,6 @@ abstract class BaseController extends Controller
         $module = static::$moduleId;
         return $this->returnError(404, "{$module} module does not installed. Please install or enable {$module} module to use this API");
     }
-
-
-    /**
-     * Authentication using JWT Bearer Header
-     *
-     * @return User|null
-     * @throws HttpException
-     */
-    private function authWithJwt()
-    {
-        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
-
-        /** @var Module $module */
-        $module = Yii::$app->getModule('rest');
-
-        if (!empty($authHeader) && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
-            $token = $matches[1];
-            try {
-                $validData = JWT::decode($token, ConfigureForm::getInstance()->jwtKey, ['HS512']);
-
-                if (!empty($validData->uid)) {
-                    return User::find()->active()->andWhere(['user.id' => $validData->uid])->one();
-                }
-
-            } catch (Exception $e) {
-                throw new HttpException(401, $e->getMessage());
-            }
-        }
-
-        return null;
-    }
-
 
     /**
      * Checks if users is allowed to use the Rest API
@@ -236,5 +222,4 @@ abstract class BaseController extends Controller
     protected function attachFilesToContent(?Content $content): array
     {
     }
-
 }

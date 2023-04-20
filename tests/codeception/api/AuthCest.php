@@ -43,20 +43,41 @@ class AuthCest extends HumHubApiTestCest
         $I->seeSuccessMessage('Success');
     }
 
-    public function testLoginByBearerToken(ApiTester $I)
+    public function testLoginByJwtBearerToken(ApiTester $I)
     {
-        $I->wantTo('login by bearer token');
+        $I->wantTo('login by Basic auth and JWT bearer token');
 
         $I->sendPost('auth/login', ['username' => 'User3', 'password' => '123qwe']);
         $I->seeSuccessMessage('Success');
         list($auth_token) = $I->grabDataFromResponseByJsonPath('auth_token');
 
         $I->sendGet('auth/current');
-        $I->seeCodeResponseContainsJson(HttpCode::UNAUTHORIZED, ['message' => 'Invalid token!']);
+        $I->seeCodeResponseContainsJson(HttpCode::UNAUTHORIZED, ['message' => 'Your request was made with invalid credentials.']);
 
         $I->amBearerAuthenticated($auth_token);
         $I->sendGet('auth/current');
         $I->seeUserDefinition('User3');
+    }
+
+    public function testLoginByBearerAccessToken(ApiTester $I)
+    {
+        $accessToken = '_sB714dci3pUh6FZw5BFA0wB2ri5TfQ-dxs32iaK920BI1eHn7SX0UphARYr4J-duJbF-ZuULdjOuqc1DSH3DB';
+
+        $I->wantTo('login by Bearer Access Token');
+
+        $I->amBearerAuthenticated($accessToken);
+        $I->sendGet('auth/current');
+        $I->seeUserDefinition('User1');
+    }
+
+    public function testLoginByQueryParamBearerAccessToken(ApiTester $I)
+    {
+        $accessToken = '_sB714dci3pUh6FZw5BFA0wB2ri5TfQ-dxs32iaK920BI1eHn7SX0UphARYr4J-duJbF-ZuULdjOuqc1DSH3DB';
+
+        $I->wantTo('login by Bearer Access Token');
+
+        $I->sendGet("auth/current?access-token=$accessToken");
+        $I->seeUserDefinition('User1');
     }
 
     public function testCurrent(ApiTester $I)
@@ -65,6 +86,27 @@ class AuthCest extends HumHubApiTestCest
         $I->amAdmin();
         $I->sendGet('auth/current');
         $I->seeUserDefinition('Admin');
+    }
+
+    public function testImpersonateByAdmin(ApiTester $I)
+    {
+        $I->wantTo('Check Impersonate by Admin');
+        $I->amAdmin();
+        $I->sendPost('auth/impersonate', ['userId' => 2]);
+        $I->canSeeResponseCodeIs(200);
+        [$auth_token] = $I->grabDataFromResponseByJsonPath('token');
+        $I->amUser(null);
+        $I->haveHttpHeader('Authorization', "Impersonate $auth_token");
+        $I->sendGet('auth/current');
+        $I->seeUserDefinition('User1');
+    }
+
+    public function testImpersonateByUser(ApiTester $I)
+    {
+        $I->wantTo('Check Impersonate by User');
+        $I->amUser1();
+        $I->sendPost('auth/impersonate', ['userId' => 2]);
+        $I->canSeeResponseCodeIs(403);
     }
 
 }
