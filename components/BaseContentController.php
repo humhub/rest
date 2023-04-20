@@ -296,50 +296,6 @@ abstract class BaseContentController extends BaseController
         }
     }
 
-    /**********************************************************************************
-     * Helpers
-     *********************************************************************************
-     *
-    /*
-     * Prepare date formats for Calendar entries and Tasks
-     *
-     * @param array $requestParams
-     * @param string $formName
-     * @param string $modelName
-     * @return array
-     * @throws HttpException
-     */
-    protected function prepareRequestParams(array $requestParams, string $formName, string $modelName): array
-    {
-        if ($this instanceof TasksController && empty($requestParams[$modelName]['scheduling'])) {
-            return $requestParams;
-        }
-
-        if (empty($requestParams[$formName]['start_date'])) {
-            throw new HttpException(400, 'Start date cannot be blank');
-        } else {
-            $requestParams[$modelName]['all_day'] = 0;
-        }
-
-        if (empty($requestParams[$formName]['end_date'])) {
-            throw new HttpException(400, 'End date cannot be blank');
-        } else {
-            $requestParams[$modelName]['all_day'] = 0;
-        }
-
-        if (!preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['start_date']) &&
-            !preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['start_date'])) {
-            throw new HttpException(400, 'Wrong start date format.');
-        }
-
-        if (!preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['end_date']) &&
-            !preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['end_date'])) {
-            throw new HttpException(400, 'Wrong end date format.');
-        }
-
-        return $requestParams;
-    }
-
     protected function saveRecord(ContentActiveRecord $contentRecord): bool
     {
         $data = Yii::$app->request->getBodyParam('data', []);
