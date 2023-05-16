@@ -57,6 +57,24 @@ class PostCest extends HumHubApiTestCest
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(15));
     }
 
+    public function testCreateScheduled(ApiTester $I)
+    {
+        $I->wantTo('create a scheduled post');
+        $I->amAdmin();
+
+        $I->sendPost('post/container/1', [
+            'data' => [
+                'message' => 'New created message from API test',
+                'content' => [
+                    'metadata' => [
+                        'scheduled_at' => (new \Datetime('tomorrow'))->format('Y-m-d H:i:s'),
+                    ]
+                ]
+            ]
+        ]);
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(16));
+    }
+
     public function testUpdate(ApiTester $I)
     {
         $I->wantTo('update a post');

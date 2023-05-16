@@ -49,6 +49,7 @@ class ContentDefinitions
             'created_at' => $content->created_at,
             'updated_by' => $content->updatedBy ? UserDefinitions::getUserShort($content->updatedBy) : null,
             'updated_at' => $content->updated_at,
+            'scheduled_at' => $content->scheduled_at,
             'url' => $content->getUrl(true),
             'contentcontainer_id' => $content->contentcontainer_id,
             'stream_channel' => $content->stream_channel
