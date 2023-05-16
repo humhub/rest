@@ -498,7 +498,7 @@ abstract class BaseContentController extends BaseController
         $validator = DynamicModel::validateData([
             'scheduled_at' => $data['scheduled_at']
         ], [
-            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+            ['scheduled_at', 'datetime', 'format' => 'php:.']
         ]);
 
         if (!$validator->validate()) {
