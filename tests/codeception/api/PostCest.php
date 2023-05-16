@@ -6,6 +6,7 @@ use humhub\modules\post\models\Post;
 use humhub\modules\rest\definitions\PostDefinitions;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
+use yii\helpers\ArrayHelper;
 
 class PostCest extends HumHubApiTestCest
 {
@@ -62,17 +63,26 @@ class PostCest extends HumHubApiTestCest
         $I->wantTo('create a scheduled post');
         $I->amAdmin();
 
+        $scheduledDate = (new \Datetime('tomorrow'))->format('Y-m-d H:i:s');
+
         $I->sendPost('post/container/1', [
             'data' => [
                 'message' => 'New created message from API test',
                 'content' => [
                     'metadata' => [
-                        'scheduled_at' => (new \Datetime('tomorrow'))->format('Y-m-d H:i:s'),
+                        'scheduled_at' => $scheduledDate,
                     ]
                 ]
             ]
         ]);
-        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(16));
+
+        $I->seeSuccessResponseContainsJson(ArrayHelper::merge($this->getRecordDefinition(16), [
+            'content' => [
+                'metadata' => [
+                    'scheduled_at' => $scheduledDate
+                ]
+            ]
+        ]));
     }
 
     public function testUpdate(ApiTester $I)
