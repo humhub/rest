@@ -21,7 +21,6 @@ class JwtAuthForm extends Model
     {
         return [
             [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
-            [['enableJwtAuth'], 'boolean'],
             [['jwtExpire'], 'integer']
         ];
     }
@@ -30,7 +29,7 @@ class JwtAuthForm extends Model
     {
         return [
             'jwtKey' => Yii::t('RestModule.base', 'JWT Key'),
-            'jwtExpire' => Yii::t('RestModule.base','JWT Token Expiration'),
+            'jwtExpire' => Yii::t('RestModule.base', 'JWT Token Expiration'),
         ];
     }
 
@@ -64,10 +63,6 @@ class JwtAuthForm extends Model
     {
         /** @var Module $module */
         $module = Yii::$app->getModule('rest');
-
-        if (!$this->enableBearerAuth ) {
-            $this->enableQueryParamAuth = false;
-        }
 
         $module->settings->set('jwtExpire', (int)$this->jwtExpire);
         $module->settings->set('jwtKey', $this->jwtKey);
