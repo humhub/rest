@@ -23,6 +23,8 @@ class BearerTokensManagementCest
         $I->amOnPage('/rest/admin/bearer-auth');
         $I->selectUserFromPicker('#restuserbearertoken-userguid', 'Peter Tester');
         $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asDate($expiration, 'short'));
+        // Focus out the filled date input
+        $I->click('#restuserbearertoken-expirationtime');
         $I->fillField('RestUserBearerToken[expirationTime]', Yii::$app->formatter->asTime($expiration, 'short'));
         $I->click('Add');
         $I->waitForText(Yii::$app->formatter->asDate($expiration));
