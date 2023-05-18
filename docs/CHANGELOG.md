@@ -1,13 +1,15 @@
 Changelog
 =========
 
-0.9.0 (Unreleased)
-----------------------
+0.9.0 (May 17, 2023)
+--------------------
 - Fix #110: Fix PHP Error in UserDefinition
 - Enh #106: Allow to set `authclient` and `authclient_id` on user creating and updating
 - Enh #112: Added support of HttpBearer and QueryParam auth methods
 - Enh #117: Added support of user Impersonate
-- Enh #113: Deleted unnecessary code used for Calendar And Task Modules 
+- Enh #113: Deleted unnecessary code used for Calendar And Task Modules
+- Fix #114: Fix tests on soft delete of content
+- Fix #122: Removed undefined properties 
 
 0.8.0 (March 10, 2023)
 ----------------------

@@ -90,7 +90,11 @@ class ContentController extends BaseController
 
     public function actionDelete($id)
     {
-        $content = Content::findOne(['id' => $id]);
+        $content = Content::find()
+            ->where(['id' => $id])
+            ->andWhere(['!=', 'state', Content::STATE_DELETED])
+            ->one();
+
         if ($content === null) {
             return $this->returnError(404, 'Content not found!');
         }
