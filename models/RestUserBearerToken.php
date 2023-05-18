@@ -66,6 +66,8 @@ class RestUserBearerToken extends ActiveRecord
 
     public function afterValidate()
     {
+
+
         parent::afterValidate();
 
         if ($this->hasErrors('user_id')) {
