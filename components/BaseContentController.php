@@ -507,7 +507,7 @@ abstract class BaseContentController extends BaseController
             return false;
         }
 
-        $activeRecord->content->scheduled_at = $data['scheduled_at'];
+        $activeRecord->content->getStateService()->schedule($data['scheduled_at']);
 
         return $activeRecord->content->save();
     }

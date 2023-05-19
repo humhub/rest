@@ -246,14 +246,13 @@ definitions:
       locked_comments:
         type: boolean
         example: false
+      scheduled_at:
+        type: string
+        example: "2023-09-14 05:15:00"
       created_by:
         readOnly: true
         allOf:
           - $ref: "user.yaml#/definitions/UserShort"
-      scheduled_at:
-        type: string
-        readOnly: true
-        example: "2023-09-14 05:15:00"
       created_at:
         type: string
         readOnly: true
