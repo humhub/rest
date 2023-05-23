@@ -10,6 +10,7 @@ namespace humhub\modules\rest\components\auth;
 use yii\filters\auth\HttpBearerAuth;
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use humhub\modules\rest\models\JwtAuthForm;
 use humhub\modules\user\models\User;
 
@@ -23,7 +24,7 @@ class JwtAuth extends HttpBearerAuth
             $token = $matches[1];
 
             try {
-                $validData = JWT::decode($token, JwtAuthForm::getInstance()->jwtKey, ['HS512']);
+                $validData = JWT::decode($token, new Key(JwtAuthForm::getInstance()->jwtKey, 'HS512'));
                 if (
                     !empty($validData->uid) &&
                     ($identity = User::find()->active()->andWhere(['user.id' => $validData->uid])->one()) &&

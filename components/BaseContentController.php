@@ -21,6 +21,7 @@ use humhub\modules\rest\definitions\ContentDefinitions;
 use humhub\modules\topic\models\Topic;
 use humhub\modules\topic\permissions\AddTopic;
 use Yii;
+use yii\base\DynamicModel;
 use yii\web\HttpException;
 use yii\web\UploadedFile;
 
@@ -30,6 +31,7 @@ use yii\web\UploadedFile;
  *
  * @package humhub\modules\rest\components
  */
+
 abstract class BaseContentController extends BaseController
 {
     /**
@@ -396,6 +398,10 @@ abstract class BaseContentController extends BaseController
             return false;
         }
 
+        if (!$this->updateScheduledAt($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
         return true;
     }
 
@@ -480,6 +486,29 @@ abstract class BaseContentController extends BaseController
         }
 
         $activeRecord->content->locked_comments = $data['locked_comments'];
+        return $activeRecord->content->save();
+    }
+
+    protected function updateScheduledAt(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['scheduled_at'])) {
+            return true;
+        }
+
+        $validator = DynamicModel::validateData([
+            'scheduled_at' => $data['scheduled_at']
+        ], [
+            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+        ]);
+
+        if (!$validator->validate()) {
+            $activeRecord->addError('scheduled_at', $validator->getFirstError('scheduled_at'));
+
+            return false;
+        }
+
+        $activeRecord->content->getStateService()->schedule($data['scheduled_at']);
+
         return $activeRecord->content->save();
     }
 }

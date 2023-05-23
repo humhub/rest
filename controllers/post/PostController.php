@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\controllers\post;
 
+
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\post\models\Post;
 use humhub\modules\rest\components\BaseContentController;

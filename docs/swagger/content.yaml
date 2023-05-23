@@ -234,10 +234,17 @@ definitions:
       visibility:
         type: integer
         format: int64
+        example: 1
+      state:
+        type: integer
+        format: int64
         minimum: 0
         maximum: 2
         example: 1
       archived:
+        type: boolean
+        example: true
+      hidden:
         type: boolean
         example: true
       pinned:
@@ -246,6 +253,9 @@ definitions:
       locked_comments:
         type: boolean
         example: false
+      scheduled_at:
+        type: string
+        example: "2023-09-14 05:15:00"
       created_by:
         readOnly: true
         allOf:
