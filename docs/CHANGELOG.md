@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.9.1 (Unreleased)
+--------------------
+- Fix #126: Fix user component initialization
+
 0.9.0 (May 17, 2023)
 --------------------
 - Fix #110: Fix PHP Error in UserDefinition
