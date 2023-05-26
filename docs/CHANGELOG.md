@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.9.1 (Unreleased)
+0.9.1 (May 26, 2023)
 --------------------
 - Fix #126: Fix user component initialization
 
