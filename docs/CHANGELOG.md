@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.9.2 (Unreleased)
+--------------------
+- Enh #125: Add documentation for endpoint `user/get-by-authclient`
+
 0.9.1 (May 26, 2023)
 --------------------
 - Fix #126: Fix user component initialization
