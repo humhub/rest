@@ -4,6 +4,7 @@ Changelog
 0.9.2 (Unreleased)
 --------------------
 - Enh #125: Add documentation for endpoint `user/get-by-authclient`
+- Enh #128: Create User without Password
 
 0.9.1 (May 26, 2023)
 --------------------
