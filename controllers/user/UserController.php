@@ -195,9 +195,11 @@ class UserController extends BaseController
 
         $password = new Password();
         $password->scenario = 'registration';
-        $password->load(Yii::$app->request->getBodyParam('password', []), '');
-        $password->newPasswordConfirm = $password->newPassword;
-        $password->validate();
+
+        if ($password->load(Yii::$app->request->getBodyParam('password', []), '')) {
+            $password->newPasswordConfirm = $password->newPassword;
+            $password->validate();
+        }
 
         if ($user->hasErrors() || $password->hasErrors() || $profile->hasErrors()) {
             return $this->returnError(400, 'Validation failed', [
@@ -210,16 +212,21 @@ class UserController extends BaseController
         if ($user->save()) {
             $profile->user_id = $user->id;
             $password->user_id = $user->id;
-            $password->setPassword($password->newPassword);
-            if ($profile->save() && $password->save()) {
-                if($password->mustChangePassword) {
+
+            if ($password->newPassword) {
+                $password->setPassword($password->newPassword);
+                if ($password->save() && $password->mustChangePassword) {
                     $user->setMustChangePassword(true);
                 }
+            }
+
+            if ($profile->save()) {
                 return $this->actionView($user->id);
             }
         }
 
         Yii::error('Could not create validated user.', 'api');
+
         return $this->returnError(500, 'Internal error while save user!');
     }
 
