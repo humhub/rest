@@ -1,10 +1,21 @@
 <?php
 return array (
-  '<strong>API</strong> Configuration' => '<strong>API</strong> beállítás',
-  'Active additional REST API endpoints from the modules' => 'Aktív további REST API-végpontok a modulokból',
+  '<strong>REST</strong> Configuration' => '',
+  'Access Tokens' => '',
+  'Add Access Token' => '',
+  'Allow Bearer Authentication' => '',
   'Allow HTTP Basic Authentication' => 'HTTP alapszintű hitelesítés engedélyezése',
+  'Allow JWT Authentication' => '',
+  'Allow Query Param Bearer Authentication' => '',
+  'Bearer Access Token Successfully Revoked' => '',
+  'Bearer Auth' => '',
   'Enabled for all registered users' => 'Engedélyezés az összes felhasználónak',
+  'Expiration' => '',
+  'General' => 'Általános',
+  'JWT Auth' => '',
   'JWT Key' => 'JWT kulcs',
   'JWT Token Expiration' => 'JWT token lejárata',
   'No enabled modules found with additional REST API endpoints.' => 'Nem találhatók engedélyezett modulok további REST API-végpontokkal.',
+  'Token' => '',
+  'User' => 'Felhasználó',
 );

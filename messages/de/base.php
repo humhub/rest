@@ -1,10 +1,21 @@
 <?php
 return array (
-  '<strong>API</strong> Configuration' => '<strong>API</strong> Konfiguration',
-  'Active additional REST API endpoints from the modules' => 'Endpunkte folgender Module aktivieren',
+  '<strong>REST</strong> Configuration' => '',
+  'Access Tokens' => '',
+  'Add Access Token' => '',
+  'Allow Bearer Authentication' => '',
   'Allow HTTP Basic Authentication' => 'HTTP Basic Authentifizierung erlauben',
+  'Allow JWT Authentication' => '',
+  'Allow Query Param Bearer Authentication' => '',
+  'Bearer Access Token Successfully Revoked' => '',
+  'Bearer Auth' => '',
   'Enabled for all registered users' => 'Aktiviert für alle registrierten Benutzer',
+  'Expiration' => '',
+  'General' => 'Allgemein',
+  'JWT Auth' => '',
   'JWT Key' => 'JWT Key',
   'JWT Token Expiration' => 'JWT Token Ablaufzeit',
   'No enabled modules found with additional REST API endpoints.' => 'Keine aktivierten Module gefunden mit zusätzlichen REST API Endpunkten.',
+  'Token' => '',
+  'User' => 'Benutzer',
 );
