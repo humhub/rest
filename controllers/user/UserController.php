@@ -115,7 +115,7 @@ class UserController extends BaseController
     public function actionUpdate($id)
     {
         $user = ApiUser::findOne(['id' => $id]);
-        if ($user === null) {
+        if ($user->user === null) {
             return $this->returnError(404, 'User not found!');
         }
 
@@ -129,7 +129,7 @@ class UserController extends BaseController
         $profileData = Yii::$app->request->getBodyParam('profile', []);
 
         if (!empty($profileData)) {
-            $profile = $user->profile;
+            $profile = $user->user->profile;
             $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
             $profile->load($profileData, '');
             $profile->validate();
@@ -216,7 +216,7 @@ class UserController extends BaseController
             if ($password->newPassword) {
                 $password->setPassword($password->newPassword);
                 if ($password->save() && $password->mustChangePassword) {
-                    $user->setMustChangePassword(true);
+                    $user->user->setMustChangePassword(true);
                 }
             }
 
