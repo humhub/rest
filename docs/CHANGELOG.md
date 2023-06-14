@@ -1,10 +1,11 @@
 Changelog
 =========
 
-0.9.2 (Unreleased)
---------------------
+0.9.2 (June 14, 2023)
+---------------------
 - Enh #125: Add documentation for endpoint `user/get-by-authclient`
 - Enh #128: Create User without Password
+- Fix #130: Don't extend core User model 
 
 0.9.1 (May 26, 2023)
 --------------------
