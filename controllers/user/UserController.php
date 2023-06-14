@@ -114,22 +114,22 @@ class UserController extends BaseController
 
     public function actionUpdate($id)
     {
-        $user = ApiUser::findOne(['id' => $id]);
-        if ($user->user === null) {
+        $apiUser = ApiUser::findOne(['id' => $id]);
+        if ($apiUser->user === null) {
             return $this->returnError(404, 'User not found!');
         }
 
         $userData = Yii::$app->request->getBodyParam('account', []);
         if (!empty($userData)) {
-            $user->load($userData, '');
-            $user->validate();
+            $apiUser->load($userData, '');
+            $apiUser->validate();
         }
 
         $profile = null;
         $profileData = Yii::$app->request->getBodyParam('profile', []);
 
         if (!empty($profileData)) {
-            $profile = $user->user->profile;
+            $profile = $apiUser->user->profile;
             $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
             $profile->load($profileData, '');
             $profile->validate();
@@ -145,18 +145,18 @@ class UserController extends BaseController
             $password->validate();
         }
 
-        if ((!empty($userData) && $user->hasErrors()) ||
+        if ((!empty($userData) && $apiUser->hasErrors()) ||
             ($password !== null && $password->hasErrors()) ||
             ($profile !== null && $profile->hasErrors())
         ) {
             return $this->returnError(400, 'Validation failed', [
                 'profile' => ($profile !== null) ? $profile->getErrors() : null,
-                'account' => $user->getErrors(),
+                'account' => $apiUser->getErrors(),
                 'password' => ($password !== null) ? $password->getErrors() : null,
             ]);
         }
 
-        if (!$user->save()) {
+        if (!$apiUser->save()) {
             return $this->returnError(500, 'Internal error while save user!');
         }
 
@@ -166,14 +166,14 @@ class UserController extends BaseController
         }
 
         if ($password !== null) {
-            $password->user_id = $user->id;
+            $password->user_id = $apiUser->id;
             $password->setPassword($password->newPassword);
             if (!$password->save()) {
                 return $this->returnError(500, 'Internal error while save new password!');
             }
         }
 
-        return $this->actionView($user->id);
+        return $this->actionView($apiUser->id);
     }
 
 
@@ -184,9 +184,9 @@ class UserController extends BaseController
      */
     public function actionCreate()
     {
-        $user = new ApiUser();
-        $user->load(Yii::$app->request->getBodyParam('account', []), '');
-        $user->validate();
+        $apiUser = new ApiUser();
+        $apiUser->load(Yii::$app->request->getBodyParam('account', []), '');
+        $apiUser->validate();
 
         $profile = new Profile();
         $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
@@ -201,27 +201,27 @@ class UserController extends BaseController
             $password->validate();
         }
 
-        if ($user->hasErrors() || $password->hasErrors() || $profile->hasErrors()) {
+        if ($apiUser->hasErrors() || $password->hasErrors() || $profile->hasErrors()) {
             return $this->returnError(400, 'Validation failed', [
                 'password' => $password->getErrors(),
                 'profile' => $profile->getErrors(),
-                'account' => $user->getErrors(),
+                'account' => $apiUser->getErrors(),
             ]);
         }
 
-        if ($user->save()) {
-            $profile->user_id = $user->id;
-            $password->user_id = $user->id;
+        if ($apiUser->save()) {
+            $profile->user_id = $apiUser->id;
+            $password->user_id = $apiUser->id;
 
             if ($password->newPassword) {
                 $password->setPassword($password->newPassword);
                 if ($password->save() && $password->mustChangePassword) {
-                    $user->user->setMustChangePassword(true);
+                    $apiUser->user->setMustChangePassword(true);
                 }
             }
 
             if ($profile->save()) {
-                return $this->actionView($user->id);
+                return $this->actionView($apiUser->id);
             }
         }
 

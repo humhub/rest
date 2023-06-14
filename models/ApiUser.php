@@ -11,6 +11,10 @@ use humhub\modules\user\models\User;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Is needed because the user model should not be extended directly,
+ * but we need some extra validators for auth_mode.
+ */
 class ApiUser extends Model
 {
 
