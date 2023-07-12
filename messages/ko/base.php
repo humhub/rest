@@ -11,7 +11,7 @@ return array (
   'Bearer Auth' => '',
   'Enabled for all registered users' => '',
   'Expiration' => '',
-  'General' => '',
+  'General' => '일반',
   'JWT Auth' => '',
   'JWT Key' => '',
   'JWT Token Expiration' => '',
