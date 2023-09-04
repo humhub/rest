@@ -4,12 +4,13 @@ Changelog
 Unreleased
 ---------------------
 - Fix #135: Add "last login" value to user endpoint
+- Enh #47: Implementation of [the "Invite new users" endpoint](https://marketplace.humhub.com/module/rest/docs/html/user.html#tag/Invite)
 
 0.9.2 (June 14, 2023)
 ---------------------
 - Enh #125: Add documentation for endpoint `user/get-by-authclient`
 - Enh #128: Create User without Password
-- Fix #130: Don't extend core User model 
+- Fix #130: Don't extend core User model
 
 0.9.1 (May 26, 2023)
 --------------------
@@ -23,7 +24,7 @@ Unreleased
 - Enh #117: Added support of user Impersonate
 - Enh #113: Deleted unnecessary code used for Calendar And Task Modules
 - Fix #114: Fix tests on soft delete of content
-- Fix #122: Removed undefined properties 
+- Fix #122: Removed undefined properties
 
 0.8.0 (March 10, 2023)
 ----------------------
@@ -54,7 +55,7 @@ Unreleased
 
 0.4.3 (February 1, 2022)
 ------------------------
-- Enh #73: Added "mustChangePassword" flag for users created using the API 
+- Enh #73: Added "mustChangePassword" flag for users created using the API
 - Enh: Don't provide auth token for disabled users on REST module side
 
 0.4.2 (January 31, 2022)
@@ -93,7 +94,7 @@ Unreleased
 - Enh: New Endpoints for Mail module
 - Enh: Added permission checks for regular user access
 - Fix #42: Activity Module Endpoint
-- Fix #43: Swagger doc is incorrect for user "display_name" for User endpoints 
+- Fix #43: Swagger doc is incorrect for user "display_name" for User endpoints
 - Fix: Renamed "/like/findByRecord" endpoint to "/like/find-by-object"
 
 0.1.4  (October 13, 2020)
