@@ -472,7 +472,7 @@ paths:
     post:
       tags:
         - Invite
-      summary: Invite new users to the HumHub installation
+      summary: Invite new users
       description: ''
       produces:
         - application/json
@@ -488,9 +488,9 @@ paths:
               - emails
             properties:
               emails:
-                type: string
-                description: Email addresses separated by comma
-                example: "example1@email.com,example2@email.com"
+                type: array
+                description: An array of email addresses
+                example: [ "test1@example.com", "test2@example.com" ]
       responses:
         default:
           description: Successful operation

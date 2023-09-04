@@ -3300,7 +3300,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n\t\"emails\": \"example1@email.com,example2@email.com\"\n}"
+              "raw": "{\n\t\"emails\":[\"example1@email.com\", \"example2@email.com\"]\n}"
             },
             "url": {
               "raw": "{{API_URL}}/user/invite",

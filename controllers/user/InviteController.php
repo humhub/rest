@@ -8,9 +8,10 @@
 namespace humhub\modules\rest\controllers\user;
 
 use humhub\modules\rest\components\BaseController;
-use humhub\modules\user\models\forms\Invite as InviteForm;
 use humhub\modules\user\models\Invite;
+use humhub\modules\user\models\User;
 use Yii;
+use yii\validators\EmailValidator;
 
 
 /**
@@ -20,17 +21,29 @@ class InviteController extends BaseController
 {
     public function actionIndex()
     {
-        $model = new InviteForm();
-
-        if ($model->load(Yii::$app->request->getBodyParams(), '') && $model->validate()) {
-            foreach ($model->getEmails() as $email) {
-                $this->createInvite($email);
-            }
-
-            return $this->returnSuccess('Users have been invited.');
+        $emails = (array)Yii::$app->request->post('emails');
+        if (!$emails) {
+            return $this->returnError(404, 'Please provide an array of emails in the json format');
         }
 
-        return $this->returnError(404, 'Error: ' . implode(' ', $model->getErrorSummary(true)));
+        $errors = [];
+        foreach ($emails as $email) {
+            $validator = new EmailValidator();
+            if (!$validator->validate($email)) {
+                $errors[] = $email . ' is not valid!';
+            }
+            if (User::findOne(['email' => $email]) !== null) {
+                $errors[] = $email . ' is already registered!';
+            }
+        }
+        if ($errors) {
+            return $this->returnError(404, implode(' | ', $errors));
+        }
+
+        foreach ($emails as $email) {
+            $this->createInvite($email);
+        }
+        return $this->returnSuccess(count($emails) . ' users have been invited.');
     }
 
     protected function createInvite($email)
@@ -39,13 +52,6 @@ class InviteController extends BaseController
         $userInvite->email = $email;
         $userInvite->source = Invite::SOURCE_INVITE;
         $userInvite->user_originator_id = Yii::$app->user->id;
-
-        $existingInvite = Invite::findOne(['email' => $email]);
-        if ($existingInvite !== null) {
-            $userInvite->token = $existingInvite->token;
-            $existingInvite->delete();
-        }
-
         $userInvite->save();
         $userInvite->sendInviteMail();
     }
