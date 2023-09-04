@@ -63,6 +63,7 @@ class UserDefinitions
             'contentcontainer_id' => $user->contentcontainer_id,
             'authclient' => $user->auth_mode,
             'authclient_id' => $user->authclient_id,
+            'last_login' => $user->last_login,
         ];
     }
 
