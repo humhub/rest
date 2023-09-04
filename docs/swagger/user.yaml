@@ -594,6 +594,10 @@ definitions:
       authclient_id:
         type: string
         example: "0123456789"
+      last_login:
+        type: string
+        format: datetime
+        example: "2023-09-11 08:46:40"
     xml:
       name: Account
 
