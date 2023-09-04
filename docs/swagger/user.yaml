@@ -253,9 +253,9 @@ paths:
         '404':
           description: User not found
 
-#-----------------------------------------------------------------------------------------------------------------------
-# Begin Group
-#-----------------------------------------------------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------------------------------------------------
+  # Begin Group
+  #-----------------------------------------------------------------------------------------------------------------------
   '/user/group':
     get:
       tags:
@@ -465,9 +465,39 @@ paths:
         default:
           description: Successful operation
 
-#-----------------------------------------------------------------------------------------------------------------------
-# Begin Session
-#-----------------------------------------------------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------------------------------------------------
+  # Begin Invite
+  #-----------------------------------------------------------------------------------------------------------------------
+  '/user/invite':
+    post:
+      tags:
+        - Invite
+      summary: Invite new users to the HumHub installation
+      description: ''
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: Email of people you want to invite
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: Email addresses separated by comma
+                example: "example1@email.com,example2@email.com"
+      responses:
+        default:
+          description: Successful operation
+
+  #-----------------------------------------------------------------------------------------------------------------------
+  # Begin Session
+  #-----------------------------------------------------------------------------------------------------------------------
   '/user/session/all/{id}':
     delete:
       tags:
@@ -569,13 +599,13 @@ definitions:
         type: array
         items:
           type: string
-        example: ["Administration", "Support", "HumHub"]
+        example: [ "Administration", "Support", "HumHub" ]
         readOnly: true
       tagsField:
         type: array
         items:
           type: string
-        example: ["Administration", "Support", "HumHub"]
+        example: [ "Administration", "Support", "HumHub" ]
         writeOnly: true
       language:
         type: string
