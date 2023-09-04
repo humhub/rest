@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.9.3 (September 4, 2023)
+Unreleased
 ---------------------
 - Fix #135: Add "last login" value to user endpoint
 
