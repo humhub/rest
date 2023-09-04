@@ -480,14 +480,14 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Email of people you want to invite
+          description: Emails of people you want to invite
           required: true
           schema:
             type: object
             required:
-              - email
+              - emails
             properties:
-              email:
+              emails:
                 type: string
                 description: Email addresses separated by comma
                 example: "example1@email.com,example2@email.com"
