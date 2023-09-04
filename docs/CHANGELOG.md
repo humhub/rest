@@ -3,6 +3,7 @@ Changelog
 
 Unreleased
 ---------------------
+- Fix #135: Add "last login" value to user endpoint
 - Enh #47: Implementation of [the "Invite new users" endpoint](https://marketplace.humhub.com/module/rest/docs/html/user.html#tag/Invite)
 
 0.9.2 (June 14, 2023)
