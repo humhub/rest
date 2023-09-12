@@ -12,7 +12,8 @@ class UserCest extends HumHubApiTestCest
         $I->wantTo('see all users list');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('user', $I->getUserDefinitions(['Admin', 'User1', 'User2', 'User3', 'DisabledUser', 'UnapprovedUser', 'UnapprovedNoGroup', 'AdminNotMember']));
+        $I->sendGet('user');
+        $I->seePaginationResponseContainsJson('user', $I->getUserDefinitions(['Admin', 'User1', 'User2', 'User3', 'DisabledUser', 'UnapprovedUser', 'UnapprovedNoGroup', 'AdminNotMember']));
     }
 
     public function testGetByUsername(ApiTester $I)
