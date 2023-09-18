@@ -58,6 +58,7 @@ class ApiUser extends Model
         $result = parent::load($data, $formName);
         $this->user->authclient_id = $this->authclient_id;
 
+        $this->user->scenario = User::SCENARIO_EDIT_ADMIN;
         return $this->user->load($data, $formName) && $result;
     }
 
@@ -68,7 +69,7 @@ class ApiUser extends Model
     {
         $result = parent::validate($attributeNames, $clearErrors);
 
-        $userAttributes = ['username', 'email', 'status', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
+        $userAttributes = ['username', 'email', 'status', 'visibility', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
 
         return $this->user->validate($userAttributes, $clearErrors) && $result;
     }
