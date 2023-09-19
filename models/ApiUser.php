@@ -58,7 +58,6 @@ class ApiUser extends Model
         $result = parent::load($data, $formName);
         $this->user->authclient_id = $this->authclient_id;
 
-        $this->user->scenario = User::SCENARIO_EDIT_ADMIN;
         return $this->user->load($data, $formName) && $result;
     }
 

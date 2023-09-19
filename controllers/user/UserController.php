@@ -49,7 +49,7 @@ class UserController extends BaseController
 
     /**
      * Get User by username
-     * 
+     *
      * @param string $username the username searched
      * @return array
      * @throws HttpException
@@ -61,13 +61,13 @@ class UserController extends BaseController
         if ($user === null) {
             return $this->returnError(404, 'User not found!');
         }
-        
+
         return $this->actionView($user->id);
     }
 
     /**
      * Get User by email
-     * 
+     *
      * @param string $email the email searched
      * @return array
      * @throws HttpException
@@ -79,7 +79,7 @@ class UserController extends BaseController
         if ($user === null) {
             return $this->returnError(404, 'User not found!');
         }
-        
+
         return $this->actionView($user->id);
     }
 
@@ -121,6 +121,9 @@ class UserController extends BaseController
 
         $userData = Yii::$app->request->getBodyParam('account', []);
         if (!empty($userData)) {
+            if (Yii::$app->user->isAdmin()) {
+                $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
+            }
             $apiUser->load($userData, '');
             $apiUser->validate();
         }
@@ -130,7 +133,9 @@ class UserController extends BaseController
 
         if (!empty($profileData)) {
             $profile = $apiUser->user->profile;
-            $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
+            if (Yii::$app->user->isAdmin()) {
+                $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
+            }
             $profile->load($profileData, '');
             $profile->validate();
         }
