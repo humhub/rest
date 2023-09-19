@@ -121,7 +121,7 @@ class UserController extends BaseController
 
         $userData = Yii::$app->request->getBodyParam('account', []);
         if (!empty($userData)) {
-            if (Yii::$app->user->isAdmin()) {
+            if (Yii::$app->user->isAdmin() || !$apiUser->user->isSystemAdmin()) {
                 $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
             }
             $apiUser->load($userData, '');
@@ -133,7 +133,7 @@ class UserController extends BaseController
 
         if (!empty($profileData)) {
             $profile = $apiUser->user->profile;
-            if (Yii::$app->user->isAdmin()) {
+            if (Yii::$app->user->isAdmin() || !$apiUser->user->isSystemAdmin()) {
                 $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
             }
             $profile->load($profileData, '');
