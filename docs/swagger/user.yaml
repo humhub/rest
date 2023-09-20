@@ -591,7 +591,6 @@ definitions:
       visibility:
         type: integer
         format: int64
-        readOnly: true
       status:
         type: integer
         example: 1

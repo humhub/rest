@@ -68,7 +68,7 @@ class ApiUser extends Model
     {
         $result = parent::validate($attributeNames, $clearErrors);
 
-        $userAttributes = ['username', 'email', 'status', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
+        $userAttributes = ['username', 'email', 'status', 'visibility', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
 
         return $this->user->validate($userAttributes, $clearErrors) && $result;
     }
