@@ -7,6 +7,7 @@ Changelog
 - Enh #47: Implementation of [the "Invite new users" endpoint](https://marketplace.humhub.com/module/rest/docs/html/user.html#tag/Invite)
 - Enh #134: Implementation of the user account `visibility` property in [the "Update an existing user" endpoint](https://marketplace.humhub.com/module/rest/docs/html/user.html#tag/User/operation/updateUser)
 - Enh #141: Tests for `next` version
+- Fix #142: Fix visibility of the method `Controller::getAccessRules()`
 
 0.9.2 (June 14, 2023)
 ---------------------
