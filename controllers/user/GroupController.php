@@ -25,7 +25,7 @@ class GroupController extends BaseController
     /**
      * @inheritdoc
      */
-    public function getAccessRules()
+    protected function getAccessRules()
     {
         return [
             ['permissions' => [ManageGroups::class]],

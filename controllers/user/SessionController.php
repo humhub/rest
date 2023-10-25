@@ -19,7 +19,7 @@ class SessionController extends BaseController
     /**
      * @inheritdoc
      */
-    public function getAccessRules()
+    protected function getAccessRules()
     {
         return [
             ['permissions' => [ManageUsers::class]],
