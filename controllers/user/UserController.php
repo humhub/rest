@@ -190,6 +190,9 @@ class UserController extends BaseController
     public function actionCreate()
     {
         $apiUser = new ApiUser();
+        if (Yii::$app->user->isAdmin()) {
+            $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
+        }
         $apiUser->load(Yii::$app->request->getBodyParam('account', []), '');
         $apiUser->validate();
 
