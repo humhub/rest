@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.9.3 (Unreleased)
----------------------
+0.9.3 (December 8, 2023)
+------------------------
 - Fix #135: Add "last login" value to user endpoint
 - Enh #47: Implementation of [the "Invite new users" endpoint](https://marketplace.humhub.com/module/rest/docs/html/user.html#tag/Invite)
 - Enh #134: Implementation of the user account `visibility` property in [the "Update an existing user" endpoint](https://marketplace.humhub.com/module/rest/docs/html/user.html#tag/User/operation/updateUser)
