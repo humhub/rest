@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Unreleased
+------------------------
+- Enh #155: Add `requirements.php`
+
 0.9.3 (December 8, 2023)
 ------------------------
 - Fix #135: Add "last login" value to user endpoint
