@@ -36,7 +36,7 @@ class ContentDefinitions
 
     public static function getContentMetadata(Content $content)
     {
-        return [
+        $metadata = [
             'id' => $content->id,
             'guid' => $content->guid,
             'object_model' => $content->object_model,
@@ -52,10 +52,13 @@ class ContentDefinitions
             'updated_by' => $content->updatedBy ? UserDefinitions::getUserShort($content->updatedBy) : null,
             'updated_at' => $content->updated_at,
             'scheduled_at' => $content->scheduled_at,
-            'url' => $content->getUrl(true),
             'contentcontainer_id' => $content->contentcontainer_id,
             'stream_channel' => $content->stream_channel
         ];
+
+        if ($content->contentcontainer_id !== null) {
+            $metadata['url'] = $content->getUrl(true);
+        }
     }
 
     public static function getContentContainer(ContentContainer $container)
