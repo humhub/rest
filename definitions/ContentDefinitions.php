@@ -52,13 +52,12 @@ class ContentDefinitions
             'updated_by' => $content->updatedBy ? UserDefinitions::getUserShort($content->updatedBy) : null,
             'updated_at' => $content->updated_at,
             'scheduled_at' => $content->scheduled_at,
+            'url' => $content->contentcontainer_id ? $content->getUrl(true) : null,
             'contentcontainer_id' => $content->contentcontainer_id,
-            'stream_channel' => $content->stream_channel
+            'stream_channel' => $content->stream_channel,
         ];
 
-        if ($content->contentcontainer_id !== null) {
-            $metadata['url'] = $content->getUrl(true);
-        }
+        return $metadata;
     }
 
     public static function getContentContainer(ContentContainer $container)
