@@ -17,5 +17,5 @@ return array (
   'JWT Token Expiration' => '',
   'No enabled modules found with additional REST API endpoints.' => '',
   'Token' => '',
-  'User' => '',
+  'User' => 'Erabiltzailea',
 );
