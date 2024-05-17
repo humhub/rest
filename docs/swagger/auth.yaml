@@ -91,7 +91,7 @@ paths:
           description: Unauthorized
 
   '/auth/impersonate':
-    get:
+    post:
       tags:
         - User
       summary: Impersonate user

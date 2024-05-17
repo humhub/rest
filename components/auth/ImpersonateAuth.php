@@ -7,6 +7,7 @@
 
 namespace humhub\modules\rest\components\auth;
 
+use Yii;
 use yii\db\Expression;
 use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\StringHelper;
@@ -30,7 +31,7 @@ class ImpersonateAuth extends HttpBearerAuth
                     return null;
                 }
 
-                if (!StringHelper::startsWith($authHeader, 'impersonate-')) {
+                if (!StringHelper::startsWith($authHeader, 'impersonated-')) {
                     return null;
                 }
             }
@@ -42,6 +43,7 @@ class ImpersonateAuth extends HttpBearerAuth
 
             if ($accessToken && ($identity = $accessToken->user)) {
                 $user->login($identity);
+                Yii::$app->user->isImpersonatedViaRest = true;
             } else {
                 $identity = null;
             }
