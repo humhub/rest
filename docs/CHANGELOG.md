@@ -4,6 +4,7 @@ Changelog
 Unreleased
 ------------------------
 - Enh #155: Add `requirements.php`
+- Fix #164: Disable `mustChangePassword` check for impersonated access tokens
 
 0.9.3 (December 8, 2023)
 ------------------------
