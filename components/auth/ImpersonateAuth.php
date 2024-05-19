@@ -43,7 +43,7 @@ class ImpersonateAuth extends HttpBearerAuth
 
             if ($accessToken && ($identity = $accessToken->user)) {
                 $user->login($identity);
-                Yii::$app->user->isImpersonatedViaRest = true;
+                Yii::$app->user->isImpersonated = true;
             } else {
                 $identity = null;
             }

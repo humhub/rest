@@ -92,6 +92,7 @@ abstract class BaseController extends Controller
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,
+            'enableSession' => false,
         ]);
 
         Yii::$app->response->format = 'json';
