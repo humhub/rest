@@ -14,21 +14,15 @@ use yii\helpers\Url;
 
 class Module extends BaseModule
 {
-
     /**
      * @event triggered before a request (inside event Application::EVENT_BEFORE_REQUEST of this Module)
      */
-    const EVENT_REST_API_ADD_RULES = 'restApiAddRules';
+    public const EVENT_REST_API_ADD_RULES = 'restApiAddRules';
 
     /**
      * @var string Prefix for REST API endpoint URLs
      */
-    const API_URL_PREFIX = 'api/v1/';
-
-    /**
-     * @inheritdoc
-     */
-    public $resourcesPath = 'resources';
+    public const API_URL_PREFIX = 'api/v1/';
 
     /**
      * @inheritdoc
