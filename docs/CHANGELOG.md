@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Unreleased
+0.10.0 (Unreleased)
 ------------------------
 - Enh #155: Add `requirements.php`
 - Fix #164: Disable `mustChangePassword` check for impersonated access tokens
