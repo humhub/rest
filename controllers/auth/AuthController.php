@@ -115,10 +115,11 @@ class AuthController extends BaseController
         $token = new ImpersonateAuthToken();
         $token->user_id = $user->id;
         $token->save();
+        $token->refresh();
 
         return [
             'token' => $token->token,
-            'expires' => $token->expiration,
+            'expires' => strtotime($token->expiration),
         ];
     }
 }

@@ -8,7 +8,7 @@
     "version": "0.9.3",
     "homepage": "https://github.com/humhub/rest",
     "humhub": {
-        "minVersion": "1.14"
+        "minVersion": "1.16"
     },
     "screenshots": []
 }
