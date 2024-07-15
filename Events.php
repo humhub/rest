@@ -54,10 +54,10 @@ class Events
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/members', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-add', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-remove', 'verb' => ['DELETE']],
-            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/index', 'verb' => 'POST'],
 
             // User: Invite Controller
-            //['pattern' => 'user/invite', 'route' => 'api/user/invite/index', 'verb' => 'POST'],
+            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/index', 'verb' => 'POST'],
+            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/list', 'verb' => 'GET'],
 
             // User: Session Controller
             ['pattern' => 'user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],
