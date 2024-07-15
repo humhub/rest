@@ -21,6 +21,13 @@ use yii\helpers\ArrayHelper;
  */
 class InviteController extends BaseController
 {
+    protected function getAccessRules()
+    {
+        return [
+            ['permissions' => [ManageUsers::class]],
+        ];
+    }
+
     public function actionIndex()
     {
         $emails = (array)Yii::$app->request->post('emails');
