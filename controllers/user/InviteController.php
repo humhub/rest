@@ -9,9 +9,11 @@ namespace humhub\modules\rest\controllers\user;
 
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\user\models\Invite;
+use humhub\modules\rest\definitions\InviteDefinitions;
 use humhub\modules\user\models\User;
 use Yii;
 use yii\validators\EmailValidator;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -19,6 +21,13 @@ use yii\validators\EmailValidator;
  */
 class InviteController extends BaseController
 {
+    protected function getAccessRules()
+    {
+        return [
+            ['permissions' => [ManageUsers::class]],
+        ];
+    }
+
     public function actionIndex()
     {
         $emails = (array)Yii::$app->request->post('emails');
@@ -44,6 +53,19 @@ class InviteController extends BaseController
             $this->createInvite($email);
         }
         return $this->returnSuccess(count($emails) . ' users have been invited.');
+    }
+
+    public function actionList()
+    {
+        $query = Invite::find()->where(['source' => Invite::SOURCE_INVITE]);
+
+        $pagination = $this->handlePagination($query, 10);
+
+        $results = ArrayHelper::getColumn($query->all(), function(Invite $invite) {
+            return InviteDefinitions::getInvite($invite);
+        });
+
+        return $this->returnPagination($query, $pagination, $results);
     }
 
     protected function createInvite($email)
