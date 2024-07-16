@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.10.0 (Unreleased)
-------------------------
+0.10.0 (July 16, 2024)
+----------------------
 - Enh #155: Add `requirements.php`
 - Fix #164: Disable `mustChangePassword` check for impersonated access tokens
 - Enh #170: Added new endpoint `GET /user/invite` for user pending invites
