@@ -57,7 +57,9 @@ class InviteController extends BaseController
 
     public function actionList()
     {
-        $query = Invite::find()->where(['source' => Invite::SOURCE_INVITE]);
+        $query = Invite::find()
+            ->where(['source' => Invite::SOURCE_INVITE])
+            ->with(['space', 'originator', 'createdBy', 'updatedBy']);
 
         $pagination = $this->handlePagination($query, 10);
 
