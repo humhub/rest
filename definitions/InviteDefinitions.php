@@ -6,11 +6,7 @@ use humhub\modules\user\models\Invite;
 
 class InviteDefinitions
 {
-    /**
-     * @param Invite|\humhub\modules\rest\models\Invite $invite
-     * @return array
-     */
-    public static function getInvite(Invite $invite)
+    public static function getInvite(Invite $invite): array
     {
         return [
             'id' => $invite->id,
