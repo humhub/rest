@@ -6,6 +6,7 @@ Changelog
 - Enh #155: Add `requirements.php`
 - Fix #164: Disable `mustChangePassword` check for impersonated access tokens
 - Enh #170: Added new endpoint `GET /user/invite` for user pending invites
+- Enh #173: Added possibility to change `created_at` of `content`
 
 0.9.3 (December 8, 2023)
 ------------------------
