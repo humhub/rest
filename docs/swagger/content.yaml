@@ -262,7 +262,6 @@ definitions:
           - $ref: "user.yaml#/definitions/UserShort"
       created_at:
         type: string
-        readOnly: true
         example: "2022-04-13 05:15:43"
       updated_by:
         readOnly: true
