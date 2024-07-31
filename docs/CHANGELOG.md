@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.10.1 (Unreleased)
+0.10.1 (July 31, 2024)
 ----------------------
 - Enh #173: Added possibility to change `created_at` of `content`
+- Enh #116: Allow to set `show_at_dashboard` and `can_cancel_membership` on space membership creating
 
 0.10.0 (July 16, 2024)
 ----------------------
