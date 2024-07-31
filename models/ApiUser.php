@@ -8,24 +8,31 @@
 namespace humhub\modules\rest\models;
 
 use humhub\modules\user\models\User;
+use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
-class ApiUser extends User
+/**
+ * Is needed because the user model should not be extended directly,
+ * but we need some extra validators for auth_mode.
+ */
+class ApiUser extends Model
 {
-    const SCENARIO_API_REQUEST = 'apiRequest';
+
+    public User $user;
 
     /**
-     * @inheritdoc
+     * @var string
      */
-    public $scenario = self::SCENARIO_API_REQUEST;
+    public $authclient_id;
 
     /**
-     * @inheritdoc
+     * @var int User ID
      */
-    public function scenarios()
+    public $id;
+
+    public function init()
     {
-        $scenarios = parent::scenarios();
-        $scenarios[static::SCENARIO_API_REQUEST] = ['username', 'email', 'status', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
-        return $scenarios;
+        $this->user = new User();
     }
 
     /**
@@ -48,6 +55,56 @@ class ApiUser extends User
             unset($data['authclient']);
         }
 
-        return parent::load($data, $formName);
+        $result = parent::load($data, $formName);
+        $this->user->authclient_id = $this->authclient_id;
+
+        return $this->user->load($data, $formName) && $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validate($attributeNames = null, $clearErrors = true)
+    {
+        $result = parent::validate($attributeNames, $clearErrors);
+
+        $userAttributes = ['username', 'email', 'status', 'visibility', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
+
+        return $this->user->validate($userAttributes, $clearErrors) && $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function hasErrors($attribute = null)
+    {
+        return parent::hasErrors($attribute) || $this->user->hasErrors($attribute);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getErrors($attribute = null)
+    {
+        return ArrayHelper::merge(parent::getErrors($attribute), $this->user->getErrors($attribute));
+    }
+
+    public function save(): bool
+    {
+        if ($this->user->save()) {
+            $this->id = $this->user->id;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function findOne($condition): self
+    {
+        $apiUser = new self();
+        $apiUser->user = User::findOne($condition);
+        $apiUser->id = $apiUser->user->id;
+
+        return $apiUser;
     }
 }

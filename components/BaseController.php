@@ -7,6 +7,15 @@
 
 namespace humhub\modules\rest\components;
 
+use humhub\components\access\ControllerAccess;
+use humhub\components\Controller;
+use humhub\modules\content\models\Content;
+use humhub\modules\rest\components\auth\ImpersonateAuth;
+use humhub\modules\rest\components\User as UserComponent;
+use humhub\modules\rest\components\auth\JwtAuth;
+use humhub\modules\rest\controllers\auth\AuthController;
+use humhub\modules\rest\models\ConfigureForm;
+use humhub\modules\user\models\User;
 use Yii;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
@@ -16,14 +25,6 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 use yii\web\JsonParser;
-use Firebase\JWT\JWT;
-use humhub\components\access\ControllerAccess;
-use humhub\components\Controller;
-use humhub\modules\content\models\Content;
-use humhub\modules\rest\components\auth\JwtAuth;
-use humhub\modules\rest\controllers\auth\AuthController;
-use humhub\modules\rest\models\ConfigureForm;
-use humhub\modules\user\models\User;
 
 /**
  * Class BaseController
@@ -75,6 +76,9 @@ abstract class BaseController extends Controller
                             return null;
                         },
                     ]] : [],
+                    [[
+                        'class' => ImpersonateAuth::class,
+                    ]]
                 ),
             ],
         ], parent::behaviors());
@@ -85,6 +89,12 @@ abstract class BaseController extends Controller
      */
     public function beforeAction($action)
     {
+        Yii::$app->set('user', [
+            'class' => UserComponent::class,
+            'identityClass' => User::class,
+            'enableSession' => false,
+        ]);
+
         Yii::$app->response->format = 'json';
 
         Yii::$app->request->setBodyParams(null);

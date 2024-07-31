@@ -5,10 +5,10 @@
     "keywords": [
         "api", "rest"
     ],
-    "version": "0.9.0",
+    "version": "0.10.1",
     "homepage": "https://github.com/humhub/rest",
     "humhub": {
-        "minVersion": "1.15"
+        "minVersion": "1.16"
     },
     "screenshots": []
 }

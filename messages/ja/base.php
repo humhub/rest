@@ -1,11 +1,21 @@
 <?php
-
-return [
-    '<strong>API</strong> Configuration' => '',
-    'Active additional REST API endpoints from the modules' => '',
-    'Allow HTTP Basic Authentication' => '',
-    'Enabled for all registered users' => '',
-    'JWT Key' => '',
-    'JWT Token Expiration' => '',
-    'No enabled modules found with additional REST API endpoints.' => '',
-];
+return array (
+  '<strong>REST</strong> Configuration' => '<strong>REST</strong> 構成',
+  'Access Tokens' => 'アクセストークン',
+  'Add Access Token' => 'アクセストークンの追加',
+  'Allow Bearer Authentication' => 'ベアラー認証を許可する',
+  'Allow HTTP Basic Authentication' => 'HTTP 基本認証を許可する',
+  'Allow JWT Authentication' => 'JWT認証を許可する',
+  'Allow Query Param Bearer Authentication' => 'クエリパラメータベアラー認証を許可する',
+  'Bearer Access Token Successfully Revoked' => 'ベアラーアクセストークンが正常に取り消されました',
+  'Bearer Auth' => 'ベアラー認証',
+  'Enabled for all registered users' => 'すべての登録ユーザーに対して有効',
+  'Expiration' => '有効期限',
+  'General' => '一般設定',
+  'JWT Auth' => 'JWT認証',
+  'JWT Key' => 'JWT キー',
+  'JWT Token Expiration' => 'JWT トークンの有効期限',
+  'No enabled modules found with additional REST API endpoints.' => '追加の REST API エンドポイントで有効なモジュールが見つかりません。',
+  'Token' => 'トークン',
+  'User' => 'ユーザー',
+);

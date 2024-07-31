@@ -1,4 +1,4 @@
-# API development 
+# API development
 
 ## Documentation
 
@@ -6,8 +6,7 @@ To completely adapt the API documentation after a change, the following steps ar
 
 ### Swagger
 
-The Swagger documentation is located in the folder `/docs/swagger`, you need to rebuild the html documentation 
-at `/docs/html` which is based on the Swagger YAML files.
+The Swagger documentation is located in the folder `/docs/swagger`, you need to rebuild the html documentation at `/docs/html` which is based on the Swagger YAML files.
 
 To create a HTML documentation you need to install the `redoc-cli` NPM package.
 

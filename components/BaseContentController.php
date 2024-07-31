@@ -21,6 +21,7 @@ use humhub\modules\rest\definitions\ContentDefinitions;
 use humhub\modules\topic\models\Topic;
 use humhub\modules\topic\permissions\AddTopic;
 use Yii;
+use yii\base\DynamicModel;
 use yii\web\HttpException;
 use yii\web\UploadedFile;
 
@@ -30,6 +31,7 @@ use yii\web\UploadedFile;
  *
  * @package humhub\modules\rest\components
  */
+
 abstract class BaseContentController extends BaseController
 {
     /**
@@ -296,50 +298,6 @@ abstract class BaseContentController extends BaseController
         }
     }
 
-    /**********************************************************************************
-     * Helpers
-     *********************************************************************************
-     *
-    /*
-     * Prepare date formats for Calendar entries and Tasks
-     *
-     * @param array $requestParams
-     * @param string $formName
-     * @param string $modelName
-     * @return array
-     * @throws HttpException
-     */
-    protected function prepareRequestParams(array $requestParams, string $formName, string $modelName): array
-    {
-        if ($this instanceof TasksController && empty($requestParams[$modelName]['scheduling'])) {
-            return $requestParams;
-        }
-
-        if (empty($requestParams[$formName]['start_date'])) {
-            throw new HttpException(400, 'Start date cannot be blank');
-        } else {
-            $requestParams[$modelName]['all_day'] = 0;
-        }
-
-        if (empty($requestParams[$formName]['end_date'])) {
-            throw new HttpException(400, 'End date cannot be blank');
-        } else {
-            $requestParams[$modelName]['all_day'] = 0;
-        }
-
-        if (!preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['start_date']) &&
-            !preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['start_date'])) {
-            throw new HttpException(400, 'Wrong start date format.');
-        }
-
-        if (!preg_match(DbDateValidator::REGEX_DBFORMAT_DATE, $requestParams[$formName]['end_date']) &&
-            !preg_match(DbDateValidator::REGEX_DBFORMAT_DATETIME, $requestParams[$formName]['end_date'])) {
-            throw new HttpException(400, 'Wrong end date format.');
-        }
-
-        return $requestParams;
-    }
-
     protected function saveRecord(ContentActiveRecord $contentRecord): bool
     {
         $data = Yii::$app->request->getBodyParam('data', []);
@@ -428,6 +386,10 @@ abstract class BaseContentController extends BaseController
             return false;
         }
 
+        if (!$this->updateVisibility($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
         if (!$this->updateArchived($activeRecord, $data['metadata'])) {
             return false;
         }
@@ -437,6 +399,14 @@ abstract class BaseContentController extends BaseController
         }
 
         if (!$this->updateLockedComments($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (!$this->updateScheduledAt($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (Yii::$app->user->identity->isSystemAdmin() && !$this->updateCreatedAt($activeRecord, $data['metadata'])) {
             return false;
         }
 
@@ -524,6 +494,52 @@ abstract class BaseContentController extends BaseController
         }
 
         $activeRecord->content->locked_comments = $data['locked_comments'];
+        return $activeRecord->content->save();
+    }
+
+    protected function updateScheduledAt(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['scheduled_at'])) {
+            return true;
+        }
+
+        $validator = DynamicModel::validateData([
+            'scheduled_at' => $data['scheduled_at']
+        ], [
+            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+        ]);
+
+        if (!$validator->validate()) {
+            $activeRecord->addError('scheduled_at', $validator->getFirstError('scheduled_at'));
+
+            return false;
+        }
+
+        $activeRecord->content->getStateService()->schedule($data['scheduled_at']);
+
+        return $activeRecord->content->save();
+    }
+
+    public function updateCreatedAt(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['created_at'])) {
+            return true;
+        }
+
+        $validator = DynamicModel::validateData([
+            'created_at' => $data['created_at']
+        ], [
+            ['created_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+        ]);
+
+        if (!$validator->validate()) {
+            $activeRecord->addError('created_at', $validator->getFirstError('created_at'));
+
+            return false;
+        }
+
+        $activeRecord->content->created_at = $data['created_at'];
+
         return $activeRecord->content->save();
     }
 }

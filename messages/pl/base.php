@@ -1,11 +1,21 @@
 <?php
-
-return [
-    '<strong>API</strong> Configuration' => 'Konfiguracja <strong>API</strong>',
-    'Enabled for all registered users' => 'Dostępne dla wszystkich zarejestrowanych użytkowników',
-    'JWT Key' => 'Klucz JWT',
-    'Active additional REST API endpoints from the modules' => '',
-    'Allow HTTP Basic Authentication' => '',
-    'JWT Token Expiration' => '',
-    'No enabled modules found with additional REST API endpoints.' => '',
-];
+return array (
+  '<strong>REST</strong> Configuration' => '<strong>REST</strong> Konfiguracja',
+  'Access Tokens' => 'Tokeny dostępowe',
+  'Add Access Token' => 'Dodaj token dostępowy',
+  'Allow Bearer Authentication' => 'Zezwól na Bearer Authentication',
+  'Allow HTTP Basic Authentication' => 'Zezwól na HTTP Basic Authentication',
+  'Allow JWT Authentication' => 'Zezwól na JWT Authentication',
+  'Allow Query Param Bearer Authentication' => 'Zezwól na Query Param Bearer Authentication',
+  'Bearer Access Token Successfully Revoked' => 'Token dostępowy Bearer poprawnie odwołany',
+  'Bearer Auth' => 'Bearer Auth',
+  'Enabled for all registered users' => 'Dostępne dla wszystkich zarejestrowanych użytkowników',
+  'Expiration' => 'Wygasa',
+  'General' => 'Ogólne',
+  'JWT Auth' => 'JWT Auth',
+  'JWT Key' => 'Klucz JWT',
+  'JWT Token Expiration' => 'Wygaśnięcie tokena JWT',
+  'No enabled modules found with additional REST API endpoints.' => 'Nie odnaleziono modułów z dodatkowymi punktami końcowymi REST API.',
+  'Token' => 'Token',
+  'User' => 'Użytkownik',
+);

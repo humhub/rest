@@ -1,10 +1,21 @@
 <?php
 return array (
-  '<strong>API</strong> Configuration' => '<strong>API</strong> -configuratie',
-  'Active additional REST API endpoints from the modules' => 'Actieve aanvullende REST API-eindpunten van de modules',
+  '<strong>REST</strong> Configuration' => '<strong>REST</strong> Configuratie',
+  'Access Tokens' => 'Toegangstokens',
+  'Add Access Token' => 'Toegangstoken toevoegen',
+  'Allow Bearer Authentication' => 'Bearer-authenticatie toestaan',
   'Allow HTTP Basic Authentication' => 'HTTP-basisverificatie toestaan',
+  'Allow JWT Authentication' => 'Sta JWT-authenticatie toe',
+  'Allow Query Param Bearer Authentication' => 'Sta Query Param Bearer-authenticatie toe',
+  'Bearer Access Token Successfully Revoked' => 'Toegangstoken voor Bearer succesvol ingetrokken',
+  'Bearer Auth' => 'Bearer Auth',
   'Enabled for all registered users' => 'Ingeschakeld voor alle geregistreerde gebruikers',
+  'Expiration' => 'Vervaldatum',
+  'General' => 'Algemeen',
+  'JWT Auth' => 'JWT-Auth',
   'JWT Key' => 'JWT-sleutel',
   'JWT Token Expiration' => 'Vervaldatum JWT-token',
   'No enabled modules found with additional REST API endpoints.' => 'Geen ingeschakelde modules gevonden met extra REST API-eindpunten.',
+  'Token' => 'Token',
+  'User' => 'Gebruiker',
 );

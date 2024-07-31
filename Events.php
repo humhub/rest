@@ -31,6 +31,7 @@ class Events
 
             // Auth
             ['pattern' => 'auth/login', 'route' => 'rest/auth/auth/index', 'verb' => ['POST']],
+            ['pattern' => 'auth/impersonate', 'route' => 'rest/auth/auth/impersonate', 'verb' => ['POST']],
             ['pattern' => 'auth/current', 'route' => 'rest/auth/auth/current', 'verb' => ['GET', 'HEAD']],
 
             // User: Default Controller
@@ -55,7 +56,8 @@ class Events
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-remove', 'verb' => ['DELETE']],
 
             // User: Invite Controller
-            //['pattern' => 'user/invite', 'route' => 'api/user/invite/index', 'verb' => 'POST'],
+            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/index', 'verb' => 'POST'],
+            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/list', 'verb' => 'GET'],
 
             // User: Session Controller
             ['pattern' => 'user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],

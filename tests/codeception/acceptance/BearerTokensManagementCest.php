@@ -13,7 +13,7 @@ use Yii;
 
 class BearerTokensManagementCest
 {
-    
+
     public function addNewBearerToken(AcceptanceTester $I)
     {
         $expiration = (new \Datetime('tomorrow'));
@@ -24,7 +24,7 @@ class BearerTokensManagementCest
         $I->selectUserFromPicker('#restuserbearertoken-userguid', 'Peter Tester');
         $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asDate($expiration, 'short'));
         $I->fillField('RestUserBearerToken[expirationTime]', Yii::$app->formatter->asTime($expiration, 'short'));
-        $I->click('Add');
+        $I->jsClick('form button[type=submit]');
         $I->waitForText(Yii::$app->formatter->asDate($expiration));
     }
 

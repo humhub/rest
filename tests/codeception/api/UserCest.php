@@ -12,7 +12,8 @@ class UserCest extends HumHubApiTestCest
         $I->wantTo('see all users list');
         $I->amAdmin();
 
-        $I->seePaginationGetResponse('user', $I->getUserDefinitions(['Admin', 'User1', 'User2', 'User3', 'DisabledUser', 'UnapprovedUser', 'UnapprovedNoGroup', 'AdminNotMember']));
+        $I->sendGet('user');
+        $I->seePaginationResponseContainsJson('user', $I->getUserDefinitions(['Admin', 'User1', 'User2', 'User3', 'DisabledUser', 'UnapprovedUser', 'UnapprovedNoGroup', 'AdminNotMember']));
     }
 
     public function testGetByUsername(ApiTester $I)
@@ -70,6 +71,24 @@ class UserCest extends HumHubApiTestCest
             ],
         ]);
         $I->seeSuccessResponseContainsJson($I->getUserDefinition('new_user'));
+    }
+
+    public function testCreateWithoutPassword(ApiTester $I)
+    {
+        $I->wantTo('create user without password');
+        $I->amAdmin();
+
+        $I->sendPost('user', [
+            'account' => [
+                'username' => 'new_user_without_password',
+                'email' => 'new_user_without_password@mail.local',
+            ],
+            'profile' => [
+                'firstname' => 'Test User',
+                'lastname' => 'Without Password',
+            ],
+        ]);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('new_user_without_password'));
     }
 
     public function testUpdate(ApiTester $I)

@@ -1,11 +1,21 @@
 <?php
-
-return [
-    '<strong>API</strong> Configuration' => '',
-    'Active additional REST API endpoints from the modules' => '',
-    'Allow HTTP Basic Authentication' => '',
-    'Enabled for all registered users' => '',
-    'JWT Key' => '',
-    'JWT Token Expiration' => '',
-    'No enabled modules found with additional REST API endpoints.' => '',
-];
+return array (
+  '<strong>REST</strong> Configuration' => 'إعداد <strong>REST</strong>',
+  'Access Tokens' => 'رموز الوصول',
+  'Add Access Token' => 'إضافة رمز الوصول',
+  'Allow Bearer Authentication' => 'السماح بمصادقة الحامل',
+  'Allow HTTP Basic Authentication' => 'السماح بمصادقة HTTP الأساسية',
+  'Allow JWT Authentication' => 'السماح بمصادقة JWT',
+  'Allow Query Param Bearer Authentication' => 'السماح بمصادقة حامل معلمة الاستعلام',
+  'Bearer Access Token Successfully Revoked' => 'تم إبطال رمز وصول حامله بنجاح',
+  'Bearer Auth' => 'مصادقة الحامل',
+  'Enabled for all registered users' => 'مفعل لجميع المستخدمين المسجلين',
+  'Expiration' => 'انتهاء الصلاحية',
+  'General' => 'العام',
+  'JWT Auth' => 'مصادقة JWT',
+  'JWT Key' => 'مفتاح JWT',
+  'JWT Token Expiration' => 'انتهاء صلاحية رمز JWT',
+  'No enabled modules found with additional REST API endpoints.' => 'لم يتم العثور على موديولات  ممكّنة مع نقاط نهاية REST API الإضافية.',
+  'Token' => 'رمز مميز',
+  'User' => 'مستخدم',
+);

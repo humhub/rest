@@ -11,11 +11,11 @@ return array (
   'Bearer Auth' => '',
   'Enabled for all registered users' => '',
   'Expiration' => '',
-  'General' => '一般資訊',
+  'General' => 'Orokorra',
   'JWT Auth' => '',
   'JWT Key' => '',
   'JWT Token Expiration' => '',
   'No enabled modules found with additional REST API endpoints.' => '',
   'Token' => '',
-  'User' => '用户',
+  'User' => 'Erabiltzailea',
 );
