@@ -8,7 +8,7 @@
 namespace humhub\modules\rest\controllers\user;
 
 use humhub\modules\rest\components\BaseController;
-use humhub\modules\user\models\Invite;
+use humhub\modules\rest\models\Invite;
 use humhub\modules\rest\definitions\InviteDefinitions;
 use humhub\modules\user\models\User;
 use Yii;
@@ -57,7 +57,9 @@ class InviteController extends BaseController
 
     public function actionList()
     {
-        $query = Invite::find()->where(['source' => Invite::SOURCE_INVITE]);
+        $query = Invite::find()
+            ->where(['source' => Invite::SOURCE_INVITE])
+            ->with(['space', 'originator', 'createdBy', 'updatedBy']);
 
         $pagination = $this->handlePagination($query, 10);
 
