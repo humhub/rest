@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.2 (Unreleased)
+----------------------
+- Enh #174: Implement new event to return all user data
+
 0.10.1 (July 31, 2024)
 ----------------------
 - Enh #173: Added possibility to change `created_at` of `content`
