@@ -8,6 +8,10 @@ Following RESTful API endpoints are available.
 
 The base url for all APIs is: `https://yourhost/api/v1/`
 
+**Language**
+
+Logged-in user's language will be used. Can be overwritten by `Accept-Language` header.
+
 
 **Core APIs:**
 
