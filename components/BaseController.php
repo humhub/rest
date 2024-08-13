@@ -11,6 +11,7 @@ use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
 use humhub\modules\rest\components\auth\ImpersonateAuth;
+use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
 use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
@@ -81,6 +82,9 @@ abstract class BaseController extends Controller
                     ]]
                 ),
             ],
+            'languagePicker' => [
+                'class' => LanguagePickerBehavior::class,
+            ]
         ], parent::behaviors());
     }
 
