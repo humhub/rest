@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.2 (unreleased)
+----------------------
+- Enh #175: User language will be used by default
+
 0.10.1 (July 31, 2024)
 ----------------------
 - Enh #173: Added possibility to change `created_at` of `content`
