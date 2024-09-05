@@ -1,12 +1,13 @@
 <?php
 /**
  * @link https://www.humhub.org/
- * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
+ * @copyright Copyright (c) HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
  */
 
 namespace humhub\modules\rest\controllers\user;
 
+use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\models\Invite;
 use humhub\modules\rest\definitions\InviteDefinitions;
@@ -14,7 +15,6 @@ use humhub\modules\user\models\User;
 use Yii;
 use yii\validators\EmailValidator;
 use yii\helpers\ArrayHelper;
-
 
 /**
  * Class InviteController
@@ -63,7 +63,7 @@ class InviteController extends BaseController
 
         $pagination = $this->handlePagination($query, 10);
 
-        $results = ArrayHelper::getColumn($query->all(), function(Invite $invite) {
+        $results = ArrayHelper::getColumn($query->all(), function (Invite $invite) {
             return InviteDefinitions::getInvite($invite);
         });
 
