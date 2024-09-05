@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.10.2 (unreleased)
-----------------------
+0.10.2 (September 5, 2024)
+--------------------------
 - Enh #175: User language will be used by default
+- Fix #176: Fix controller to invite users
 
 0.10.1 (July 31, 2024)
 ----------------------
