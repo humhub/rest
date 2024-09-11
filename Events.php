@@ -8,6 +8,16 @@
 namespace humhub\modules\rest;
 
 use humhub\components\Event;
+use humhub\modules\comment\models\Comment;
+use humhub\modules\file\models\File;
+use humhub\modules\legal\events\UserDataCollectionEvent;
+use humhub\modules\like\models\Like;
+use humhub\modules\post\models\Post;
+use humhub\modules\rest\definitions\CommentDefinitions;
+use humhub\modules\rest\definitions\FileDefinitions;
+use humhub\modules\rest\definitions\LikeDefinitions;
+use humhub\modules\rest\definitions\PostDefinitions;
+use humhub\modules\rest\definitions\UserDefinitions;
 use Yii;
 
 class Events
@@ -156,5 +166,31 @@ class Events
             ['pattern' => $moduleId, 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
             ['pattern' => "{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
         ]);
+    }
+
+    public static function onLegalModuleUserDataExport(UserDataCollectionEvent $event)
+    {
+        $event->addExportData('user', UserDefinitions::getUser($event->user));
+
+        $event->addExportData('post', array_map(function ($post) {
+            return PostDefinitions::getPost($post);
+        }, Post::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('comment', array_map(function ($comment) {
+            return CommentDefinitions::getComment($comment);
+        }, Comment::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('like', array_map(function ($like) {
+            return LikeDefinitions::getLike($like);
+        }, Like::findAll(['created_by' => $event->user->id])));
+
+        $files = File::findAll(['created_by' => $event->user->id]);
+        $event->addExportData('file', array_map(function ($file) {
+            return FileDefinitions::getFile($file);
+        }, $files));
+
+        foreach ($files as $file) {
+            $event->addExportFile($file->file_name, $file->store->get());
+        }
     }
 }
