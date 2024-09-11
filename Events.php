@@ -8,16 +8,24 @@
 namespace humhub\modules\rest;
 
 use humhub\components\Event;
+use humhub\modules\activity\models\Activity;
 use humhub\modules\comment\models\Comment;
 use humhub\modules\file\models\File;
 use humhub\modules\legal\events\UserDataCollectionEvent;
 use humhub\modules\like\models\Like;
+use humhub\modules\notification\models\Notification;
 use humhub\modules\post\models\Post;
+use humhub\modules\rest\definitions\ActivityDefinitions;
 use humhub\modules\rest\definitions\CommentDefinitions;
 use humhub\modules\rest\definitions\FileDefinitions;
+use humhub\modules\rest\definitions\InviteDefinitions;
 use humhub\modules\rest\definitions\LikeDefinitions;
+use humhub\modules\rest\definitions\NotificationDefinitions;
 use humhub\modules\rest\definitions\PostDefinitions;
+use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\rest\models\Invite;
+use humhub\modules\space\models\Space;
 use Yii;
 
 class Events
@@ -183,6 +191,25 @@ class Events
         $event->addExportData('like', array_map(function ($like) {
             return LikeDefinitions::getLike($like);
         }, Like::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('activity', array_map(function ($activity) {
+            return ActivityDefinitions::getActivity($activity);
+        }, Activity::find()
+            ->innerJoin('content', 'activity.id = content.object_id and content.object_model = :activityClass', ['activityClass' => Activity::class])
+            ->where(['created_by' => $event->user->id])
+            ->all()));
+
+        $event->addExportData('invite', array_map(function ($invite) {
+            return InviteDefinitions::getInvite($invite);
+        }, Invite::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('notification', array_map(function ($notification) {
+            return NotificationDefinitions::getNotification($notification);
+        }, Notification::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('space', array_map(function ($space) {
+            return SpaceDefinitions::getSpace($space);
+        }, Space::findAll(['created_by' => $event->user->id])));
 
         $files = File::findAll(['created_by' => $event->user->id]);
         $event->addExportData('file', array_map(function ($file) {
