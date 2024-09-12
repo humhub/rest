@@ -11,6 +11,7 @@ use humhub\components\Event;
 use humhub\modules\activity\models\Activity;
 use humhub\modules\comment\models\Comment;
 use humhub\modules\file\models\File;
+use humhub\modules\friendship\models\Friendship;
 use humhub\modules\legal\events\UserDataCollectionEvent;
 use humhub\modules\like\models\Like;
 use humhub\modules\notification\models\Notification;
@@ -25,7 +26,13 @@ use humhub\modules\rest\definitions\PostDefinitions;
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\Invite;
+use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
+use humhub\modules\user\models\Auth;
+use humhub\modules\user\models\Follow;
+use humhub\modules\user\models\Group;
+use humhub\modules\user\models\Mentioning;
+use humhub\modules\user\models\Session;
 use Yii;
 
 class Events
@@ -159,7 +166,7 @@ class Events
             ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
 
             // Catch all to ensure verbs
-            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound']
+            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
 
         ], true);
 
@@ -179,6 +186,35 @@ class Events
     public static function onLegalModuleUserDataExport(UserDataCollectionEvent $event)
     {
         $event->addExportData('user', UserDefinitions::getUser($event->user));
+
+        $event->addExportData('password', UserDefinitions::getPassword($event->user->currentPassword));
+
+        $event->addExportData('friendship', array_map(function ($friendship) {
+            return UserDefinitions::getFriendship($friendship);
+        }, Friendship::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('mentioning', array_map(function ($mentioning) {
+            return UserDefinitions::getMentioning($mentioning);
+        }, Mentioning::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('user-follow', array_map(function ($follow) {
+            return UserDefinitions::getUserFollow($follow);
+        }, Follow::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('auth', array_map(function ($auth) {
+            return UserDefinitions::getUserAuth($auth);
+        }, Auth::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('session', array_map(function ($session) {
+            return UserDefinitions::getUserHttpSession($session);
+        }, Session::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('group', array_map(function ($group) {
+            return UserDefinitions::getGroup($group);
+        }, Group::find()
+            ->innerJoin('group_user', 'group_user.group_id = group.id')
+            ->where(['group_user.user_id' => $event->user->id])
+            ->all()));
 
         $event->addExportData('post', array_map(function ($post) {
             return PostDefinitions::getPost($post);
@@ -210,6 +246,13 @@ class Events
         $event->addExportData('space', array_map(function ($space) {
             return SpaceDefinitions::getSpace($space);
         }, Space::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('space-membership', array_map(function ($membership) {
+            return SpaceDefinitions::getSpaceMembership($membership);
+        }, Membership::find()
+            ->innerJoin('space', 'space.id = space_membership.space_id')
+            ->where(['space.created_by' => $event->user->id])
+            ->all()));
 
         $files = File::findAll(['created_by' => $event->user->id]);
         $event->addExportData('file', array_map(function ($file) {
