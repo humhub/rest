@@ -32,6 +32,7 @@ use humhub\modules\user\models\Auth;
 use humhub\modules\user\models\Follow;
 use humhub\modules\user\models\Group;
 use humhub\modules\user\models\Mentioning;
+use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Session;
 use Yii;
 
@@ -187,7 +188,9 @@ class Events
     {
         $event->addExportData('user', UserDefinitions::getUser($event->user));
 
-        $event->addExportData('password', UserDefinitions::getPassword($event->user->currentPassword));
+        $event->addExportData('password', array_map(function ($password) {
+            return UserDefinitions::getPassword($password);
+        }, Password::findAll(['user_id' => $event->user->id])));
 
         $event->addExportData('friendship', array_map(function ($friendship) {
             return UserDefinitions::getFriendship($friendship);
@@ -249,10 +252,7 @@ class Events
 
         $event->addExportData('space-membership', array_map(function ($membership) {
             return SpaceDefinitions::getSpaceMembership($membership);
-        }, Membership::find()
-            ->innerJoin('space', 'space.id = space_membership.space_id')
-            ->where(['space.created_by' => $event->user->id])
-            ->all()));
+        }, Membership::findAll(['user_id' => $event->user->id])));
 
         $files = File::findAll(['created_by' => $event->user->id]);
         $event->addExportData('file', array_map(function ($file) {
