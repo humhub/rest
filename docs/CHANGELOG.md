@@ -1,9 +1,9 @@
 Changelog
 =========
 
-0.10.3 (Unreleased)
---------------------------
-- Enh #: Collect user data for Legal module
+0.10.3 (September 13, 2024)
+---------------------------
+- Enh #177: Collect user data for Legal module
 
 0.10.2 (September 5, 2024)
 --------------------------
