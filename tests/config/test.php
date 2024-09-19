@@ -8,6 +8,7 @@
 
 return [
     'modules' => ['rest'],
+    'humhub_root' => '/app/humhub',
     'fixtures' => [
         'default',
         'humhub\modules\rest\tests\codeception\fixtures\ActivityFixture',
