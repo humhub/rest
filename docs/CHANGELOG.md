@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.4 (Unreleased)
+---------------------------
+- Enh #180: Added new `user/get-by-source` endpoint to get user by source
+
 0.10.3 (September 13, 2024)
 ---------------------------
 - Enh #177: Collect user data for Legal module
