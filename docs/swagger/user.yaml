@@ -720,6 +720,10 @@ definitions:
         type: string
       url_twitter:
         type: string
+      image_url:
+        type: string
+      banner_url:
+        type: string
     xml:
       name: Profile
 

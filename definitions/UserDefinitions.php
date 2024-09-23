@@ -16,6 +16,7 @@ use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\Group;
 use humhub\modules\user\models\Session;
 use humhub\modules\user\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -41,14 +42,26 @@ class UserDefinitions
             'display_name' => $user->displayName,
             'url' => Url::to(['/', 'container' => $user], true),
             'account' => static::getAccount($user),
-            'profile' => static::getProfile($user->profile),
+            'profile' => static::getProfile($user),
         ];
     }
 
-    public static function getProfile(Profile $profile)
+    public static function getProfile(User $user)
     {
-        $attributes = $profile->attributes;
-        unset($attributes['user_id']);
+        $attributes = $user->profile->attributes;
+        ArrayHelper::remove($attributes, 'user_id');
+
+        ArrayHelper::setValue(
+            $attributes,
+            'image_url',
+            Url::to($user->profileImage->getUrl(), true),
+        );
+        ArrayHelper::setValue(
+            $attributes,
+            'banner_url',
+            Url::to($user->profileBannerImage->getUrl(), true),
+        );
+
         return $attributes;
     }
 
