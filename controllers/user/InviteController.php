@@ -30,7 +30,7 @@ class InviteController extends BaseController
 
     public function actionIndex()
     {
-        $emails = (array)Yii::$app->request->post('emails');
+        $emails = (array) Yii::$app->request->post('emails');
         if (!$emails) {
             return $this->returnError(404, 'Please provide an array of emails in the json format');
         }
@@ -68,6 +68,33 @@ class InviteController extends BaseController
         });
 
         return $this->returnPagination($query, $pagination, $results);
+    }
+
+    public function actionResend($id)
+    {
+        $userInvite = Invite::find()->where(['id' => $id, 'source' => Invite::SOURCE_INVITE])->one();
+
+        if (!$userInvite) {
+            return $this->returnError(404, 'Invite not found!');
+        }
+
+        $userInvite->save();
+        $userInvite->sendInviteMail();
+
+        return $this->returnSuccess('Invite has been resent.');
+    }
+
+    public function actionCancel($id)
+    {
+        $userInvite = Invite::find()->where(['id' => $id, 'source' => Invite::SOURCE_INVITE])->one();
+
+        if (!$userInvite) {
+            return $this->returnError(404, 'Invite not found!');
+        }
+
+        $userInvite->delete();
+
+        return $this->returnSuccess('Invite has been canceled.');
     }
 
     protected function createInvite($email)

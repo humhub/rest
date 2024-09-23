@@ -3,6 +3,7 @@
 namespace humhub\modules\rest\definitions;
 
 use humhub\modules\rest\models\Invite;
+use yii\helpers\Url;
 
 class InviteDefinitions
 {
@@ -15,6 +16,7 @@ class InviteDefinitions
             'lastname' => $invite->lastname,
             'language' => $invite->language,
             'space' => $invite->space ? SpaceDefinitions::getSpaceShort($invite->space) : null,
+            'invitationUrl' => Url::to(['/user/registration', 'token' => $invite->token], true),
             'originator' => $invite->originator ? UserDefinitions::getUserShort($invite->originator) : null,
             'createdBy' => $invite->createdBy ? UserDefinitions::getUserShort($invite->createdBy) : null,
             'updatedBy' => $invite->updatedBy ? UserDefinitions::getUserShort($invite->updatedBy) : null,
