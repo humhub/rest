@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.4 (Unreleased)
+---------------------------
+- Enh #181: Added user profile `image_url` and `banner_url`
+
 0.10.3 (September 13, 2024)
 ---------------------------
 - Enh #177: Collect user data for Legal module
