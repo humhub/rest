@@ -3,6 +3,7 @@ Changelog
 
 0.10.4 (Unreleased)
 ---------------------------
+- Enh #181: Added user profile `image_url` and `banner_url`
 - Enh #179: Added new `resend` and `cancel` endpoints for user invite
 
 0.10.3 (September 13, 2024)
