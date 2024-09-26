@@ -84,6 +84,8 @@ class Events
             // User: Invite Controller
             ['pattern' => 'user/invite', 'route' => 'rest/user/invite/index', 'verb' => 'POST'],
             ['pattern' => 'user/invite', 'route' => 'rest/user/invite/list', 'verb' => 'GET'],
+            ['pattern' => 'user/invite/<id:\d+>', 'route' => 'rest/user/invite/cancel', 'verb' => 'DELETE'],
+            ['pattern' => 'user/invite/<id:\d+>', 'route' => 'rest/user/invite/resend', 'verb' => 'PATCH'],
 
             // User: Session Controller
             ['pattern' => 'user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],

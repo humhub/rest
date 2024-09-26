@@ -516,6 +516,29 @@ paths:
                 type: array
                 items:
                   $ref: "user.yaml#/definitions/Invite"
+  '/user/invite/{id}':
+    patch:
+      tags:
+        - Invite
+      summary: Resend invite
+      description: Resends invitation email
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+    delete:
+      tags:
+        - Invite
+      summary: Cancel invite
+      description: Cancels the invite, making the invitation URL no longer valid.
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
 
   #-----------------------------------------------------------------------------------------------------------------------
   # Begin Session
@@ -720,6 +743,10 @@ definitions:
         type: string
       url_twitter:
         type: string
+      image_url:
+        type: string
+      banner_url:
+        type: string
     xml:
       name: Profile
 
@@ -789,6 +816,10 @@ definitions:
       space:
         readOnly: true
         $ref: "space.yaml#/definitions/SpaceShort"
+      invitationUrl:
+        type: string
+        readOnly: true
+        example: "http://example.com/user/registration?token=cK4FCaopFHNP"
       originator:
         readOnly: true
         $ref: "user.yaml#/definitions/UserShort"
