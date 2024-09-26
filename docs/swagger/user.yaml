@@ -153,32 +153,6 @@ paths:
             $ref: "#/definitions/User"
         '404':
           description: User not found
-  '/user/get-by-source':
-    get:
-      tags:
-        - User
-      summary: Get user by source
-      description: ''
-      produces:
-        - application/json
-      parameters:
-        - name: source
-          in: query
-          description: Source
-          required: true
-          type: string
-        - name: id
-          in: query
-          description: Source ID
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: "#/definitions/User"
-        '404':
-          description: User not found
 
   '/user/{id}':
     get:

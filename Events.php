@@ -65,7 +65,6 @@ class Events
             ['pattern' => 'user/get-by-username', 'route' => 'rest/user/user/get-by-username', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'user/get-by-email', 'route' => 'rest/user/user/get-by-email', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'user/get-by-authclient', 'route' => 'rest/user/user/get-by-authclient', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'user/get-by-source', 'route' => 'rest/user/user/get-by-source', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/update', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/delete', 'verb' => ['DELETE']],

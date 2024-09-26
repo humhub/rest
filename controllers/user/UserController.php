@@ -14,7 +14,6 @@ use humhub\modules\rest\models\ApiUser;
 use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
-use humhub\modules\user\models\Auth as UserAuth;
 use Yii;
 use yii\web\HttpException;
 
@@ -94,24 +93,18 @@ class UserController extends BaseController
      */
     public function actionGetByAuthclient($name, $id)
     {
-        $user = User::findOne(['auth_mode' => $name, 'authclient_id' => $id]);
+        $user = User::find()
+            ->alias('u')
+            ->joinWith('auths a', false)
+            ->where(['u.auth_mode' => $name, 'u.authclient_id' => $id])
+            ->orWhere(['a.source' => $name, 'a.source_id' => $id])
+            ->one();
 
         if ($user === null) {
             return $this->returnError(404, 'User not found!');
         }
 
         return $this->actionView($user->id);
-    }
-
-    public function actionGetBySource($source, $id)
-    {
-        $auth = UserAuth::findOne(['source' => $source, 'source_id' => $id]);
-
-        if (empty($auth->user)) {
-            return $this->returnError(404, 'User not found!');
-        }
-
-        return $this->actionView($auth->user->id);
     }
 
     public function actionView($id)
