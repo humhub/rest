@@ -1,8 +1,9 @@
 Changelog
 =========
 
-0.10.4 (Unreleased)
----------------------------
+0.10.4 (September 9, 2024)
+--------------------------
+- Enh #180: Improved `user/get-by-authclient` endpoint to support additional authentication clients.
 - Enh #181: Added user profile `image_url` and `banner_url`
 - Enh #179: Added new `resend` and `cancel` endpoints for user invite
 
