@@ -13,7 +13,6 @@ use yii\test\ActiveFixture;
 
 class FileFixture extends ActiveFixture
 {
-
     public $modelClass = File::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/file.php';
 

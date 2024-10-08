@@ -17,13 +17,11 @@ use humhub\modules\user\models\User;
 use Yii;
 use yii\web\HttpException;
 
-
 /**
  * Class AccountController
  */
 class UserController extends BaseController
 {
-
     /**
      * @inheritdoc
      */

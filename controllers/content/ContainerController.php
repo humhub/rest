@@ -11,10 +11,8 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ContentDefinitions;
 use humhub\modules\content\models\ContentContainer;
 
-
 class ContainerController extends BaseController
 {
-
     public function actionList()
     {
         $results = [];

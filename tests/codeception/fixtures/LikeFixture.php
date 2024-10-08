@@ -13,7 +13,6 @@ use yii\test\ActiveFixture;
 
 class LikeFixture extends ActiveFixture
 {
-
     public $modelClass = Like::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/like.php';
 

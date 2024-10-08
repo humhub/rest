@@ -14,7 +14,6 @@ use Yii;
 
 class FileController extends BaseController
 {
-
     public function actionDownload($id)
     {
         $file = File::findOne(['id' => $id]);

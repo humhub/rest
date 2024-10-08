@@ -13,7 +13,6 @@ use yii\test\ActiveFixture;
 
 class ContentFixture extends ActiveFixture
 {
-
     public $modelClass = Content::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/content.php';
 

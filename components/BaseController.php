@@ -69,7 +69,7 @@ abstract class BaseController extends Controller
                     ]] : [],
                     ConfigureForm::getInstance()->enableBasicAuth ? [[
                         'class' => HttpBasicAuth::class,
-                        'auth' => function($username, $password) {
+                        'auth' => function ($username, $password) {
                             if (($identity = AuthController::authByUserAndPassword($username, $password)) && $this->isUserEnabled($identity)) {
                                 return $identity;
                             }
@@ -79,12 +79,12 @@ abstract class BaseController extends Controller
                     ]] : [],
                     [[
                         'class' => ImpersonateAuth::class,
-                    ]]
+                    ]],
                 ),
             ],
             'languagePicker' => [
                 'class' => LanguagePickerBehavior::class,
-            ]
+            ],
         ], parent::behaviors());
     }
 

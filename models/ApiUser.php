@@ -17,7 +17,6 @@ use yii\helpers\ArrayHelper;
  */
 class ApiUser extends Model
 {
-
     public User $user;
 
     /**

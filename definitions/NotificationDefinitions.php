@@ -21,7 +21,7 @@ class NotificationDefinitions
             'output' => $baseNotification->html(),
             'originator' => UserDefinitions::getUserShort($baseNotification->originator),
             'source' => SourceDefinitions::getSource($baseNotification->source),
-            'createdAt' => $notification->created_at
+            'createdAt' => $notification->created_at,
         ];
     }
 }

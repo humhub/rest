@@ -17,7 +17,6 @@ use humhub\modules\content\models\Content;
  */
 class CommentDefinitions
 {
-
     public static function getCommentsSummary(ActiveRecord $record)
     {
         $result = [];
@@ -36,7 +35,7 @@ class CommentDefinitions
             foreach (Comment::GetCommentsLimited($model, $pk) as $comment) {
                 $result['latest'][] = static::getComment($comment);
             }
-       }
+        }
 
         return $result;
     }
@@ -55,7 +54,7 @@ class CommentDefinitions
         ];
 
         $subComments = static::getSubComments($comment);
-        $subCommentsCount = count($subComments );
+        $subCommentsCount = count($subComments);
         if ($subCommentsCount) {
             $result['commentsCount'] = $subCommentsCount;
             $result['comments'] = $subComments;

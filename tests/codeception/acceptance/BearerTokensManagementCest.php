@@ -13,7 +13,6 @@ use Yii;
 
 class BearerTokensManagementCest
 {
-
     public function addNewBearerToken(AcceptanceTester $I)
     {
         $expiration = (new \Datetime('tomorrow'));
