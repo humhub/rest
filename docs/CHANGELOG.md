@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.5 (Unreleased)
+--------------------------
+- Enh #182: Use PHP CS Fixer
+
 0.10.4 (September 9, 2024)
 --------------------------
 - Enh #180: Improved `user/get-by-authclient` endpoint to support additional authentication clients.

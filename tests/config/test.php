@@ -21,6 +21,3 @@ return [
         'humhub\modules\rest\tests\codeception\fixtures\BearerAccessTokenFixture',
     ],
 ];
-
-
-

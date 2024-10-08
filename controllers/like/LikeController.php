@@ -13,10 +13,8 @@ use humhub\modules\rest\definitions\LikeDefinitions;
 use humhub\modules\like\models\Like;
 use Yii;
 
-
 class LikeController extends BaseController
 {
-
     public function actionFindByObject()
     {
         $contentFilter = [

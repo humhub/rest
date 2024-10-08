@@ -25,7 +25,6 @@ use yii\base\DynamicModel;
 use yii\web\HttpException;
 use yii\web\UploadedFile;
 
-
 /**
  * BaseContentController provides basic CRUD operations for HumHub content records
  *
@@ -90,7 +89,7 @@ abstract class BaseContentController extends BaseController
     /**
      * Finds content by given container
      *
-     * @param integer $containerId the id of the content container
+     * @param int $containerId the id of the content container
      * @return array the rest output
      * @throws \yii\db\IntegrityException
      */
@@ -504,9 +503,9 @@ abstract class BaseContentController extends BaseController
         }
 
         $validator = DynamicModel::validateData([
-            'scheduled_at' => $data['scheduled_at']
+            'scheduled_at' => $data['scheduled_at'],
         ], [
-            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s'],
         ]);
 
         if (!$validator->validate()) {
@@ -527,9 +526,9 @@ abstract class BaseContentController extends BaseController
         }
 
         $validator = DynamicModel::validateData([
-            'created_at' => $data['created_at']
+            'created_at' => $data['created_at'],
         ], [
-            ['created_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+            ['created_at', 'datetime', 'format' => 'php:Y-m-d H:i:s'],
         ]);
 
         if (!$validator->validate()) {

@@ -15,13 +15,11 @@ use humhub\modules\user\models\Group;
 use humhub\modules\user\models\User;
 use Yii;
 
-
 /**
  * Class GroupController
  */
 class GroupController extends BaseController
 {
-
     /**
      * @inheritdoc
      */

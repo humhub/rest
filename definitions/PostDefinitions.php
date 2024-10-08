@@ -6,8 +6,8 @@
  */
 
 namespace humhub\modules\rest\definitions;
-use humhub\modules\post\models\Post;
 
+use humhub\modules\post\models\Post;
 
 /**
  * Class PostDefinitions
@@ -21,7 +21,7 @@ class PostDefinitions
         return [
             'id' => $post->id,
             'message' => $post->message,
-            'content' => ContentDefinitions::getContent($post->content)
+            'content' => ContentDefinitions::getContent($post->content),
         ];
     }
 

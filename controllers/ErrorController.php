@@ -6,8 +6,8 @@
  */
 
 namespace humhub\modules\rest\controllers;
-use humhub\modules\rest\components\BaseController;
 
+use humhub\modules\rest\components\BaseController;
 
 /**
  * Class ErrorController
