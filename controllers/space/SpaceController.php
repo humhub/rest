@@ -24,7 +24,11 @@ class SpaceController extends BaseController
     public function actionIndex()
     {
         $results = [];
-        $query = Space::find()->visible();
+        $query = Space::find();
+
+        if (!(Yii::$app->getModule('space')->globalAdminCanAccessPrivateContent && Yii::$app->user->identity->isSystemAdmin())) {
+            $query = $query->visible();
+        }
 
         $pagination = $this->handlePagination($query);
         foreach ($query->all() as $space) {
