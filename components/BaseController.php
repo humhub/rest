@@ -11,6 +11,7 @@ use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
 use humhub\modules\rest\components\auth\ImpersonateAuth;
+use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
 use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
@@ -68,7 +69,7 @@ abstract class BaseController extends Controller
                     ]] : [],
                     ConfigureForm::getInstance()->enableBasicAuth ? [[
                         'class' => HttpBasicAuth::class,
-                        'auth' => function($username, $password) {
+                        'auth' => function ($username, $password) {
                             if (($identity = AuthController::authByUserAndPassword($username, $password)) && $this->isUserEnabled($identity)) {
                                 return $identity;
                             }
@@ -78,8 +79,11 @@ abstract class BaseController extends Controller
                     ]] : [],
                     [[
                         'class' => ImpersonateAuth::class,
-                    ]]
+                    ]],
                 ),
+            ],
+            'languagePicker' => [
+                'class' => LanguagePickerBehavior::class,
             ],
         ], parent::behaviors());
     }
@@ -92,6 +96,7 @@ abstract class BaseController extends Controller
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,
+            'enableSession' => false,
         ]);
 
         Yii::$app->response->format = 'json';

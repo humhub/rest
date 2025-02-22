@@ -494,6 +494,51 @@ paths:
       responses:
         default:
           description: Successful operation
+    get:
+      tags:
+        - Invite
+      summary: Pending invites
+      description: Returns list of pending invites
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              total:
+                $ref: 'common.yaml#/components/properties/totalProperty'
+              page:
+                $ref: 'common.yaml#/components/properties/pageProperty'
+              results:
+                type: array
+                items:
+                  $ref: "user.yaml#/definitions/Invite"
+  '/user/invite/{id}':
+    patch:
+      tags:
+        - Invite
+      summary: Resend invite
+      description: Resends invitation email
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+    delete:
+      tags:
+        - Invite
+      summary: Cancel invite
+      description: Cancels the invite, making the invitation URL no longer valid.
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
 
   #-----------------------------------------------------------------------------------------------------------------------
   # Begin Session
@@ -698,6 +743,10 @@ definitions:
         type: string
       url_twitter:
         type: string
+      image_url:
+        type: string
+      banner_url:
+        type: string
     xml:
       name: Profile
 
@@ -738,3 +787,53 @@ definitions:
         example: true
     xml:
       name: Password
+
+  Invite:
+    description: a representation of invite
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        example: 14
+      email:
+        type: string
+        readOnly: true
+        example: email@email.org
+      firstname:
+        type: string
+        readOnly: true
+        example: John
+      lastname:
+        type: string
+        readOnly: true
+        example: Doe
+      language:
+        type: string
+        readOnly: true
+        example: English
+      space:
+        readOnly: true
+        $ref: "space.yaml#/definitions/SpaceShort"
+      invitationUrl:
+        type: string
+        readOnly: true
+        example: "http://example.com/user/registration?token=cK4FCaopFHNP"
+      originator:
+        readOnly: true
+        $ref: "user.yaml#/definitions/UserShort"
+      createdBy:
+        readOnly: true
+        $ref: "user.yaml#/definitions/UserShort"
+      updatedBy:
+        readOnly: true
+        $ref: "user.yaml#/definitions/UserShort"
+      createdAt:
+        type: string
+        format: datetime
+        example: "2024-09-11 08:46:40"
+      updatedAt:
+        type: string
+        format: datetime
+        example: "2024-09-15 08:46:40"

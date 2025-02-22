@@ -8,6 +8,32 @@
 namespace humhub\modules\rest;
 
 use humhub\components\Event;
+use humhub\modules\activity\models\Activity;
+use humhub\modules\comment\models\Comment;
+use humhub\modules\file\models\File;
+use humhub\modules\friendship\models\Friendship;
+use humhub\modules\legal\events\UserDataCollectionEvent;
+use humhub\modules\like\models\Like;
+use humhub\modules\notification\models\Notification;
+use humhub\modules\post\models\Post;
+use humhub\modules\rest\definitions\ActivityDefinitions;
+use humhub\modules\rest\definitions\CommentDefinitions;
+use humhub\modules\rest\definitions\FileDefinitions;
+use humhub\modules\rest\definitions\InviteDefinitions;
+use humhub\modules\rest\definitions\LikeDefinitions;
+use humhub\modules\rest\definitions\NotificationDefinitions;
+use humhub\modules\rest\definitions\PostDefinitions;
+use humhub\modules\rest\definitions\SpaceDefinitions;
+use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\rest\models\Invite;
+use humhub\modules\space\models\Membership;
+use humhub\modules\space\models\Space;
+use humhub\modules\user\models\Auth;
+use humhub\modules\user\models\Follow;
+use humhub\modules\user\models\Group;
+use humhub\modules\user\models\Mentioning;
+use humhub\modules\user\models\Password;
+use humhub\modules\user\models\Session;
 use Yii;
 
 class Events
@@ -54,10 +80,12 @@ class Events
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/members', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-add', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'user/group/<id:\d+>/member', 'route' => 'rest/user/group/member-remove', 'verb' => ['DELETE']],
-            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/index', 'verb' => 'POST'],
 
             // User: Invite Controller
-            //['pattern' => 'user/invite', 'route' => 'api/user/invite/index', 'verb' => 'POST'],
+            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/index', 'verb' => 'POST'],
+            ['pattern' => 'user/invite', 'route' => 'rest/user/invite/list', 'verb' => 'GET'],
+            ['pattern' => 'user/invite/<id:\d+>', 'route' => 'rest/user/invite/cancel', 'verb' => 'DELETE'],
+            ['pattern' => 'user/invite/<id:\d+>', 'route' => 'rest/user/invite/resend', 'verb' => 'PATCH'],
 
             // User: Session Controller
             ['pattern' => 'user/session/all/<id:\d+>', 'route' => 'rest/user/session/delete-from-user', 'verb' => 'DELETE'],
@@ -141,7 +169,7 @@ class Events
             ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
 
             // Catch all to ensure verbs
-            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound']
+            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
 
         ], true);
 
@@ -156,5 +184,85 @@ class Events
             ['pattern' => $moduleId, 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
             ['pattern' => "{$moduleId}/<tmpParam:.*>", 'route' => "rest/{$moduleId}/{$moduleId}/not-supported"],
         ]);
+    }
+
+    public static function onLegalModuleUserDataExport(UserDataCollectionEvent $event)
+    {
+        $event->addExportData('user', UserDefinitions::getUser($event->user));
+
+        $event->addExportData('password', array_map(function ($password) {
+            return UserDefinitions::getPassword($password);
+        }, Password::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('friendship', array_map(function ($friendship) {
+            return UserDefinitions::getFriendship($friendship);
+        }, Friendship::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('mentioning', array_map(function ($mentioning) {
+            return UserDefinitions::getMentioning($mentioning);
+        }, Mentioning::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('user-follow', array_map(function ($follow) {
+            return UserDefinitions::getUserFollow($follow);
+        }, Follow::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('auth', array_map(function ($auth) {
+            return UserDefinitions::getUserAuth($auth);
+        }, Auth::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('session', array_map(function ($session) {
+            return UserDefinitions::getUserHttpSession($session);
+        }, Session::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('group', array_map(function ($group) {
+            return UserDefinitions::getGroup($group);
+        }, Group::find()
+            ->innerJoin('group_user', 'group_user.group_id = group.id')
+            ->where(['group_user.user_id' => $event->user->id])
+            ->all()));
+
+        $event->addExportData('post', array_map(function ($post) {
+            return PostDefinitions::getPost($post);
+        }, Post::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('comment', array_map(function ($comment) {
+            return CommentDefinitions::getComment($comment);
+        }, Comment::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('like', array_map(function ($like) {
+            return LikeDefinitions::getLike($like);
+        }, Like::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('activity', array_map(function ($activity) {
+            return ActivityDefinitions::getActivity($activity);
+        }, Activity::find()
+            ->innerJoin('content', 'activity.id = content.object_id and content.object_model = :activityClass', ['activityClass' => Activity::class])
+            ->where(['created_by' => $event->user->id])
+            ->all()));
+
+        $event->addExportData('invite', array_map(function ($invite) {
+            return InviteDefinitions::getInvite($invite);
+        }, Invite::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('notification', array_map(function ($notification) {
+            return NotificationDefinitions::getNotification($notification);
+        }, Notification::findAll(['user_id' => $event->user->id])));
+
+        $event->addExportData('space', array_map(function ($space) {
+            return SpaceDefinitions::getSpace($space);
+        }, Space::findAll(['created_by' => $event->user->id])));
+
+        $event->addExportData('space-membership', array_map(function ($membership) {
+            return SpaceDefinitions::getSpaceMembership($membership);
+        }, Membership::findAll(['user_id' => $event->user->id])));
+
+        $files = File::findAll(['created_by' => $event->user->id]);
+        $event->addExportData('file', array_map(function ($file) {
+            return FileDefinitions::getFile($file);
+        }, $files));
+
+        foreach ($files as $file) {
+            $event->addExportFile($file->file_name, $file->store->get());
+        }
     }
 }

@@ -25,7 +25,6 @@ use yii\base\DynamicModel;
 use yii\web\HttpException;
 use yii\web\UploadedFile;
 
-
 /**
  * BaseContentController provides basic CRUD operations for HumHub content records
  *
@@ -90,7 +89,7 @@ abstract class BaseContentController extends BaseController
     /**
      * Finds content by given container
      *
-     * @param integer $containerId the id of the content container
+     * @param int $containerId the id of the content container
      * @return array the rest output
      * @throws \yii\db\IntegrityException
      */
@@ -386,6 +385,10 @@ abstract class BaseContentController extends BaseController
             return false;
         }
 
+        if (!$this->updateVisibility($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
         if (!$this->updateArchived($activeRecord, $data['metadata'])) {
             return false;
         }
@@ -399,6 +402,10 @@ abstract class BaseContentController extends BaseController
         }
 
         if (!$this->updateScheduledAt($activeRecord, $data['metadata'])) {
+            return false;
+        }
+
+        if (Yii::$app->user->identity->isSystemAdmin() && !$this->updateCreatedAt($activeRecord, $data['metadata'])) {
             return false;
         }
 
@@ -496,9 +503,9 @@ abstract class BaseContentController extends BaseController
         }
 
         $validator = DynamicModel::validateData([
-            'scheduled_at' => $data['scheduled_at']
+            'scheduled_at' => $data['scheduled_at'],
         ], [
-            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s']
+            ['scheduled_at', 'datetime', 'format' => 'php:Y-m-d H:i:s'],
         ]);
 
         if (!$validator->validate()) {
@@ -508,6 +515,29 @@ abstract class BaseContentController extends BaseController
         }
 
         $activeRecord->content->getStateService()->schedule($data['scheduled_at']);
+
+        return $activeRecord->content->save();
+    }
+
+    public function updateCreatedAt(ContentActiveRecord $activeRecord, array $data): bool
+    {
+        if (!isset($data['created_at'])) {
+            return true;
+        }
+
+        $validator = DynamicModel::validateData([
+            'created_at' => $data['created_at'],
+        ], [
+            ['created_at', 'datetime', 'format' => 'php:Y-m-d H:i:s'],
+        ]);
+
+        if (!$validator->validate()) {
+            $activeRecord->addError('created_at', $validator->getFirstError('created_at'));
+
+            return false;
+        }
+
+        $activeRecord->content->created_at = $data['created_at'];
 
         return $activeRecord->content->save();
     }

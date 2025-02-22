@@ -1,9 +1,36 @@
 Changelog
 =========
 
-Unreleased
-------------------------
+0.10.5 (Unreleased)
+--------------------------
+- Enh #182: Use PHP CS Fixer
+
+0.10.4 (September 9, 2024)
+--------------------------
+- Enh #180: Improved `user/get-by-authclient` endpoint to support additional authentication clients.
+- Enh #181: Added user profile `image_url` and `banner_url`
+- Enh #179: Added new `resend` and `cancel` endpoints for user invite
+
+0.10.3 (September 13, 2024)
+---------------------------
+- Enh #177: Collect user data for Legal module
+
+0.10.2 (September 5, 2024)
+--------------------------
+- Enh #175: User language will be used by default
+- Fix #176: Fix controller to invite users
+
+0.10.1 (July 31, 2024)
+----------------------
+- Enh #173: Added possibility to change `created_at` of `content`
+- Enh #116: Allow to set `show_at_dashboard` and `can_cancel_membership` on space membership creating
+
+0.10.0 (July 16, 2024)
+----------------------
 - Enh #155: Add `requirements.php`
+- Fix #164: Disable `mustChangePassword` check for impersonated access tokens
+- Enh #170: Added new endpoint `GET /user/invite` for user pending invites
+- Enh #171: Extended invite information in response of `GET /user/invite` endpoint
 
 0.9.3 (December 8, 2023)
 ------------------------

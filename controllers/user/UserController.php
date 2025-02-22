@@ -17,13 +17,11 @@ use humhub\modules\user\models\User;
 use Yii;
 use yii\web\HttpException;
 
-
 /**
  * Class AccountController
  */
 class UserController extends BaseController
 {
-
     /**
      * @inheritdoc
      */
@@ -93,7 +91,12 @@ class UserController extends BaseController
      */
     public function actionGetByAuthclient($name, $id)
     {
-        $user = User::findOne(['auth_mode' => $name, 'authclient_id' => $id]);
+        $user = User::find()
+            ->alias('u')
+            ->joinWith('auths a', false)
+            ->where(['u.auth_mode' => $name, 'u.authclient_id' => $id])
+            ->orWhere(['a.source' => $name, 'a.source_id' => $id])
+            ->one();
 
         if ($user === null) {
             return $this->returnError(404, 'User not found!');

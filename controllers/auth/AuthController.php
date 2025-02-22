@@ -53,7 +53,7 @@ class AuthController extends BaseController
             'iss' => Yii::$app->settings->get('baseUrl'),
             'nbf' => $issuedAt,
             'uid' => $user->id,
-            'email' => $user->email
+            'email' => $user->email,
         ];
 
         $config = JwtAuthForm::getInstance();
@@ -65,14 +65,14 @@ class AuthController extends BaseController
 
         return $this->returnSuccess('Success', 200, [
             'auth_token' => $jwt,
-            'expired_at' => (!isset($data['exp'])) ? 0 : $data['exp']
+            'expired_at' => (!isset($data['exp'])) ? 0 : $data['exp'],
         ]);
     }
 
 
     public static function authByUserAndPassword($username, $password)
     {
-        $login = new Login;
+        $login = new Login();
         if (!$login->load(['username' => $username, 'password' => $password], '') || !$login->validate()) {
             return null;
         }
@@ -115,10 +115,11 @@ class AuthController extends BaseController
         $token = new ImpersonateAuthToken();
         $token->user_id = $user->id;
         $token->save();
+        $token->refresh();
 
         return [
             'token' => $token->token,
-            'expires' => $token->expiration,
+            'expires' => strtotime($token->expiration),
         ];
     }
 }

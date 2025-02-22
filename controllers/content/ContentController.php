@@ -14,10 +14,8 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ContentDefinitions;
 use humhub\modules\content\models\Content;
 
-
 class ContentController extends BaseController
 {
-
     public function actionFindByContainer($id, $orderBy = 'creationTime', $dateUpdatedFrom = null, $dateUpdatedTo = null)
     {
         $contentContainer = ContentContainer::findOne(['id' => (int) $id]);
@@ -41,17 +39,17 @@ class ContentController extends BaseController
             ->orderBy([Content::tableName() . '.' . $orderByColumn => SORT_DESC])
             ->readable();
 
-        if(!empty($dateUpdatedFrom)) {
+        if (!empty($dateUpdatedFrom)) {
             $dateUpdatedFrom = is_numeric($dateUpdatedFrom) ? (int) $dateUpdatedFrom : strtotime($dateUpdatedFrom);
             $query->andWhere([
-                '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedFrom)
+                '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedFrom),
             ]);
         }
 
-        if(!empty($dateUpdatedTo)) {
+        if (!empty($dateUpdatedTo)) {
             $dateUpdatedTo = is_numeric($dateUpdatedTo) ? (int) $dateUpdatedTo : strtotime($dateUpdatedTo);
             $query->andWhere([
-                '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedTo)
+                '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedTo),
             ]);
         }
 

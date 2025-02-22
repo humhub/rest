@@ -91,7 +91,7 @@ paths:
           description: Unauthorized
 
   '/auth/impersonate':
-    get:
+    post:
       tags:
         - User
       summary: Impersonate user
@@ -121,7 +121,7 @@ paths:
               token:
                 type: string
                 description: 'Use in header: "Authorization: Impersonate $token"'
-                example: 'impersonate-YvyEVcbzCvg0wLjb9yXylj1bkbotlCwkKjNKTZD9xeMO86o1G-V9p-wklm5pUdXhdkSGj5dk-l'
+                example: 'impersonated-YvyEVcbzCvg0wLjb9yXylj1bkbotlCwkKjNKTZD9xMO86o1G-V9p-wklm5pUdXhdkSGj5dk-l'
               expires:
                 type: integer
                 description: Expiration timestamp of token

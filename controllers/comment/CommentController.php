@@ -107,7 +107,7 @@ class CommentController extends BaseController
     {
         $content = Content::findOne([
             'object_model' => $objectModel,
-            'object_id' => $objectId
+            'object_id' => $objectId,
         ]);
 
         return $this->getPagedComments($content);

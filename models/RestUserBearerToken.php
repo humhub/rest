@@ -13,7 +13,6 @@ use yii\helpers\ArrayHelper;
 use humhub\libs\DbDateValidator;
 use humhub\modules\user\models\User;
 
-
 /**
  * @property int $id
  * @property int $user_id
@@ -48,10 +47,10 @@ class RestUserBearerToken extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => Yii::t('RestModule.base','User'),
-            'userGuid' => Yii::t('RestModule.base','User'),
-            'token' => Yii::t('RestModule.base','Token'),
-            'expiration' => Yii::t('RestModule.base','Expiration'),
+            'user_id' => Yii::t('RestModule.base', 'User'),
+            'userGuid' => Yii::t('RestModule.base', 'User'),
+            'token' => Yii::t('RestModule.base', 'Token'),
+            'expiration' => Yii::t('RestModule.base', 'Expiration'),
         ];
     }
 

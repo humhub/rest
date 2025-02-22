@@ -37,7 +37,7 @@ class AdminController extends Controller
         return $this->render('tabs', [
             'tab' => $this->renderPartial('index', [
                 'model' => $model,
-            ])
+            ]),
         ]);
     }
 
@@ -54,7 +54,7 @@ class AdminController extends Controller
         return $this->render('tabs', [
             'tab' => $this->renderPartial('jwt-auth', [
                 'model' => $model,
-            ])
+            ]),
         ]);
     }
 
@@ -72,11 +72,11 @@ class AdminController extends Controller
                 'bearerTokenModel' => $bearerTokenModel,
                 'bearerTokensProvider' => new ActiveDataProvider([
                     'query' => RestUserBearerToken::find()->with('user'),
-                    'sort'=> [
-                        'defaultOrder' => ['id' => SORT_ASC]
+                    'sort' => [
+                        'defaultOrder' => ['id' => SORT_ASC],
                     ],
-                ])
-            ])
+                ]),
+            ]),
         ]);
     }
 
@@ -84,7 +84,7 @@ class AdminController extends Controller
     {
         RestUserBearerToken::deleteAll(['id' => $id]);
 
-        $this->view->success(Yii::t('RestModule.base','Bearer Access Token Successfully Revoked'));
+        $this->view->success(Yii::t('RestModule.base', 'Bearer Access Token Successfully Revoked'));
 
         return $this->redirect(['bearer-auth']);
     }

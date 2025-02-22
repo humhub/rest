@@ -13,14 +13,12 @@ use humhub\modules\content\models\ContentContainer;
 use humhub\modules\topic\models\Topic;
 use Yii;
 
-
 /**
  * Class ContentDefinitions
  * @package humhub\modules\rest\definitions
  */
 class ContentDefinitions
 {
-
     public static function getContent($content)
     {
         return [
@@ -54,7 +52,7 @@ class ContentDefinitions
             'scheduled_at' => $content->scheduled_at,
             'url' => $content->getUrl(true),
             'contentcontainer_id' => $content->contentcontainer_id,
-            'stream_channel' => $content->stream_channel
+            'stream_channel' => $content->stream_channel,
         ];
     }
 

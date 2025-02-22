@@ -17,7 +17,6 @@ use humhub\modules\like\models\Like;
  */
 class LikeDefinitions
 {
-
     public static function getLikesSummary(ActiveRecord $record)
     {
         $result = [];
@@ -38,7 +37,7 @@ class LikeDefinitions
         return [
             'id' => $like->id,
             'createdBy' => UserDefinitions::getUserShort($like->user),
-            'createdAt' => $like->created_at
+            'createdAt' => $like->created_at,
         ];
     }
 

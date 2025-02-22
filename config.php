@@ -8,13 +8,12 @@
 
 use humhub\components\Application;
 
-/** @noinspection MissedFieldInspection */
 return [
     'id' => 'rest',
     'class' => 'humhub\modules\rest\Module',
     'namespace' => 'humhub\modules\rest',
     'events' => [
-        [Application::class, Application::EVENT_BEFORE_REQUEST, ['\humhub\modules\rest\Events', 'onBeforeRequest']]
-    ]
+        [Application::class, Application::EVENT_BEFORE_REQUEST, ['\humhub\modules\rest\Events', 'onBeforeRequest']],
+        ['humhub\modules\legal\services\ExportService', 'collectUserData', ['humhub\modules\rest\Events', 'onLegalModuleUserDataExport']],
+    ],
 ];
-?>

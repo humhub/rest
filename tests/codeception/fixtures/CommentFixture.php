@@ -13,7 +13,6 @@ use yii\test\ActiveFixture;
 
 class CommentFixture extends ActiveFixture
 {
-
     public $modelClass = Comment::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/comment.php';
 
