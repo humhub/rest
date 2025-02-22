@@ -4,6 +4,7 @@ Changelog
 0.10.5 (Unreleased)
 --------------------------
 - Enh #182: Use PHP CS Fixer
+- Fix #188: Fix visibility of hidden objects to admin
 
 0.10.4 (September 9, 2024)
 --------------------------
