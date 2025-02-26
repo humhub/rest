@@ -24,7 +24,7 @@ class SpaceController extends BaseController
     public function actionIndex()
     {
         $results = [];
-        $query = Space::find()->visible(Yii::$app->user->identity);
+        $query = Space::find()->visible();
 
         $pagination = $this->handlePagination($query);
         foreach ($query->all() as $space) {
