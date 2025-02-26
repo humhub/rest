@@ -13,6 +13,7 @@ use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Space;
 use humhub\modules\space\permissions\CreatePrivateSpace;
 use humhub\modules\space\permissions\CreatePublicSpace;
+use humhub\modules\admin\permissions\ManageSpaces;
 use Yii;
 
 /**
@@ -23,11 +24,7 @@ class SpaceController extends BaseController
     public function actionIndex()
     {
         $results = [];
-        $query = Space::find();
-
-        if (!(Yii::$app->getModule('space')->globalAdminCanAccessPrivateContent && Yii::$app->user->identity->isSystemAdmin())) {
-            $query = $query->visible();
-        }
+        $query = Space::find()->visible(Yii::$app->user->identity);
 
         $pagination = $this->handlePagination($query);
         foreach ($query->all() as $space) {
