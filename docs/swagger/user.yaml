@@ -127,6 +127,44 @@ paths:
         '404':
           description: User not found
 
+  '/user/{id}/auth-client':
+    post:
+      tags:
+        - User
+      summary: Add a new authentication client for a user
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Authentication client details
+          required: true
+          schema:
+            type: object
+            required:
+              - source
+              - sourceId
+            properties:
+              source:
+                type: string
+                example: google
+              sourceId:
+                type: string
+                example: "1234567890"
+      responses:
+        '200':
+          description: successful operation
+        '403':
+          description: not allowed
+        '422':
+          description: validation failed
+
   '/user/get-by-authclient':
     get:
       tags:
