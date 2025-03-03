@@ -70,6 +70,7 @@ class Events
             ['pattern' => 'user/<id:\d+>', 'route' => 'rest/user/user/delete', 'verb' => ['DELETE']],
             ['pattern' => 'user/full/<id:\d+>', 'route' => 'rest/user/user/hard-delete', 'verb' => ['DELETE']],
             ['pattern' => 'user/', 'route' => 'rest/user/user/create', 'verb' => 'POST'],
+            ['pattern' => 'user/<id:\d+>/auth-client', 'route' => 'rest/user/user/add-auth-client', 'verb' => 'POST'],
 
             // User: Group Controller
             ['pattern' => 'user/group', 'route' => 'rest/user/group/index', 'verb' => ['GET', 'HEAD']],

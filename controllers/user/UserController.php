@@ -11,6 +11,7 @@ use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\ApiUser;
+use humhub\modules\rest\models\UserAuthForm;
 use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
@@ -269,5 +270,21 @@ class UserController extends BaseController
         return $this->returnError(500, 'Internal error while soft delete user!');
     }
 
+    public function actionAddAuthClient($id)
+    {
+        if (!Yii::$app->user->isAdmin()) {
+            return $this->returnError(403, Yii::t('RestModule.base', 'You are not allowed to do this action!'));
+        }
 
+        $userAuth = new UserAuthForm();
+        $userAuth->load(Yii::$app->request->bodyParams, '');
+        $userAuth->userId = $id;
+        $userAuth->save();
+
+        if ($userAuth->hasErrors()) {
+            return $this->returnError(422, Yii::t('RestModule.base', 'Validation failed'), $userAuth->errors);
+        }
+
+        return $this->returnSuccess('successfully Saved!');
+    }
 }
