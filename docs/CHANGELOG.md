@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.10.5 (Unreleased)
---------------------------
+0.10.5 (March 3, 2025)
+----------------------
 - Enh #182: Use PHP CS Fixer
 - Enh #189: Added new endpoint `POST /user/{id}/auth-client` to insert entries directly into the `user_auth` table
 
