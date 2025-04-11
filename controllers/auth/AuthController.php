@@ -23,6 +23,8 @@ use yii\web\NotFoundHttpException;
 
 class AuthController extends BaseController
 {
+    public $skip2faCheck = ['*'];
+
     public function beforeAction($action)
     {
         if (in_array($action->id, ['current', 'impersonate'])) {

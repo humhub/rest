@@ -17,6 +17,8 @@ use humhub\modules\content\models\Content;
 
 class ContentController extends BaseController
 {
+    public $skip2faCheck = ['*'];
+
     public function actionFindByContainer($id, $orderBy = 'creationTime', $dateUpdatedFrom = null, $dateUpdatedTo = null)
     {
         $contentContainer = ContentContainer::findOne(['id' => (int) $id]);

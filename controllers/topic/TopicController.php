@@ -19,6 +19,8 @@ use Yii;
 
 class TopicController extends BaseController
 {
+    public $skip2faCheck = ['*'];
+
     public function actionIndex()
     {
         $results = [];

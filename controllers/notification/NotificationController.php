@@ -16,6 +16,8 @@ use Yii;
 
 class NotificationController extends BaseController
 {
+    public $skip2faCheck = ['*'];
+
     public function actionIndex()
     {
         $results = [];

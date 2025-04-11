@@ -18,6 +18,8 @@ use humhub\modules\rest\models\JwtAuthForm;
 
 class AdminController extends Controller
 {
+    public $skip2faCheck = ['*'];
+
     public function beforeAction($action)
     {
         Yii::$app->response->format = Response::FORMAT_HTML;

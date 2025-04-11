@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.6 (Unreleased)
+----------------------
+- Enh #: Ignore all actions from 2FA check
+
 0.10.5 (March 3, 2025)
 ----------------------
 - Enh #182: Use PHP CS Fixer

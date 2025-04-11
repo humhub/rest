@@ -19,6 +19,8 @@ use Yii;
  */
 class ArchiveController extends BaseController
 {
+    public $skip2faCheck = ['*'];
+
     public function actionArchive($id)
     {
         $space = Space::findOne(['id' => $id]);
