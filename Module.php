@@ -11,6 +11,7 @@ namespace humhub\modules\rest;
 use humhub\components\bootstrap\ModuleAutoLoader;
 use humhub\components\Module as BaseModule;
 use Yii;
+use yii\base\Event;
 use yii\helpers\Url;
 
 class Module extends BaseModule
@@ -106,5 +107,14 @@ class Module extends BaseModule
         $apiModules = (array)$this->settings->getSerialized('apiModules');
 
         return !isset($apiModules[$moduleId]) || $apiModules[$moduleId];
+    }
+
+    public function beforeAction($action)
+    {
+        Yii::$app->on('beforeTwoFaCheck', function (Event $event) use ($action) {
+            $event->handled = $action->controller->id !== 'admin-user';
+        });
+
+        return parent::beforeAction($action);
     }
 }

@@ -15,8 +15,6 @@ use Yii;
 
 class FileController extends BaseController
 {
-    public $skip2faCheck = ['*'];
-
     public function actionDownload($id)
     {
         $file = File::findOne(['id' => $id]);

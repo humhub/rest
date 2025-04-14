@@ -29,8 +29,6 @@ use yii\web\NotFoundHttpException;
  */
 class CommentController extends BaseController
 {
-    public $skip2faCheck = ['*'];
-
     /**
      * @var null|ContentActiveRecord|Comment Cached object
      */

@@ -16,8 +16,6 @@ use Yii;
 
 class LikeController extends BaseController
 {
-    public $skip2faCheck = ['*'];
-
     public function actionFindByObject()
     {
         $contentFilter = [

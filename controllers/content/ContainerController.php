@@ -14,8 +14,6 @@ use humhub\modules\content\models\ContentContainer;
 
 class ContainerController extends BaseController
 {
-    public $skip2faCheck = ['*'];
-
     public function actionList()
     {
         $results = [];

@@ -15,8 +15,6 @@ use humhub\modules\rest\components\BaseController;
  */
 class ErrorController extends BaseController
 {
-    public $skip2faCheck = ['*'];
-
     public function actionNotfound()
     {
         return $this->returnError(404, 'Requested action not found!');

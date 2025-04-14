@@ -19,8 +19,6 @@ use Yii;
  */
 class MembershipController extends BaseController
 {
-    public $skip2faCheck = ['*'];
-
     public function actionIndex($spaceId)
     {
         $space = Space::findOne(['id' => (int)$spaceId]);

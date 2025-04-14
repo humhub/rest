@@ -15,8 +15,6 @@ use humhub\modules\rest\definitions\PostDefinitions;
 
 class PostController extends BaseContentController
 {
-    public $skip2faCheck = ['*'];
-
     /**
      * {@inheritdoc}
      */
