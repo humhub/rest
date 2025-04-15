@@ -111,7 +111,7 @@ class Module extends BaseModule
 
     public function beforeAction($action)
     {
-        Yii::$app->on('beforeTwoFaCheck', function (Event $event) use ($action) {
+        Yii::$app->on('twofa.beforeCheck', function (Event $event) use ($action) {
             $event->handled = $action->controller->id !== 'admin-user';
         });
 
