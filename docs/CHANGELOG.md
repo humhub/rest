@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.6 (Unreleased)
+----------------------
+- Fix #194: Fix failing tests
+
 0.10.5 (March 3, 2025)
 ----------------------
 - Enh #182: Use PHP CS Fixer
