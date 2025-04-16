@@ -160,7 +160,6 @@ class TopicController extends BaseController
         $spaceIds = Membership::getUserSpaceIds(Yii::$app->user->id);
 
         $query = Topic::find()
-            ->select('content_tag.*')
             ->leftJoin('contentcontainer', '`contentcontainer`.`id` = `content_tag`.`contentcontainer_id`');
 
         if ($contentContainerId) {
