@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.10.6 (Unreleased)
-----------------------
+0.10.6 (April 17, 2025)
+-----------------------
 - Enh #192: Ignore all actions from 2FA check
+- Fix #194: Fix failing tests
 
 0.10.5 (March 3, 2025)
 ----------------------
