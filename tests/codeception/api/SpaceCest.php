@@ -4,6 +4,7 @@ namespace rest\api;
 
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Space;
+use humhub\modules\stream\actions\Stream;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
@@ -68,6 +69,7 @@ class SpaceCest extends HumHubApiTestCest
             'description' => 'Updated Space 2 description',
             'tags' => 'first, second, third',
             'color' => '#EE3300',
+            'defaultStreamSort' => Stream::SORT_CREATED_AT,
         ]);
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(2));
     }
