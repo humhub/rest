@@ -1,5 +1,5 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> konfiguráció',
   'Access Tokens' => 'Hozzáférési tokenek',
   'Add Access Token' => 'Hozzáférési token hozzáadása',
@@ -16,6 +16,10 @@ return array (
   'JWT Key' => 'JWT kulcs',
   'JWT Token Expiration' => 'JWT token lejárata',
   'No enabled modules found with additional REST API endpoints.' => 'Nem találhatók engedélyezett modulok további REST API-végpontokkal.',
+  'Source' => 'Forrás',
+  'Source ID' => '',
   'Token' => 'Token',
   'User' => 'Felhasználó',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+];

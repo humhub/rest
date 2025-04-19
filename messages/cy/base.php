@@ -17,6 +17,10 @@ return [
     'JWT Key' => '',
     'JWT Token Expiration' => '',
     'No enabled modules found with additional REST API endpoints.' => '',
+    'Source' => '',
+    'Source ID' => '',
     'Token' => '',
     'User' => '',
+    'Validation failed' => '',
+    'You are not allowed to do this action!' => '',
 ];

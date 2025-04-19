@@ -1,5 +1,5 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => 'إعداد <strong>REST</strong>',
   'Access Tokens' => 'رموز الوصول',
   'Add Access Token' => 'إضافة رمز الوصول',
@@ -16,6 +16,10 @@ return array (
   'JWT Key' => 'مفتاح JWT',
   'JWT Token Expiration' => 'انتهاء صلاحية رمز JWT',
   'No enabled modules found with additional REST API endpoints.' => 'لم يتم العثور على موديولات  ممكّنة مع نقاط نهاية REST API الإضافية.',
+  'Source' => 'المصدر',
+  'Source ID' => '',
   'Token' => 'رمز مميز',
   'User' => 'مستخدم',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+];

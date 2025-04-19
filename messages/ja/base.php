@@ -1,5 +1,5 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> 構成',
   'Access Tokens' => 'アクセストークン',
   'Add Access Token' => 'アクセストークンの追加',
@@ -16,6 +16,10 @@ return array (
   'JWT Key' => 'JWT キー',
   'JWT Token Expiration' => 'JWT トークンの有効期限',
   'No enabled modules found with additional REST API endpoints.' => '追加の REST API エンドポイントで有効なモジュールが見つかりません。',
+  'Source' => 'ソース',
+  'Source ID' => '',
   'Token' => 'トークン',
   'User' => 'ユーザー',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+];

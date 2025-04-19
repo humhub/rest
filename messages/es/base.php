@@ -1,5 +1,5 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => 'Configuración <strong>REST</strong>',
   'Access Tokens' => 'Tokens de acceso',
   'Add Access Token' => 'Añadir token de acceso',
@@ -16,6 +16,10 @@ return array (
   'JWT Key' => 'Clave JWT',
   'JWT Token Expiration' => 'Expiración de token JWT',
   'No enabled modules found with additional REST API endpoints.' => 'No se han encontrado módulos que tengan endpoints de la API adicionales.',
+  'Source' => 'Fuente',
+  'Source ID' => '',
   'Token' => 'Token',
   'User' => 'Usuario',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+];
