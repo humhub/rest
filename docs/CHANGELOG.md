@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.7 (April 22, 2025)
+-----------------------
+- Fix #192: Authentication of unregistered LDAP Users fails
+
 0.10.6 (April 17, 2025)
 -----------------------
 - Enh #192: Ignore all actions from 2FA check

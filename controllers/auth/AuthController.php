@@ -78,7 +78,15 @@ class AuthController extends BaseController
             return null;
         }
 
-        $user = (new AuthClientService($login->authClient))->getUser();
+        $authClientService = new AuthClientService($login->authClient);
+
+        $user = $authClientService->getUser();
+
+        # If user is not found, try to create it by AuthClient (e.g. LDAP)
+        if ($user === null) {
+            $user = $authClientService->createUser();
+        }
+
         return $user;
     }
 
