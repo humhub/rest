@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.8 (Unreleased)
+-----------------------
+- Enh #198: Add doc for Auth Methods
+
 0.10.7 (April 22, 2025)
 -----------------------
 - Fix #192: Authentication of unregistered LDAP Users fails
