@@ -2,6 +2,89 @@ swagger: '2.0'
 info:
   description: |
     Welcome to the HumHub auth module API reference.
+    Humhub REST API supports the following Authentication Methods:
+    
+    ## 1. HTTP Basic Authentication
+    Uses standard HTTP Basic Authentication, requiring a username and password for each API request.
+    Include the username and password in the `Authorization` header for each request.
+    
+    Example:
+    ```bash
+    curl -X GET "https://yourhost/api/v1/auth/current" -H "Authorization: Basic $(echo -n 'username@example.com:password' | base64)"
+      ```
+    
+    Configuration:
+    - **Enabled for All Registered Users**: When enabled, all registered users can use Basic Authentication.
+    - **User Selection Dropdown**: Allows specifying individual users for whom this method is enabled.
+        
+    ## 2. JWT Authentication
+    Uses JSON Web Tokens (JWT) for authentication. Users authenticate via a login endpoint to obtain a JWT token, which is then used in subsequent requests. The `auth_token` has an expiration time (`expired_at`). You must obtain a new token after it expires.
+    
+    Login Process:
+    Endpoint: `POST /auth/login`
+      - Request:
+        ```json
+        {
+          "username": "username@example.com",
+          "password": "password"
+        }
+        ```
+      - Response:
+        ```json
+        {
+          "code": 200,
+          "message": "Authentication successful",
+          "auth_token": "eyJ0eXAiOiJKV1QiLC....tE_7_rLSX3vA",
+          "expired_at": "2025-04-23T12:00:00Z"
+        }
+        ```
+    Include the obtained `auth_token` in the `Authorization` header as `Bearer {auth_token}` in subsequent requests.
+    
+    Example:
+      - Obtain JWT Token:
+        ```bash
+        curl -X POST "https://yourhost/api/v1/auth/login" -H "Content-Type: application/json" -d '{"username":"username@example.com","password":"password"}'
+        ```
+      - Use JWT Token:
+        ```bash
+        curl -X GET "https://yourhost/api/v1/auth/current" -H "Authorization: Bearer your-auth-token"
+        ```
+    
+    
+    Configuration:
+      - **Enabled for All Registered Users**: When enabled, all registered users can use JWT Authentication.
+      - **User Selection Dropdown**: Allows specifying individual users for whom this method is enabled.
+      - **JWT Key**: A secret key used to encrypt the JWT token, configured in the JWT Auth settings.
+      
+    ## 3. Bearer Authentication
+    Uses predefined bearer tokens created for each user in the HumHub Bearer Authentication settings.
+    Include the bearer token in the `Authorization` header as `Bearer {your-bearer-token}` for each request.
+    
+    Example:
+    ```bash
+      curl -X GET "https://yourhost/api/v1/auth/current" -H "Authorization: Bearer your-bearer-token"
+    ```
+    
+    Configuration:
+      - Tokens must be generated in the Bearer Auth settings for specific users.
+      
+    ## 4. Query Param Bearer Authentication
+    Uses the same bearer tokens created in the Bearer Auth settings but passes them as a query parameter instead of a header.
+    Append the bearer token as a query parameter `access-token={your-bearer-token}` to the request URL.
+
+    Example:
+      ```bash
+      curl -X GET "https://yourhost/api/v1/auth/current?access-token=your-bearer-token"
+      ```
+
+    Configuration:
+      - Tokens are the same as those generated for Bearer Auth.
+    
+    ## Notes
+    
+    - Replace `https://yourhost` with the actual base URL of your HumHub instance.
+    - Ensure that the appropriate authentication method is enabled and configured in the HumHub admin panel before making API requests.
+    - Securely store and handle authentication credentials and tokens to prevent unauthorized access.    
 
   version: 1.0.0
   title: HumHub - Auth API
