@@ -11,6 +11,7 @@ namespace humhub\modules\rest\controllers\auth;
 use Firebase\JWT\JWT;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\models\ImpersonateAuthToken;
 use humhub\modules\rest\models\JwtAuthForm;
 use humhub\modules\user\models\forms\Login;
@@ -38,6 +39,10 @@ class AuthController extends BaseController
 
     public function actionIndex()
     {
+        if (!ConfigureForm::getInstance()->enableJwtAuth) {
+            throw new NotFoundHttpException();
+        }
+
         $user = static::authByUserAndPassword(Yii::$app->request->post('username'), Yii::$app->request->post('password'));
 
         if ($user === null) {
