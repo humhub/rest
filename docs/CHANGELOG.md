@@ -4,6 +4,7 @@ Changelog
 0.10.8 (Unreleased)
 -----------------------
 - Enh #198: Add doc for Auth Methods
+- Enh #199: Disable `auth/login` endpoint when JWT is disabled
 
 0.10.7 (April 22, 2025)
 -----------------------
