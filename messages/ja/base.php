@@ -17,9 +17,9 @@ return [
   'JWT Token Expiration' => 'JWT トークンの有効期限',
   'No enabled modules found with additional REST API endpoints.' => '追加の REST API エンドポイントで有効なモジュールが見つかりません。',
   'Source' => 'ソース',
-  'Source ID' => '',
+  'Source ID' => 'ソースID',
   'Token' => 'トークン',
   'User' => 'ユーザー',
-  'Validation failed' => '',
-  'You are not allowed to do this action!' => '',
+  'Validation failed' => '検証に失敗',
+  'You are not allowed to do this action!' => 'この操作を行うことは許可されていません。',
 ];

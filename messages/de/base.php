@@ -17,9 +17,9 @@ return [
   'JWT Token Expiration' => 'JWT Token Ablaufzeit',
   'No enabled modules found with additional REST API endpoints.' => 'Keine aktivierten Module gefunden mit zusätzlichen REST API Endpunkten.',
   'Source' => 'Quelle',
-  'Source ID' => '',
+  'Source ID' => 'Quell-ID',
   'Token' => 'Token',
   'User' => 'Benutzer',
-  'Validation failed' => '',
-  'You are not allowed to do this action!' => '',
+  'Validation failed' => 'Validierung fehlgeschlagen',
+  'You are not allowed to do this action!' => 'Du hast keine ausreichende Berechtigung für diese Aktion!',
 ];
