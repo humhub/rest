@@ -212,10 +212,6 @@ class Events
             return UserDefinitions::getUserAuth($auth);
         }, Auth::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('session', array_map(function ($session) {
-            return UserDefinitions::getUserHttpSession($session);
-        }, Session::findAll(['user_id' => $event->user->id])));
-
         $event->addExportData('group', array_map(function ($group) {
             return UserDefinitions::getGroup($group);
         }, Group::find()
