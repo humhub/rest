@@ -5,6 +5,7 @@ Changelog
 -----------------------
 - Enh #198: Add doc for Auth Methods
 - Enh #199: Disable `auth/login` endpoint when JWT is disabled
+- Enh #201: Remove session data from legal user data export
 
 0.10.7 (April 22, 2025)
 -----------------------
