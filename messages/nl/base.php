@@ -17,9 +17,9 @@ return [
   'JWT Token Expiration' => 'Vervaldatum JWT-token',
   'No enabled modules found with additional REST API endpoints.' => 'Geen ingeschakelde modules gevonden met extra REST API-eindpunten.',
   'Source' => 'Bron',
-  'Source ID' => '',
+  'Source ID' => 'Bron-ID',
   'Token' => 'Token',
   'User' => 'Gebruiker',
-  'Validation failed' => '',
-  'You are not allowed to do this action!' => '',
+  'Validation failed' => 'Validatie mislukt',
+  'You are not allowed to do this action!' => 'Deze actie mag u niet uitvoeren!',
 ];

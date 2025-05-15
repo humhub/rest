@@ -17,9 +17,9 @@ return [
   'JWT Token Expiration' => 'Validade do Token JWT',
   'No enabled modules found with additional REST API endpoints.' => 'Nenhum módulo habilitado encontrado com endpoints de API REST adicionais.',
   'Source' => 'Origem',
-  'Source ID' => '',
+  'Source ID' => 'ID de Origem',
   'Token' => 'Token',
   'User' => 'Usuário',
-  'Validation failed' => '',
-  'You are not allowed to do this action!' => '',
+  'Validation failed' => 'A validação falhou',
+  'You are not allowed to do this action!' => 'Você não tem permissão para realizar esta ação!',
 ];
