@@ -10,6 +10,7 @@ namespace humhub\modules\rest\controllers\user;
 
 use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
+use humhub\modules\rest\components\UploadedImageHandler;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\ApiUser;
 use humhub\modules\rest\models\UserAuthForm;
@@ -17,6 +18,7 @@ use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\HttpException;
 
 /**
@@ -166,22 +168,40 @@ class UserController extends BaseController
             ]);
         }
 
-        if (!$apiUser->save()) {
-            return $this->returnError(500, 'Internal error while save user!');
-        }
-
-        if ($profile !== null && !$profile->save()) {
-            return $this->returnError(500, 'Internal error while save profile!');
-
-        }
-
-        if ($password !== null) {
-            $password->user_id = $apiUser->id;
-            $password->setPassword($password->newPassword);
-            if (!$password->save()) {
-                return $this->returnError(500, 'Internal error while save new password!');
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$apiUser->save()) {
+                throw new \RuntimeException('Internal error while save user!');
             }
+
+            if ($profile !== null && !$profile->save()) {
+                throw new \RuntimeException('Internal error while save profile!');
+            }
+
+            if ($password !== null) {
+                $password->user_id = $apiUser->id;
+                $password->setPassword($password->newPassword);
+                if (!$password->save()) {
+                    throw new \RuntimeException('Internal error while save new password!');
+                }
+            }
+
+            if ($profileImage = ArrayHelper::getValue($profileData, 'image')) {
+                UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), $profileImage);
+            }
+
+            if ($bannerImage = ArrayHelper::getValue($profileData, 'banner')) {
+                UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), $bannerImage);
+            }
+
+            $transaction->commit();
+        } catch (\RuntimeException $e) {
+            $transaction->rollBack();
+
+            return $this->returnError(500, $e->getMessage());
         }
+
+
 
         return $this->actionView($apiUser->id);
     }
@@ -234,9 +254,18 @@ class UserController extends BaseController
             }
 
             if ($profile->save()) {
+                if ($profileImage = ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'image')) {
+                    UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), $profileImage);
+                }
+
+                if ($bannerImage = ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'banner')) {
+                    UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), $bannerImage);
+                }
+
                 return $this->actionView($apiUser->id);
             }
         }
+
 
         Yii::error('Could not create validated user.', 'api');
 
