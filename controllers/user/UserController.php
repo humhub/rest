@@ -186,8 +186,13 @@ class UserController extends BaseController
                 }
             }
 
-            UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), ArrayHelper::getValue($profileData, 'image'));
-            UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), ArrayHelper::getValue($profileData, 'banner'));
+            if ($profileImage = ArrayHelper::getValue($profileData, 'image')) {
+                UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), $profileImage);
+            }
+
+            if ($bannerImage = ArrayHelper::getValue($profileData, 'banner')) {
+                UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), $bannerImage);
+            }
 
             $transaction->commit();
         } catch (\RuntimeException $e) {
@@ -249,8 +254,13 @@ class UserController extends BaseController
             }
 
             if ($profile->save()) {
-                UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'image'));
-                UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'banner'));
+                if ($profileImage = ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'image')) {
+                    UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), $profileImage);
+                }
+
+                if ($bannerImage = ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'banner')) {
+                    UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), $bannerImage);
+                }
 
                 return $this->actionView($apiUser->id);
             }

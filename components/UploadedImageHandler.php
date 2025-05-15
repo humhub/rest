@@ -2,16 +2,24 @@
 
 namespace humhub\modules\rest\components;
 
+use Yii;
 use yii\base\StaticInstanceInterface;
 use yii\base\StaticInstanceTrait;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 use humhub\models\forms\UploadProfileImage;
+use humhub\libs\ProfileImage;
 
 class UploadedImageHandler implements StaticInstanceInterface
 {
     use StaticInstanceTrait;
+
+    const SUPPORTED_MIMES = [
+        'image/png' => 'png',
+        'image/tiff' => 'tif',
+        'image/jpeg' => 'jpg',
+    ];
 
     private function convertBase64ImgToUploadedFile($value) : ?UploadedFile
     {
@@ -36,7 +44,11 @@ class UploadedImageHandler implements StaticInstanceInterface
             'name' => sprintf(
                 '%s.%s',
                 Yii::$app->security->generateRandomString(13),
-                ArrayHelper::getValue(FileHelper::getExtensionsByMimeType($mime), 0 , 'jpg'),
+                ArrayHelper::getValue(
+                    self::SUPPORTED_MIMES,
+                    $mime,
+                    ArrayHelper::getValue(FileHelper::getExtensionsByMimeType($mime), 0 , 'jpg')
+                ),
             ),
             'tempName' => $tempName,
             'type' => $mime,
@@ -45,7 +57,7 @@ class UploadedImageHandler implements StaticInstanceInterface
         ]);
     }
 
-    public function handle($image, string $imageData): void
+    public function handle(ProfileImage $image, string $imageData): void
     {
         $uploadedFile = $this->convertBase64ImgToUploadedFile($imageData);
 

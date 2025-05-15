@@ -39,7 +39,7 @@ class RestUserBearerToken extends ActiveRecord
             [['user_id', 'userGuid', 'expiration'], 'required'],
             [['expiration'], DbDateValidator::class, 'timeAttribute' => 'expirationTime'],
             [['expirationTime'], 'date', 'type' => 'time', 'format' => Yii::$app->formatter->isShowMeridiem() ? 'h:mm a' : 'php:H:i'],
-            [['userGuid'], 'each', 'rule' => ['string', 'max' => 45]],
+            [['userGuid'], 'each', 'rule' => ['integer']],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'targetRelation' => 'user', 'targetAttribute' => 'id'],
         ];
@@ -75,15 +75,12 @@ class RestUserBearerToken extends ActiveRecord
 
     public function setUserGuid($guid)
     {
-        $this->user_id = User::find()
-            ->select('id')
-            ->where(['guid' => $guid])
-            ->scalar();
+        $this->user_id =  ArrayHelper::getValue($guid, 0);
     }
 
     public function getUserGuid()
     {
-        return [ArrayHelper::getValue($this->user, 'guid')];
+        return [ArrayHelper::getValue($this->user, 'id')];
     }
 
     public function getUser()
