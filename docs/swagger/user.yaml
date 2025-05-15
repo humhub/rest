@@ -76,7 +76,7 @@ paths:
               account:
                 $ref: "#/definitions/Account"
               profile:
-                $ref: "#/definitions/ProfileUpdate"
+                $ref: "#/definitions/Profile"
               password:
                 $ref: "#/definitions/Password"
       responses:
@@ -239,7 +239,7 @@ paths:
               account:
                 $ref: "#/definitions/Account"
               profile:
-                $ref: "#/definitions/ProfileUpdate"
+                $ref: "#/definitions/Profile"
               password:
                 $ref: "#/definitions/Password"
       responses:
@@ -651,7 +651,7 @@ definitions:
       account:
         $ref: "#/definitions/Account"
       profile:
-        $ref: "#/definitions/ProfileView"
+        $ref: "#/definitions/Profile"
 
   Account:
     type: object
@@ -714,7 +714,7 @@ definitions:
     xml:
       name: Account
 
-  ProfileView:
+  Profile:
     type: object
     properties:
       firstname:
@@ -785,83 +785,16 @@ definitions:
         type: string
       banner_url:
         type: string
-    xml:
-      name: Profile
-  ProfileUpdate:
-    type: object
-    properties:
-      firstname:
-        type: string
-        example: John
-      lastname:
-        type: string
-        example: Doe
-      title:
-        type: string
-        example: Test user
-      gender:
-        type: string
-        example: male
-      street:
-        type: string
-        example: New Street 5
-      zip:
-        type: string
-        example: 80331
-      city:
-        type: string
-        example: Munich
-      country:
-        type: string
-        example: DE (ISO 3166 code)
-      state:
-        type: string
-      birthday_hide_year:
-        type: integer
-      birthday:
-        type: string
-        format: date
-        example: "1990-01-01"
-      about:
-        type: string
-      phone_private:
-        type: string
-      phone_work:
-        type: string
-      mobile:
-        type: string
-      fax:
-        type: string
-      im_skype:
-        type: string
-      im_xmpp:
-        type: string
-      url:
-        type: string
-      url_facebook:
-        type: string
-      url_linkedin:
-        type: string
-      url_xing:
-        type: string
-      url_youtube:
-        type: string
-      url_vimeo:
-        type: string
-      url_flickr:
-        type: string
-      url_myspace:
-        type: string
-      url_twitter:
-        type: string
       image:
-        description: Base64 of image
+        description: Base64 of image (Write Only)
         example: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACAUG/8QAKBAAAgECBAMJAAAAAAAAAAAAAQIDBAcABhEhBRJhEyQxMjRBc4Gx/8QAFQEBAQAAAAAAAAAAAAAAAAAABQb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAIRIf/aAAwDAQACEQMRAD8AzN2Ku5kl8knybn5uG01caOPhcJmkihh8iBNNeVzzlywAbYgkbjCqqMwW8eeR5TwcOzksE7JVB130HsOmD1GTPcK38MxMka5iqdFbcDuwPgeoB+sRq31tR8r/AKcShdrwj6bP/9k="
         type: string
+        writeOnly: true
       banner:
-        description: Base64 of image
+        description: Base64 of banner (Write Only)
         example: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACAUG/8QAKBAAAgECBAMJAAAAAAAAAAAAAQIDBAcABhEhBRJhEyQxMjRBc4Gx/8QAFQEBAQAAAAAAAAAAAAAAAAAABQb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAIRIf/aAAwDAQACEQMRAD8AzN2Ku5kl8knybn5uG01caOPhcJmkihh8iBNNeVzzlywAbYgkbjCqqMwW8eeR5TwcOzksE7JVB130HsOmD1GTPcK38MxMka5iqdFbcDuwPgeoB+sRq31tR8r/AKcShdrwj6bP/9k="
         type: string
+        writeOnly: true
     xml:
       name: Profile
 
