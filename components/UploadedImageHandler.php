@@ -15,13 +15,13 @@ class UploadedImageHandler implements StaticInstanceInterface
 {
     use StaticInstanceTrait;
 
-    const SUPPORTED_MIMES = [
+    public const SUPPORTED_MIMES = [
         'image/png' => 'png',
         'image/tiff' => 'tif',
         'image/jpeg' => 'jpg',
     ];
 
-    private function convertBase64ImgToUploadedFile($value) : ?UploadedFile
+    private function convertBase64ImgToUploadedFile($value): ?UploadedFile
     {
         if (!(is_string($value) && preg_match('/^data:image\/([^;]+);base64,/', $value))) {
             return null;
@@ -47,7 +47,7 @@ class UploadedImageHandler implements StaticInstanceInterface
                 ArrayHelper::getValue(
                     self::SUPPORTED_MIMES,
                     $mime,
-                    ArrayHelper::getValue(FileHelper::getExtensionsByMimeType($mime), 0 , 'jpg')
+                    ArrayHelper::getValue(FileHelper::getExtensionsByMimeType($mime), 0, 'jpg'),
                 ),
             ),
             'tempName' => $tempName,
