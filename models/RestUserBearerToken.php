@@ -20,13 +20,15 @@ use humhub\modules\user\models\User;
  * @property string $token
  * @property string $expiration
  *
- * @property string $userGuid
+ * @property string $userIds
  *
  * @property-read User $user
  */
 class RestUserBearerToken extends ActiveRecord
 {
     public $expirationTime;
+
+    public $newToken;
 
     public static function tableName()
     {
@@ -36,11 +38,11 @@ class RestUserBearerToken extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'userGuid', 'expiration'], 'required'],
+            [['user_id', 'userIds', 'expiration'], 'required'],
             [['expiration'], DbDateValidator::class, 'timeAttribute' => 'expirationTime'],
             [['expirationTime'], 'date', 'type' => 'time', 'format' => Yii::$app->formatter->isShowMeridiem() ? 'h:mm a' : 'php:H:i'],
-            [['userGuid'], 'each', 'rule' => ['integer']],
-            [['user_id'], 'unique'],
+            [['userIds'], 'each', 'rule' => ['integer']],
+            [['user_id'], 'unique', 'message' => Yii::t('RestModule.base', '{attribute} is already in use!')],
             [['user_id'], 'exist', 'targetRelation' => 'user', 'targetAttribute' => 'id'],
         ];
     }
@@ -49,7 +51,7 @@ class RestUserBearerToken extends ActiveRecord
     {
         return [
             'user_id' => Yii::t('RestModule.base', 'User'),
-            'userGuid' => Yii::t('RestModule.base', 'User'),
+            'userIds' => Yii::t('RestModule.base', 'User'),
             'token' => Yii::t('RestModule.base', 'Token'),
             'expiration' => Yii::t('RestModule.base', 'Expiration'),
         ];
@@ -58,7 +60,8 @@ class RestUserBearerToken extends ActiveRecord
     public function beforeSave($insert)
     {
         if ($insert) {
-            $this->token = Yii::$app->security->generateRandomString(86);
+            $this->newToken = Yii::$app->security->generateRandomString(86);
+            $this->token = hash('sha256', $this->newToken);
         }
 
         return parent::beforeSave($insert);
@@ -69,16 +72,16 @@ class RestUserBearerToken extends ActiveRecord
         parent::afterValidate();
 
         if ($this->hasErrors('user_id')) {
-            $this->addError('userGuid', $this->getFirstError('user_id'));
+            $this->addError('userIds', $this->getFirstError('user_id'));
         }
     }
 
-    public function setUserGuid($guid)
+    public function setUserIds($userIds)
     {
-        $this->user_id =  ArrayHelper::getValue($guid, 0);
+        $this->user_id =  ArrayHelper::getValue($userIds, 0);
     }
 
-    public function getUserGuid()
+    public function getUserIds()
     {
         return [ArrayHelper::getValue($this->user, 'id')];
     }
