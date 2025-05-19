@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.10.9 (Unreleased)
+0.10.9 (May 19, 2025)
 ---------------------
 - Enh #204: Bearer Token Auth Improvements
 
