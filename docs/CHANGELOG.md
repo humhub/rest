@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.9 (Unreleased)
+---------------------
+- Enh #204: Bearer Token Auth Improvements
+
 0.10.8 (May 15, 2025)
 ---------------------
 - Enh #198: Add doc for Auth Methods

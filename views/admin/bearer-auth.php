@@ -21,6 +21,7 @@ use humhub\widgets\GridView;
 use humhub\widgets\Button;
 use humhub\modules\ui\form\widgets\DatePicker;
 use humhub\modules\ui\form\widgets\TimePicker;
+use humhub\widgets\Link;
 
 ?>
 
@@ -36,9 +37,14 @@ use humhub\modules\ui\form\widgets\TimePicker;
                 [
                     'attribute' => 'user.email',
                     'format' => 'email',
-                    'label' => $bearerTokenModel->getAttributeLabel('userGuid'),
+                    'label' => $bearerTokenModel->getAttributeLabel('userIds'),
                 ],
-                'token',
+                [
+                    'attribute' => 'token',
+                    'value' => function () {
+                        return str_repeat('*', 30);
+                    }
+                ],
                 'expiration:datetime',
                 [
                     'class' => ActionColumn::class,
@@ -59,13 +65,33 @@ use humhub\modules\ui\form\widgets\TimePicker;
         ]) ?>
     </div>
 </div>
+
+<?php if(!empty($bearerTokenModel->newToken)): ?>
+<div class="panel panel-default">
+    <div class="panel-heading"><?= Yii::t('RestModule.base','Bearer Token Created Successfully') ?></div>
+    <div class="panel-body">
+        <p class="form-heading">
+            <?= Yii::t('RestModule.base', 'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.') ?>
+        </p>
+        <div class="form-group">
+            <?= Html::label(Yii::t('RestModule.base', 'Access Token for {user}', ['user' => $bearerTokenModel->user->displayName])); ?>
+            <?= Html::textInput(null, $bearerTokenModel->newToken, ['disabled' => true, 'class' => 'form-control']) ?>
+            <div class="text-right help-block">
+                <div id="token" class="hidden"><?= $bearerTokenModel->newToken ?></div>
+                <?= Link::withAction(Yii::t('RestModule.base', 'Copy to clipboard'), 'copyToClipboard', null, '#token')->icon('fa-clipboard')->style('color:#777') ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="panel panel-default">
     <div class="panel-heading"><?= Yii::t('RestModule.base','Add Access Token') ?></div>
     <div class="panel-body">
         <?php $form = ActiveForm::begin(); ?>
         <div class="row">
             <div class="col-md-6">
-                <?= $form->field($bearerTokenModel, 'userGuid')->widget(UserPickerField::class, [
+                <?= $form->field($bearerTokenModel, 'userIds')->widget(UserPickerField::class, [
                     'maxSelection' => 1,
                     'itemKey' => 'id',
                 ]); ?>
