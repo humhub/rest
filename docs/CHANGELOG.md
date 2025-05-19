@@ -7,6 +7,7 @@ Changelog
 - Enh #199: Disable `auth/login` endpoint when JWT is disabled
 - Enh #201: Remove session data from legal user data export
 - Enh #202: Add upload support for user `image` and `banner`
+- Enh #204: Bearer Token Auth Improvements 
 
 0.10.7 (April 22, 2025)
 -----------------------
