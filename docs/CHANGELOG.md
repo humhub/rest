@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.10.10 (Unreleased)
----------------------
+0.10.10 (May 20, 2025)
+----------------------
 - Fix #206: `UserPickerField` version compatibility
 
 0.10.9 (May 19, 2025)
