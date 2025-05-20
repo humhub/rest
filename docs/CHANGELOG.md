@@ -3,7 +3,7 @@ Changelog
 
 0.10.10 (Unreleased)
 ---------------------
-- Enh #206: Fix `UserPickerField` version compatibility
+- Fix #206: `UserPickerField` version compatibility
 
 0.10.9 (May 19, 2025)
 ---------------------
