@@ -87,6 +87,7 @@ class RestUserBearerToken extends ActiveRecord
     {
         $this->user_id = ArrayHelper::getValue($userIds, 0);
 
+        //TODO: remove after humhub 1.18 release
         if (!is_numeric($this->user_id)) {
             $this->user_id = User::find()
                 ->select('id')
