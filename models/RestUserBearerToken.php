@@ -41,7 +41,7 @@ class RestUserBearerToken extends ActiveRecord
             [['user_id', 'userIds', 'expiration'], 'required'],
             [['expiration'], DbDateValidator::class, 'timeAttribute' => 'expirationTime'],
             [['expirationTime'], 'date', 'type' => 'time', 'format' => Yii::$app->formatter->isShowMeridiem() ? 'h:mm a' : 'php:H:i'],
-            [['userIds'], 'validateUserIds'],
+            [['userIds'], 'each', 'rule' => ['integer']],
             [['user_id'], 'unique', 'message' => Yii::t('RestModule.base', '{attribute} is already in use!')],
             [['user_id'], 'exist', 'targetRelation' => 'user', 'targetAttribute' => 'id'],
         ];
@@ -65,13 +65,6 @@ class RestUserBearerToken extends ActiveRecord
         }
 
         return parent::beforeSave($insert);
-    }
-
-    public function validateUserIds()
-    {
-        if (!is_array($this->userIds)) {
-            $this->addError('userIds', Yii::t('yii', '{attribute} is invalid.', ['attribute' => Yii::t('RestModule.base', 'User')]));
-        }
     }
 
     public function afterValidate()
