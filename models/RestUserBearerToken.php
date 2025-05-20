@@ -78,7 +78,15 @@ class RestUserBearerToken extends ActiveRecord
 
     public function setUserIds($userIds)
     {
-        $this->user_id =  ArrayHelper::getValue($userIds, 0);
+        $this->user_id = ArrayHelper::getValue($userIds, 0);
+
+        //TODO: remove after humhub 1.18 release
+        if (!is_numeric($this->user_id)) {
+            $this->user_id = User::find()
+                ->select('id')
+                ->where(['guid' => $this->user_id])
+                ->scalar();
+        }
     }
 
     public function getUserIds()
