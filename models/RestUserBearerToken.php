@@ -41,7 +41,7 @@ class RestUserBearerToken extends ActiveRecord
             [['user_id', 'userIds', 'expiration'], 'required'],
             [['expiration'], DbDateValidator::class, 'timeAttribute' => 'expirationTime'],
             [['expirationTime'], 'date', 'type' => 'time', 'format' => Yii::$app->formatter->isShowMeridiem() ? 'h:mm a' : 'php:H:i'],
-            [['userIds'], 'each', 'rule' => ['integer']],
+            [['userIds'], 'validateUserIds'],
             [['user_id'], 'unique', 'message' => Yii::t('RestModule.base', '{attribute} is already in use!')],
             [['user_id'], 'exist', 'targetRelation' => 'user', 'targetAttribute' => 'id'],
         ];
@@ -67,6 +67,13 @@ class RestUserBearerToken extends ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    public function validateUserIds()
+    {
+        if (!is_array($this->userIds)) {
+            $this->addError('userIds', Yii::t('yii', '{attribute} is invalid.', ['attribute' => Yii::t('RestModule.base', 'User')]));
+        }
+    }
+
     public function afterValidate()
     {
         parent::afterValidate();
@@ -78,7 +85,14 @@ class RestUserBearerToken extends ActiveRecord
 
     public function setUserIds($userIds)
     {
-        $this->user_id =  ArrayHelper::getValue($userIds, 0);
+        $this->user_id = ArrayHelper::getValue($userIds, 0);
+
+        if (!is_numeric($this->user_id)) {
+            $this->user_id = User::find()
+                ->select('id')
+                ->where(['guid' => $this->user_id])
+                ->scalar();
+        }
     }
 
     public function getUserIds()
