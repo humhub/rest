@@ -104,6 +104,7 @@ class InviteController extends BaseController
         $userInvite->email = $email;
         $userInvite->source = Invite::SOURCE_INVITE;
         $userInvite->user_originator_id = Yii::$app->user->id;
+        $userInvite->language = Yii::$app->settings->get('defaultLanguage');
         $userInvite->save();
         $userInvite->sendInviteMail();
     }
