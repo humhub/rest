@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.10.11 (Unreleased)
+----------------------
+- Fix #209: Invite created via `user/invite` endpoint now sets the language correctly
+
 0.10.10 (May 20, 2025)
 ----------------------
 - Fix #206: `UserPickerField` version compatibility
