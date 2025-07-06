@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.10.11 (Unreleased)
+0.11.0 (Unreleased)
 ----------------------
 - Fix #209: Invite created via `user/invite` endpoint now sets the language correctly
+- Enh: Migration to Bootstrap 5 for HumHub 1.18
 
 0.10.10 (May 20, 2025)
 ----------------------

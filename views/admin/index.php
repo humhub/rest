@@ -6,13 +6,13 @@
  */
 
 /**
- * @var \humhub\modules\ui\view\components\View $this
+ * @var \humhub\components\View $this
  * @var \humhub\modules\rest\models\ConfigureForm $model
  */
 
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
 use humhub\modules\user\widgets\UserPickerField;
+use humhub\widgets\form\ActiveForm;
+use yii\helpers\Html;
 
 $apiModuleOptions = $model->getApiModuleOptions();
 ?>
@@ -36,7 +36,7 @@ $apiModuleOptions = $model->getApiModuleOptions();
 <?= $form->field($model, 'apiModules')->checkboxList($apiModuleOptions)
     ->hint(empty($apiModuleOptions) ? Yii::t('RestModule.base', 'No enabled modules found with additional REST API endpoints.') : false); ?>
 
-<div class="form-group">
+<div class="mb-3">
     <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
 </div>
 
@@ -56,7 +56,7 @@ function enabledUsers() {
 function enabledUsersBlockquote() {
     if ($('#configureform-enablebasicauth').prop('checked') || $('#configureform-enablejwtauth').prop('checked')) {
         $('#enabledusers').show()
-        
+
         $('#enabledusers').insertAfter($('#configureform-enablejwtauth').prop('checked') ? $('.field-configureform-enablejwtauth') : $('.field-configureform-enablebasicauth'))
     } else {
         $('#enabledusers').hide()
@@ -86,4 +86,3 @@ $('#configureform-enablequeryparamauth').change(checkQueryParamBearerAuth)
 JS;
 
 $this->registerJs($js);
-

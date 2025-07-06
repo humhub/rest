@@ -6,22 +6,22 @@
  */
 
 /**
- * @var \humhub\modules\ui\view\components\View $this
+ * @var \humhub\components\View $this
  * @var \humhub\modules\rest\models\RestUserBearerToken $bearerTokenModel
  * @var \yii\data\ActiveDataProvider $bearerTokensProvider
  */
 
-use yii\bootstrap\ActiveForm;
+use humhub\modules\ui\form\widgets\DatePicker;
+use humhub\modules\ui\form\widgets\TimePicker;
+use humhub\modules\user\widgets\UserPickerField;
+use humhub\widgets\bootstrap\Button;
+use humhub\widgets\bootstrap\Link;
+use humhub\widgets\form\ActiveForm;
+use humhub\widgets\GridView;
 use yii\grid\ActionColumn;
 use yii\grid\SerialColumn;
 use yii\helpers\Html;
 use yii\web\JsExpression;
-use humhub\modules\user\widgets\UserPickerField;
-use humhub\widgets\GridView;
-use humhub\widgets\Button;
-use humhub\modules\ui\form\widgets\DatePicker;
-use humhub\modules\ui\form\widgets\TimePicker;
-use humhub\widgets\Link;
 
 ?>
 
@@ -57,7 +57,7 @@ use humhub\widgets\Link;
                             return Button::primary()
                                 ->link(['revoke-access-token', 'id' => $id])
                                 ->icon('trash')
-                                ->xs();
+                                ->sm();
                         },
                     ],
                 ],
@@ -73,11 +73,11 @@ use humhub\widgets\Link;
         <p class="form-heading">
             <?= Yii::t('RestModule.base', 'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.') ?>
         </p>
-        <div class="form-group">
+        <div class="mb-3">
             <?= Html::label(Yii::t('RestModule.base', 'Access Token for {user}', ['user' => $bearerTokenModel->user->displayName])); ?>
             <?= Html::textInput(null, $bearerTokenModel->newToken, ['disabled' => true, 'class' => 'form-control']) ?>
-            <div class="text-right help-block">
-                <div id="token" class="hidden"><?= $bearerTokenModel->newToken ?></div>
+            <div class="text-end form-text">
+                <div id="token" class="d-none"><?= $bearerTokenModel->newToken ?></div>
                 <?= Link::withAction(Yii::t('RestModule.base', 'Copy to clipboard'), 'copyToClipboard', null, '#token')->icon('fa-clipboard')->style('color:#777') ?>
             </div>
         </div>
@@ -90,23 +90,23 @@ use humhub\widgets\Link;
     <div class="panel-body">
         <?php $form = ActiveForm::begin(); ?>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 <?= $form->field($bearerTokenModel, 'userIds')->widget(UserPickerField::class, [
                     'maxSelection' => 1,
                     'itemKey' => 'id',
-                ]); ?>
+                ]) ?>
 
                 <div class="row">
-                    <div class="col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-6">
                         <?= $form
                             ->field($bearerTokenModel, 'expiration')
                             ->widget(DatePicker::class, [
                                 'clientOptions' => [
-                                    'minDate' => new JsExpression('new Date()')
+                                    'minDate' => new JsExpression('new Date()'),
                                 ],
                             ]) ?>
                     </div>
-                    <div class="col-sm-6 col-xs-6">
+                    <div class="col-md-6 col-6">
                         <?= $form
                             ->field($bearerTokenModel, 'expirationTime')
                             ->widget(TimePicker::class)
@@ -114,7 +114,7 @@ use humhub\widgets\Link;
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="mb-3">
                     <?= Html::submitButton(Yii::t('base', 'Add'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
                 </div>
             </div>

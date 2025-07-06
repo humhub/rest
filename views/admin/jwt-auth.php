@@ -6,11 +6,11 @@
  */
 
 /**
- * @var \humhub\modules\ui\view\components\View $this
+ * @var \humhub\components\View $this
  * @var \humhub\modules\rest\models\JwtAuthForm $model
  */
 
-use yii\bootstrap\ActiveForm;
+use humhub\widgets\form\ActiveForm;
 use yii\helpers\Html;
 
 ?>
@@ -20,7 +20,7 @@ use yii\helpers\Html;
 <?= $form->field($model, 'jwtKey'); ?>
 <?= $form->field($model, 'jwtExpire'); ?>
 
-<div class="form-group">
+<div class="mb-3">
     <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
 </div>
 
