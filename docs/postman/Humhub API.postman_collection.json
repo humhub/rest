@@ -4341,7 +4341,7 @@
     "basic": [
       {
         "key": "password",
-        "value": "123qwe",
+        "value": "admin&humhub@PASS%worD!",
         "type": "string"
       },
       {

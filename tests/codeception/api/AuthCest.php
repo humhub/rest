@@ -25,21 +25,21 @@ class AuthCest extends HumHubApiTestCest
     public function testLoginAdmin(ApiTester $I)
     {
         $I->wantTo('login Admin');
-        $I->sendPost('auth/login', ['username' => 'admin', 'password' => 'test']);
+        $I->sendPost('auth/login', ['username' => 'admin', 'password' => 'admin&humhub@PASS%worD!']);
         $I->seeSuccessMessage('Success');
     }
 
     public function testLoginUser(ApiTester $I)
     {
         $I->wantTo('login User3');
-        $I->sendPost('auth/login', ['username' => 'User3', 'password' => '123qwe']);
+        $I->sendPost('auth/login', ['username' => 'User3', 'password' => 'user^humhub@PASS%worD!']);
         $I->seeSuccessMessage('Success');
     }
 
     public function testLoginByEmail(ApiTester $I)
     {
         $I->wantTo('login by email');
-        $I->sendPost('auth/login', ['username' => 'user1@example.com', 'password' => '123qwe']);
+        $I->sendPost('auth/login', ['username' => 'user1@example.com', 'password' => 'user^humhub@PASS%worD!']);
         $I->seeSuccessMessage('Success');
     }
 
@@ -47,7 +47,7 @@ class AuthCest extends HumHubApiTestCest
     {
         $I->wantTo('login by Basic auth and JWT bearer token');
 
-        $I->sendPost('auth/login', ['username' => 'User3', 'password' => '123qwe']);
+        $I->sendPost('auth/login', ['username' => 'User3', 'password' => 'user^humhub@PASS%worD!']);
         $I->seeSuccessMessage('Success');
         list($auth_token) = $I->grabDataFromResponseByJsonPath('auth_token');
 
