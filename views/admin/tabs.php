@@ -6,14 +6,14 @@
  */
 
 /**
- * @var \humhub\modules\ui\view\components\View $this
+ * @var \humhub\components\View $this
  * @var string $tab
  */
 
 use humhub\modules\rest\models\ConfigureForm;
+use humhub\widgets\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 use yii\helpers\Url;
-use humhub\widgets\Tabs;
 
 $tabs = [
     [

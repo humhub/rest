@@ -8,13 +8,11 @@
 
 namespace humhub\modules\rest\components\auth;
 
+use humhub\modules\rest\models\ImpersonateAuthToken;
 use Yii;
 use yii\db\Expression;
 use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\StringHelper;
-use humhub\modules\rest\models\ImpersonateAuthToken;
-use humhub\modules\user\models\User;
-use Firebase\JWT\JWT;
 
 class ImpersonateAuth extends HttpBearerAuth
 {

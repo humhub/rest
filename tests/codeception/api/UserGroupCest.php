@@ -44,8 +44,8 @@ class UserGroupCest extends HumHubApiTestCest
         $I->sendPost('user/group', [
             'name' => 'New group',
             'description' => 'Description of the new created group.',
-            'show_at_directory' => false,
-            'show_at_registration' => false,
+            'show_at_directory' => 0,
+            'show_at_registration' => 0,
             'sort_order' => 1000,
         ]);
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(4));
