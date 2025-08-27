@@ -19,8 +19,8 @@ class LanguagePickerBehavior extends Behavior
     public function pickLanguage()
     {
         if (
-            empty(Yii::$app->request->acceptableLanguages) &&
-            $userLanguage = ArrayHelper::getValue(Yii::$app->user->identity, 'language')
+            empty(Yii::$app->request->acceptableLanguages)
+            && $userLanguage = ArrayHelper::getValue(Yii::$app->user->identity, 'language')
         ) {
             Yii::$app->language = $userLanguage;
         }
