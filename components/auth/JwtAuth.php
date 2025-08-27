@@ -27,9 +27,9 @@ class JwtAuth extends HttpBearerAuth
             try {
                 $validData = JWT::decode($token, new Key(JwtAuthForm::getInstance()->jwtKey, 'HS512'));
                 if (
-                    !empty($validData->uid) &&
-                    ($identity = User::find()->active()->andWhere(['user.id' => $validData->uid])->one()) &&
-                    $user->login($identity)
+                    !empty($validData->uid)
+                    && ($identity = User::find()->active()->andWhere(['user.id' => $validData->uid])->one())
+                    && $user->login($identity)
                 ) {
                     return $identity;
                 }

@@ -157,9 +157,9 @@ class UserController extends BaseController
             $password->validate();
         }
 
-        if ((!empty($userData) && $apiUser->hasErrors()) ||
-            ($password !== null && $password->hasErrors()) ||
-            ($profile !== null && $profile->hasErrors())
+        if ((!empty($userData) && $apiUser->hasErrors())
+            || ($password !== null && $password->hasErrors())
+            || ($profile !== null && $profile->hasErrors())
         ) {
             return $this->returnError(400, 'Validation failed', [
                 'profile' => ($profile !== null) ? $profile->getErrors() : null,
