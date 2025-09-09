@@ -5,6 +5,7 @@ Changelog
 ----------------------
 - Fix #209: Invite created via `user/invite` endpoint now sets the language correctly
 - Fix #211: Update test user passwords
+- Fix #214: Switch to using PolymorphicRelation::getObjectModel() in LikeController::actionFindByObject so likes can be fetched for ContentAddon models
 
 0.10.10 (May 20, 2025)
 ----------------------
