@@ -15,7 +15,6 @@ use humhub\modules\content\components\ContentAddonActiveRecord;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\LikeDefinitions;
 use humhub\modules\like\models\Like;
-
 use Yii;
 
 class LikeController extends BaseController
