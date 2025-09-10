@@ -91,11 +91,19 @@ class AuthCest extends HumHubApiTestCest
     public function testImpersonateByAdmin(ApiTester $I)
     {
         $I->wantTo('Check Impersonate by Admin');
-        $I->amAdmin();
+        // Login as Admin by token
+        // NOTE: Don't use $I->amAdmin() here because it doesn't allow to use Authorization by Impersonate below
+        $I->sendPOST('auth/login', ['username' => 'Admin', 'password' => 'admin&humhub@PASS%worD!']);
+        $I->canSeeResponseCodeIs(200);
+        [$adminToken] = $I->grabDataFromResponseByJsonPath('auth_token');
+        $I->amBearerAuthenticated($adminToken);
+        $I->sendGet('auth/current');
+        $I->seeUserDefinition('Admin');
+
+        // Login as impersonated user 2
         $I->sendPost('auth/impersonate', ['userId' => 2]);
         $I->canSeeResponseCodeIs(200);
         [$auth_token] = $I->grabDataFromResponseByJsonPath('token');
-        $I->amUser(null);
         $I->haveHttpHeader('Authorization', "Impersonate $auth_token");
         $I->sendGet('auth/current');
         $I->seeUserDefinition('User1');
