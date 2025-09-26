@@ -301,9 +301,9 @@ abstract class BaseContentController extends BaseController
     protected function saveRecord(ContentActiveRecord $contentRecord): bool
     {
         $data = Yii::$app->request->getBodyParam('data', []);
-        return $contentRecord->load($data, '') &&
-            $contentRecord->save() &&
-            $this->updateContent($contentRecord, $data);
+        return $contentRecord->load($data, '')
+            && $contentRecord->save()
+            && $this->updateContent($contentRecord, $data);
     }
 
     protected function updateContent($activeRecord, $data): bool

@@ -85,8 +85,8 @@ class Module extends BaseModule
             }
 
             foreach ($moduleConfig['events'] as $event) {
-                if ((isset($event['class'], $event['event']) && $event['class'] == $restApiClass && $event['event'] == $restApiEvent) ||
-                    (isset($event[0], $event[1]) && $event[0] == $restApiClass && $event[1] == $restApiEvent)) {
+                if ((isset($event['class'], $event['event']) && $event['class'] == $restApiClass && $event['event'] == $restApiEvent)
+                    || (isset($event[0], $event[1]) && $event[0] == $restApiClass && $event[1] == $restApiEvent)) {
                     $restApiModules[] = $enabledModule;
                     break;
                 }
