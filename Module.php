@@ -29,11 +29,6 @@ class Module extends BaseModule
     /**
      * @inheritdoc
      */
-    public $resourcesPath = 'resources';
-
-    /**
-     * @inheritdoc
-     */
     public function getConfigUrl()
     {
         return Url::to(['/rest/admin/index']);

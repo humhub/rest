@@ -4,6 +4,7 @@ Changelog
 0.11.0 (July 26, 2025)
 ----------------------
 - Enh #210: Migration to Bootstrap 5 for HumHub 1.18
+- Fix #167: Update module resources path
 
 0.10.11 (September 10, 2025)
 ----------------------------
