@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -12,10 +13,8 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\user\models\Session;
 use humhub\modules\user\models\User;
 
-
 class SessionController extends BaseController
 {
-
     /**
      * @inheritdoc
      */

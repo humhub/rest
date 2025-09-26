@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2023 HumHub GmbH & Co. KG
@@ -20,15 +21,15 @@ class JwtAuth extends HttpBearerAuth
     {
         $authHeader = $request->getHeaders()->get($this->header);
 
-        if ($request->getHeaders()->get($this->header) &&$this->pattern !== null && preg_match($this->pattern, $authHeader, $matches)) {
+        if ($request->getHeaders()->get($this->header) && $this->pattern !== null && preg_match($this->pattern, $authHeader, $matches)) {
             $token = $matches[1];
 
             try {
                 $validData = JWT::decode($token, new Key(JwtAuthForm::getInstance()->jwtKey, 'HS512'));
                 if (
-                    !empty($validData->uid) &&
-                    ($identity = User::find()->active()->andWhere(['user.id' => $validData->uid])->one()) &&
-                    $user->login($identity)
+                    !empty($validData->uid)
+                    && ($identity = User::find()->active()->andWhere(['user.id' => $validData->uid])->one())
+                    && $user->login($identity)
                 ) {
                     return $identity;
                 }

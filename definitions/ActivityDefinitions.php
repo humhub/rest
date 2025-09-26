@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -24,7 +25,7 @@ class ActivityDefinitions
             'content' => static::getActivityContent($activity, $baseActivity),
             'originator' => UserDefinitions::getUserShort($baseActivity->originator),
             'source' => SourceDefinitions::getSource($baseActivity->source),
-            'createdAt' => $activity->content->created_at
+            'createdAt' => $activity->content->created_at,
         ];
     }
 
@@ -33,12 +34,12 @@ class ActivityDefinitions
         return [
             'id' => $activity->content->id,
             'guid' => $activity->content->guid,
-            'pinned' => (boolean) $activity->content->pinned,
-            'archived' => (boolean) $activity->content->archived,
+            'pinned' => (bool) $activity->content->pinned,
+            'archived' => (bool) $activity->content->archived,
             'output' => static::getActivityOutput($baseActivity),
         ];
     }
-    
+
     private static function getActivityOutput($baseActivity)
     {
         try {

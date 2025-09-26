@@ -1,6 +1,7 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '',
+  'Access Token for {user}' => '',
   'Access Tokens' => '',
   'Add Access Token' => '',
   'Allow Bearer Authentication' => '',
@@ -9,6 +10,8 @@ return array (
   'Allow Query Param Bearer Authentication' => '',
   'Bearer Access Token Successfully Revoked' => '',
   'Bearer Auth' => '',
+  'Bearer Token Created Successfully' => '',
+  'Copy to clipboard' => 'Salin ke papan klip',
   'Enabled for all registered users' => '',
   'Expiration' => '',
   'General' => 'Umum',
@@ -16,6 +19,12 @@ return array (
   'JWT Key' => '',
   'JWT Token Expiration' => '',
   'No enabled modules found with additional REST API endpoints.' => '',
+  'Source' => '',
+  'Source ID' => '',
+  'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => '',
   'Token' => '',
   'User' => 'Pengguna',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+  '{attribute} is already in use!' => '',
+];

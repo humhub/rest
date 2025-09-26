@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2023 HumHub GmbH & Co. KG
@@ -8,7 +9,9 @@
 
 namespace rest;
 
-use rest\_generated;;
+use rest\_generated;
+
+;
 
 /**
  * Inherited Methods
@@ -29,7 +32,7 @@ class AcceptanceTester extends \AcceptanceTester
 {
     use _generated\AcceptanceTesterActions;
 
-   /**
-    * Define custom actions here
-    */
+    /**
+     * Define custom actions here
+     */
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -44,10 +45,10 @@ class ConfigureForm extends Model
     public function attributeLabels()
     {
         return [
-            'enableJwtAuth' => Yii::t('RestModule.base','Allow JWT Authentication'),
-            'enableBasicAuth' => Yii::t('RestModule.base','Allow HTTP Basic Authentication'),
-            'enableBearerAuth' => Yii::t('RestModule.base','Allow Bearer Authentication'),
-            'enableQueryParamAuth' => Yii::t('RestModule.base','Allow Query Param Bearer Authentication'),
+            'enableJwtAuth' => Yii::t('RestModule.base', 'Allow JWT Authentication'),
+            'enableBasicAuth' => Yii::t('RestModule.base', 'Allow HTTP Basic Authentication'),
+            'enableBearerAuth' => Yii::t('RestModule.base', 'Allow Bearer Authentication'),
+            'enableQueryParamAuth' => Yii::t('RestModule.base', 'Allow Query Param Bearer Authentication'),
             'enabledForAllUsers' => Yii::t('RestModule.base', 'Enabled for all registered users'),
         ];
     }
@@ -67,11 +68,11 @@ class ConfigureForm extends Model
 
         $settings = $module->settings;
 
-        $this->enableJwtAuth = (boolean)$settings->get('enableJwtAuth');
-        $this->enableBasicAuth = (boolean)$settings->get('enableBasicAuth');
-        $this->enableBearerAuth = (boolean)$settings->get('enableBearerAuth');
-        $this->enableQueryParamAuth = (boolean)$settings->get('enableQueryParamAuth');
-        $this->enabledForAllUsers = (boolean)$settings->get('enabledForAllUsers');
+        $this->enableJwtAuth = (bool)$settings->get('enableJwtAuth');
+        $this->enableBasicAuth = (bool)$settings->get('enableBasicAuth');
+        $this->enableBearerAuth = (bool)$settings->get('enableBearerAuth');
+        $this->enableQueryParamAuth = (bool)$settings->get('enableQueryParamAuth');
+        $this->enabledForAllUsers = (bool)$settings->get('enabledForAllUsers');
         $this->enabledUsers = (array)$settings->getSerialized('enabledUsers');
 
         foreach ($module->getModulesWithRestApi() as $apiModule) {
@@ -88,14 +89,14 @@ class ConfigureForm extends Model
         /** @var Module $module */
         $module = Yii::$app->getModule('rest');
 
-        if (!$this->enableBearerAuth ) {
+        if (!$this->enableBearerAuth) {
             $this->enableQueryParamAuth = false;
         }
 
-        $module->settings->set('enableJwtAuth', (boolean)$this->enableJwtAuth);
-        $module->settings->set('enableBasicAuth', (boolean)$this->enableBasicAuth);
-        $module->settings->set('enableBearerAuth', (boolean)$this->enableBearerAuth);
-        $module->settings->set('enableQueryParamAuth', (boolean)$this->enableQueryParamAuth);
+        $module->settings->set('enableJwtAuth', (bool)$this->enableJwtAuth);
+        $module->settings->set('enableBasicAuth', (bool)$this->enableBasicAuth);
+        $module->settings->set('enableBearerAuth', (bool)$this->enableBearerAuth);
+        $module->settings->set('enableQueryParamAuth', (bool)$this->enableQueryParamAuth);
         $module->settings->set('enabledForAllUsers', $this->enabledForAllUsers);
         $module->settings->setSerialized('enabledUsers', (array)$this->enabledUsers);
 
@@ -110,7 +111,7 @@ class ConfigureForm extends Model
 
     public static function getInstance()
     {
-        $config = new static;
+        $config = new static();
         $config->loadSettings();
 
         return $config;

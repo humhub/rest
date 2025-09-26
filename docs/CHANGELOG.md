@@ -1,13 +1,72 @@
 Changelog
 =========
 
-0.10.0 (Unreleased)
-------------------------
+0.11.0 (July 26, 2025)
+----------------------
+- Enh #210: Migration to Bootstrap 5 for HumHub 1.18
 - Fix #167: Update module resources path
 
-0.9.4 (Unreleased)
-------------------------
+0.10.11 (September 10, 2025)
+----------------------------
+- Fix #209: Invite created via `user/invite` endpoint now sets the language correctly
+- Fix #211: Update test user passwords
+- Fix #214: Switch to using `PolymorphicRelation::getObjectModel()` in `LikeController::actionFindByObject` so likes can be fetched for ContentAddon models
+
+0.10.10 (May 20, 2025)
+----------------------
+- Fix #206: `UserPickerField` version compatibility
+
+0.10.9 (May 19, 2025)
+---------------------
+- Enh #204: Bearer Token Auth Improvements
+
+0.10.8 (May 15, 2025)
+---------------------
+- Enh #198: Add doc for Auth Methods
+- Enh #199: Disable `auth/login` endpoint when JWT is disabled
+- Enh #201: Remove session data from legal user data export
+- Enh #202: Add upload support for user `image` and `banner`
+
+0.10.7 (April 22, 2025)
+-----------------------
+- Fix #192: Authentication of unregistered LDAP Users fails
+
+0.10.6 (April 17, 2025)
+-----------------------
+- Enh #192: Ignore all actions from 2FA check
+- Fix #194: Fix failing tests
+
+0.10.5 (March 3, 2025)
+----------------------
+- Enh #182: Use PHP CS Fixer
+- Enh #189: Added new endpoint `POST /user/{id}/auth-client` to insert entries directly into the `user_auth` table
+
+0.10.4 (September 9, 2024)
+--------------------------
+- Enh #180: Improved `user/get-by-authclient` endpoint to support additional authentication clients.
+- Enh #181: Added user profile `image_url` and `banner_url`
+- Enh #179: Added new `resend` and `cancel` endpoints for user invite
+
+0.10.3 (September 13, 2024)
+---------------------------
+- Enh #177: Collect user data for Legal module
+
+0.10.2 (September 5, 2024)
+--------------------------
+- Enh #175: User language will be used by default
+- Fix #176: Fix controller to invite users
+
+0.10.1 (July 31, 2024)
+----------------------
+- Enh #173: Added possibility to change `created_at` of `content`
+- Enh #116: Allow to set `show_at_dashboard` and `can_cancel_membership` on space membership creating
+
+0.10.0 (July 16, 2024)
+----------------------
 - Enh #155: Add `requirements.php`
+- Fix #164: Disable `mustChangePassword` check for impersonated access tokens
+- Enh #170: Added new endpoint `GET /user/invite` for user pending invites
+- Enh #171: Extended invite information in response of `GET /user/invite` endpoint
 
 0.9.3 (December 8, 2023)
 ------------------------

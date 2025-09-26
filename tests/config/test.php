@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2021 HumHub GmbH & Co. KG
@@ -21,6 +22,3 @@ return [
         'humhub\modules\rest\tests\codeception\fixtures\BearerAccessTokenFixture',
     ],
 ];
-
-
-

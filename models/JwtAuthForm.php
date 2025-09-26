@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2023 HumHub GmbH & Co. KG
@@ -21,7 +22,7 @@ class JwtAuthForm extends Model
     {
         return [
             [['jwtKey'], 'string', 'min' => 32, 'max' => 128],
-            [['jwtExpire'], 'integer']
+            [['jwtExpire'], 'integer'],
         ];
     }
 
@@ -72,7 +73,7 @@ class JwtAuthForm extends Model
 
     public static function getInstance()
     {
-        $config = new static;
+        $config = new static();
         $config->loadSettings();
 
         return $config;

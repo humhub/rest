@@ -1,4 +1,5 @@
 <?php
+
 namespace rest;
 
 use humhub\modules\rest\definitions\UserDefinitions;

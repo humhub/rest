@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -10,6 +11,7 @@ namespace humhub\modules\rest\controllers\auth;
 use Firebase\JWT\JWT;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\UserDefinitions;
+use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\rest\models\ImpersonateAuthToken;
 use humhub\modules\rest\models\JwtAuthForm;
 use humhub\modules\user\models\forms\Login;
@@ -37,6 +39,10 @@ class AuthController extends BaseController
 
     public function actionIndex()
     {
+        if (!ConfigureForm::getInstance()->enableJwtAuth) {
+            throw new NotFoundHttpException();
+        }
+
         $user = static::authByUserAndPassword(Yii::$app->request->post('username'), Yii::$app->request->post('password'));
 
         if ($user === null) {
@@ -53,7 +59,7 @@ class AuthController extends BaseController
             'iss' => Yii::$app->settings->get('baseUrl'),
             'nbf' => $issuedAt,
             'uid' => $user->id,
-            'email' => $user->email
+            'email' => $user->email,
         ];
 
         $config = JwtAuthForm::getInstance();
@@ -65,19 +71,27 @@ class AuthController extends BaseController
 
         return $this->returnSuccess('Success', 200, [
             'auth_token' => $jwt,
-            'expired_at' => (!isset($data['exp'])) ? 0 : $data['exp']
+            'expired_at' => (!isset($data['exp'])) ? 0 : $data['exp'],
         ]);
     }
 
 
     public static function authByUserAndPassword($username, $password)
     {
-        $login = new Login;
+        $login = new Login();
         if (!$login->load(['username' => $username, 'password' => $password], '') || !$login->validate()) {
             return null;
         }
 
-        $user = (new AuthClientService($login->authClient))->getUser();
+        $authClientService = new AuthClientService($login->authClient);
+
+        $user = $authClientService->getUser();
+
+        # If user is not found, try to create it by AuthClient (e.g. LDAP)
+        if ($user === null) {
+            $user = $authClientService->createUser();
+        }
+
         return $user;
     }
 
@@ -115,10 +129,11 @@ class AuthController extends BaseController
         $token = new ImpersonateAuthToken();
         $token->user_id = $user->id;
         $token->save();
+        $token->refresh();
 
         return [
             'token' => $token->token,
-            'expires' => $token->expiration,
+            'expires' => strtotime($token->expiration),
         ];
     }
 }

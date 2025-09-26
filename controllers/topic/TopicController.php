@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -67,7 +68,7 @@ class TopicController extends BaseController
     {
         $contentContainer = ContentContainer::findOne(['id' => $containerId]);
         $container = $contentContainer->getPolymorphicRelation();
-        
+
         if ($contentContainer->class === User::class && ($contentContainer->pk !== Yii::$app->user->id && ! Yii::$app->user->isAdmin())) {
             return $this->returnError(403, 'You are not allowed to create topic for user!');
         }
@@ -80,7 +81,7 @@ class TopicController extends BaseController
         $topic->load(Yii::$app->request->getBodyParams(), '');
         $topic->validate();
 
-        if($topic->hasErrors()) {
+        if ($topic->hasErrors()) {
             return $this->returnError(422, 'Validation failed', [
                 $topic->getErrors(),
             ]);
@@ -115,7 +116,7 @@ class TopicController extends BaseController
         $topic->load(Yii::$app->request->getBodyParams(), '');
         $topic->validate();
 
-        if($topic->hasErrors()) {
+        if ($topic->hasErrors()) {
             return $this->returnError(422, 'Validation failed', [
                 $topic->getErrors(),
             ]);
@@ -159,7 +160,6 @@ class TopicController extends BaseController
         $spaceIds = Membership::getUserSpaceIds(Yii::$app->user->id);
 
         $query = Topic::find()
-            ->select('content_tag.*')
             ->leftJoin('contentcontainer', '`contentcontainer`.`id` = `content_tag`.`contentcontainer_id`');
 
         if ($contentContainerId) {
@@ -185,7 +185,7 @@ class TopicController extends BaseController
             } else {
                 $query->andWhere(['and',
                     ['contentcontainer.pk' => $contentContainer->pk, 'contentcontainer.class' => $contentContainer->class],
-                    ['contentcontainer.pk' => $spaceIds, 'contentcontainer.class' => Space::class]
+                    ['contentcontainer.pk' => $spaceIds, 'contentcontainer.class' => Space::class],
                 ]);
             }
         }

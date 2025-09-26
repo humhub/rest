@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -11,13 +12,11 @@ use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
 use yii\helpers\Url;
 
-
 /**
  * Class SpaceDefinitions
  */
 class SpaceDefinitions
 {
-
     public static function getSpaceShort(Space $space)
     {
         return [
@@ -25,7 +24,7 @@ class SpaceDefinitions
             'guid' => $space->guid,
             'name' => $space->name,
             'description' => $space->description,
-            'url' => Url::to(['/', 'container' => $space], true)
+            'url' => Url::to(['/', 'container' => $space], true),
         ];
     }
 
@@ -70,4 +69,3 @@ class SpaceDefinitions
     }
 
 }
-

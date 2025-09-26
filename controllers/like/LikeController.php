@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -7,29 +8,39 @@
 
 namespace humhub\modules\rest\controllers\like;
 
-use humhub\modules\content\models\Content;
+use humhub\components\behaviors\PolymorphicRelation;
+use humhub\helpers\DataTypeHelper;
+use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\content\components\ContentAddonActiveRecord;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\LikeDefinitions;
 use humhub\modules\like\models\Like;
 use Yii;
 
-
 class LikeController extends BaseController
 {
-
     public function actionFindByObject()
     {
-        $contentFilter = [
-            'object_model' => Yii::$app->request->get('model'),
-            'object_id' => (int)Yii::$app->request->get('pk'),
-        ];
-        $content = Content::findOne($contentFilter);
-        if ($content === null) {
-            return $this->returnError(404, 'Content not found!');
+        $model = Yii::$app->request->get('model');
+        $pk = (int)Yii::$app->request->get('pk');
+
+        if (DataTypeHelper::matchClassType($model, [ContentActiveRecord::class, ContentAddonActiveRecord::class]) === null) {
+            return $this->returnError(400, 'Invalid object model!');
         }
-        if (!$content->canView()) {
+
+        $object = $model::findOne(['id' => $pk]);
+        if ($object === null) {
+            return $this->returnError(404, 'Object model not found!');
+        }
+
+        if (!$object->content->canView()) {
             return $this->returnError(403, 'You cannot view this content!');
         }
+
+        $contentFilter = [
+            'object_model' => PolymorphicRelation::getObjectModel($object),
+            'object_id' => $object->getPrimaryKey(),
+        ];
 
         $results = [];
         $query = Like::find();

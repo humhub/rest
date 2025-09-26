@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -20,7 +21,6 @@ use Yii;
  */
 class SpaceController extends BaseController
 {
-
     public function actionIndex()
     {
         $results = [];
@@ -50,7 +50,7 @@ class SpaceController extends BaseController
 
     public function actionCreate()
     {
-        if (!Yii::$app->user->permissionmanager->can(new CreatePublicSpace) && !Yii::$app->user->permissionmanager->can(new CreatePrivateSpace)) {
+        if (!Yii::$app->user->permissionmanager->can(new CreatePublicSpace()) && !Yii::$app->user->permissionmanager->can(new CreatePrivateSpace())) {
             return $this->returnError(403, 'You are not allowed to create spaces!');
         }
 

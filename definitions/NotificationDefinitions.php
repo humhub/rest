@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -21,7 +22,7 @@ class NotificationDefinitions
             'output' => $baseNotification->html(),
             'originator' => UserDefinitions::getUserShort($baseNotification->originator),
             'source' => SourceDefinitions::getSource($baseNotification->source),
-            'createdAt' => $notification->created_at
+            'createdAt' => $notification->created_at,
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -11,10 +12,8 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ContentDefinitions;
 use humhub\modules\content\models\ContentContainer;
 
-
 class ContainerController extends BaseController
 {
-
     public function actionList()
     {
         $results = [];

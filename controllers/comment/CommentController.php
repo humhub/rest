@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -107,7 +108,7 @@ class CommentController extends BaseController
     {
         $content = Content::findOne([
             'object_model' => $objectModel,
-            'object_id' => $objectId
+            'object_id' => $objectId,
         ]);
 
         return $this->getPagedComments($content);

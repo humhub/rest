@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2023 HumHub GmbH & Co. KG
@@ -12,7 +13,6 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use humhub\libs\DbDateValidator;
 use humhub\modules\user\models\User;
-
 
 /**
  * @property int $id
@@ -35,11 +35,11 @@ class ImpersonateAuthToken extends ActiveRecord
             [['user_id'], 'required'],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'targetRelation' => 'user', 'targetAttribute' => 'id'],
-            [['expiration'], 'default', 'value' => function() {
+            [['expiration'], 'default', 'value' => function () {
                 return new Expression('DATE_ADD(NOW(), INTERVAL 30 MINUTE)');
             }],
-            [['token'], 'default', 'value' => function() {
-                return 'impersonate-' . Yii::$app->security->generateRandomString(74);
+            [['token'], 'default', 'value' => function () {
+                return 'impersonated-' . Yii::$app->security->generateRandomString(73);
             }],
         ];
     }

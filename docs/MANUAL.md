@@ -8,6 +8,10 @@ Following RESTful API endpoints are available.
 
 The base url for all APIs is: `https://yourhost/api/v1/`
 
+**Language**
+
+Logged-in user's language will be used. Can be overwritten by `Accept-Language` header.
+
 
 **Core APIs:**
 
@@ -30,7 +34,7 @@ The base url for all APIs is: `https://yourhost/api/v1/`
 - [Tasks](https://marketplace.humhub.com/module/tasks/docs/swagger/task.html)
 - [Wiki](https://marketplace.humhub.com/module/wiki/docs/swagger/wiki.html)
 - [Mail](https://marketplace.humhub.com/module/mail/docs/swagger/mail.html)
-- [Polls](https://marketplace.humhub.com/module/polls/docs/swagger/polls.html)
+- [Polls](https://marketplace.humhub.com/module/polls/docs/swagger/poll.html)
 - [Survey](https://marketplace.humhub.com/module/survey/docs/swagger/survey.html)
 
 

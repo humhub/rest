@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -14,7 +15,6 @@ use Yii;
 
 class FileController extends BaseController
 {
-
     public function actionDownload($id)
     {
         $file = File::findOne(['id' => $id]);

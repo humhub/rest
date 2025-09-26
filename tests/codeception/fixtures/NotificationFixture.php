@@ -13,7 +13,6 @@ use yii\test\ActiveFixture;
 
 class NotificationFixture extends ActiveFixture
 {
-
     public $modelClass = Notification::class;
     public $dataFile = '@rest/tests/codeception/fixtures/data/notification.php';
 

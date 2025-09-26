@@ -1,6 +1,7 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => 'Configuración <strong>REST</strong>',
+  'Access Token for {user}' => '',
   'Access Tokens' => 'Tokens de acceso',
   'Add Access Token' => 'Añadir token de acceso',
   'Allow Bearer Authentication' => 'Permitir autenticación Bearer',
@@ -9,6 +10,8 @@ return array (
   'Allow Query Param Bearer Authentication' => 'Permitir autenticación Bearer mediante parámetro en el query',
   'Bearer Access Token Successfully Revoked' => 'Token de autenticación Bearer revocada con éxito',
   'Bearer Auth' => 'Bearer Auth',
+  'Bearer Token Created Successfully' => '',
+  'Copy to clipboard' => 'Copiar al portapapeles',
   'Enabled for all registered users' => 'Habilitado para todos los usuarios registrados',
   'Expiration' => 'Expiración',
   'General' => 'General',
@@ -16,6 +19,12 @@ return array (
   'JWT Key' => 'Clave JWT',
   'JWT Token Expiration' => 'Expiración de token JWT',
   'No enabled modules found with additional REST API endpoints.' => 'No se han encontrado módulos que tengan endpoints de la API adicionales.',
+  'Source' => 'Fuente',
+  'Source ID' => '',
+  'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => '',
   'Token' => 'Token',
   'User' => 'Usuario',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+  '{attribute} is already in use!' => '',
+];

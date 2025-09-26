@@ -1,18 +1,18 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
  */
 
-/* @var $this \humhub\modules\ui\view\components\View */
+/* @var $this \humhub\components\View */
 
 namespace humhub\modules\rest\definitions;
 
 use humhub\components\ActiveRecord;
 use humhub\modules\content\models\Content;
 use humhub\modules\file\models\File;
-
 
 /**
  * Class FileDefinitions
@@ -21,7 +21,6 @@ use humhub\modules\file\models\File;
  */
 class FileDefinitions
 {
-
     public static function getFiles(ActiveRecord $record)
     {
         if ($record instanceof Content) {
@@ -42,7 +41,7 @@ class FileDefinitions
             'mime_type' => $file->mime_type,
             'size' => $file->size,
             'file_name' => $file->file_name,
-            'url' => $file->getUrl([], true)
+            'url' => $file->getUrl([], true),
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> Konfiguracja',
+  'Access Token for {user}' => 'Token dostępu dla {user}',
   'Access Tokens' => 'Tokeny dostępowe',
   'Add Access Token' => 'Dodaj token dostępowy',
   'Allow Bearer Authentication' => 'Zezwól na Bearer Authentication',
@@ -9,6 +10,8 @@ return array (
   'Allow Query Param Bearer Authentication' => 'Zezwól na Query Param Bearer Authentication',
   'Bearer Access Token Successfully Revoked' => 'Token dostępowy Bearer poprawnie odwołany',
   'Bearer Auth' => 'Bearer Auth',
+  'Bearer Token Created Successfully' => 'Token na okaziciela utworzony poprawnie',
+  'Copy to clipboard' => 'Skopiuj do schowka',
   'Enabled for all registered users' => 'Dostępne dla wszystkich zarejestrowanych użytkowników',
   'Expiration' => 'Wygasa',
   'General' => 'Ogólne',
@@ -16,6 +19,12 @@ return array (
   'JWT Key' => 'Klucz JWT',
   'JWT Token Expiration' => 'Wygaśnięcie tokena JWT',
   'No enabled modules found with additional REST API endpoints.' => 'Nie odnaleziono modułów z dodatkowymi punktami końcowymi REST API.',
+  'Source' => 'Źródło',
+  'Source ID' => 'ID źródłowe',
+  'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => '',
   'Token' => 'Token',
   'User' => 'Użytkownik',
-);
+  'Validation failed' => 'Weryfikacja nie powiodła się',
+  'You are not allowed to do this action!' => 'Nie możesz wykonać tej akcji!',
+  '{attribute} is already in use!' => '{attribute} już w użyciu!',
+];

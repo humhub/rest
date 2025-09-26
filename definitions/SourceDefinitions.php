@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2019 HumHub GmbH & Co. KG
@@ -18,13 +19,13 @@ class SourceDefinitions
     public static function getSource($source)
     {
         switch (true) {
-            case $source instanceof Space :
+            case $source instanceof Space:
                 return SpaceDefinitions::getSpaceShort($source);
-            case $source instanceof Post :
+            case $source instanceof Post:
                 return PostDefinitions::getPost($source);
-            case $source instanceof Comment :
+            case $source instanceof Comment:
                 return CommentDefinitions::getComment($source);
-            case $source instanceof Like :
+            case $source instanceof Like:
                 return LikeDefinitions::getLike($source);
         }
 

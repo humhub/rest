@@ -98,7 +98,7 @@ class UserCest extends HumHubApiTestCest
 
         $I->sendPut('user/2', [
             'account' => [
-                'username' => 'User1_updated'
+                'username' => 'User1_updated',
             ],
             'profile' => [
                 'firstname' => 'Peter Updated',

@@ -1,6 +1,7 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> Configuratie',
+  'Access Token for {user}' => 'Toegangstoken voor {user}',
   'Access Tokens' => 'Toegangstokens',
   'Add Access Token' => 'Toegangstoken toevoegen',
   'Allow Bearer Authentication' => 'Bearer-authenticatie toestaan',
@@ -9,6 +10,8 @@ return array (
   'Allow Query Param Bearer Authentication' => 'Sta Query Param Bearer-authenticatie toe',
   'Bearer Access Token Successfully Revoked' => 'Toegangstoken voor Bearer succesvol ingetrokken',
   'Bearer Auth' => 'Bearer Auth',
+  'Bearer Token Created Successfully' => 'Dragertoken succesvol aangemaakt',
+  'Copy to clipboard' => 'Kopiëren naar klembord',
   'Enabled for all registered users' => 'Ingeschakeld voor alle geregistreerde gebruikers',
   'Expiration' => 'Vervaldatum',
   'General' => 'Algemeen',
@@ -16,6 +19,12 @@ return array (
   'JWT Key' => 'JWT-sleutel',
   'JWT Token Expiration' => 'Vervaldatum JWT-token',
   'No enabled modules found with additional REST API endpoints.' => 'Geen ingeschakelde modules gevonden met extra REST API-eindpunten.',
+  'Source' => 'Bron',
+  'Source ID' => 'Bron-ID',
+  'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => 'Dit token wordt om veiligheidsredenen slechts één keer weergegeven. Kopieer het en bewaar het veilig. U kunt het niet meer bekijken nadat u deze pagina verlaat. Als u het verliest, moet u een nieuw token genereren.',
   'Token' => 'Token',
   'User' => 'Gebruiker',
-);
+  'Validation failed' => 'Validatie mislukt',
+  'You are not allowed to do this action!' => 'Deze actie mag u niet uitvoeren!',
+  '{attribute} is already in use!' => '{attribute} is al in gebruik!',
+];

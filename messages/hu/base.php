@@ -1,6 +1,7 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> konfiguráció',
+  'Access Token for {user}' => '',
   'Access Tokens' => 'Hozzáférési tokenek',
   'Add Access Token' => 'Hozzáférési token hozzáadása',
   'Allow Bearer Authentication' => 'Adathordozó hitelesítés engedélyezése',
@@ -9,6 +10,8 @@ return array (
   'Allow Query Param Bearer Authentication' => 'Lekérdezésparaméter-vivő hitelesítés engedélyezése',
   'Bearer Access Token Successfully Revoked' => 'A hordozó hozzáférési token sikeresen visszavonva',
   'Bearer Auth' => 'Bearer Auth',
+  'Bearer Token Created Successfully' => '',
+  'Copy to clipboard' => 'Másolás vágólapra',
   'Enabled for all registered users' => 'Engedélyezés az összes felhasználónak',
   'Expiration' => 'Lejárat',
   'General' => 'Általános',
@@ -16,6 +19,12 @@ return array (
   'JWT Key' => 'JWT kulcs',
   'JWT Token Expiration' => 'JWT token lejárata',
   'No enabled modules found with additional REST API endpoints.' => 'Nem találhatók engedélyezett modulok további REST API-végpontokkal.',
+  'Source' => 'Forrás',
+  'Source ID' => '',
+  'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => '',
   'Token' => 'Token',
   'User' => 'Felhasználó',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+  '{attribute} is already in use!' => '',
+];

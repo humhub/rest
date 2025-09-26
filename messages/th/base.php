@@ -1,6 +1,7 @@
 <?php
-return array (
+return [
   '<strong>REST</strong> Configuration' => '',
+  'Access Token for {user}' => '',
   'Access Tokens' => '',
   'Add Access Token' => '',
   'Allow Bearer Authentication' => '',
@@ -9,6 +10,8 @@ return array (
   'Allow Query Param Bearer Authentication' => '',
   'Bearer Access Token Successfully Revoked' => '',
   'Bearer Auth' => '',
+  'Bearer Token Created Successfully' => '',
+  'Copy to clipboard' => 'คัดลอกไปที่คลิปบอร์ด',
   'Enabled for all registered users' => 'เปิดใช้งานสำหรับผู้ใช้ที่ลงทะเบียนทั้งหมด',
   'Expiration' => '',
   'General' => 'ทั่วไป',
@@ -16,6 +19,12 @@ return array (
   'JWT Key' => 'JWT คีย์',
   'JWT Token Expiration' => 'JWT Token หมดอายุ',
   'No enabled modules found with additional REST API endpoints.' => 'ไม่พบโมดูลที่เปิดใช้งานพร้อมปลายทาง REST API เพิ่มเติม',
+  'Source' => 'ที่มา',
+  'Source ID' => '',
+  'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => '',
   'Token' => '',
   'User' => 'ผู้ใช้',
-);
+  'Validation failed' => '',
+  'You are not allowed to do this action!' => '',
+  '{attribute} is already in use!' => '',
+];

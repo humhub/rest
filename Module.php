@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
@@ -10,6 +11,7 @@ namespace humhub\modules\rest;
 use humhub\components\bootstrap\ModuleAutoLoader;
 use humhub\components\Module as BaseModule;
 use Yii;
+use yii\base\Event;
 use yii\helpers\Url;
 
 class Module extends BaseModule
@@ -78,8 +80,8 @@ class Module extends BaseModule
             }
 
             foreach ($moduleConfig['events'] as $event) {
-                if ((isset($event['class'], $event['event']) && $event['class'] == $restApiClass && $event['event'] == $restApiEvent) ||
-                    (isset($event[0], $event[1]) && $event[0] == $restApiClass && $event[1] == $restApiEvent)) {
+                if ((isset($event['class'], $event['event']) && $event['class'] == $restApiClass && $event['event'] == $restApiEvent)
+                    || (isset($event[0], $event[1]) && $event[0] == $restApiClass && $event[1] == $restApiEvent)) {
                     $restApiModules[] = $enabledModule;
                     break;
                 }
@@ -100,5 +102,14 @@ class Module extends BaseModule
         $apiModules = (array)$this->settings->getSerialized('apiModules');
 
         return !isset($apiModules[$moduleId]) || $apiModules[$moduleId];
+    }
+
+    public function beforeAction($action)
+    {
+        Yii::$app->on('twofa.beforeCheck', function (Event $event) use ($action) {
+            $event->handled = $action->controller->id !== 'admin-user';
+        });
+
+        return parent::beforeAction($action);
     }
 }

@@ -53,7 +53,7 @@ class PostCest extends HumHubApiTestCest
         $I->sendPost('post/container/1', [
             'data' => [
                 'message' => 'New created message from API test',
-            ]
+            ],
         ]);
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(15));
     }
@@ -71,17 +71,17 @@ class PostCest extends HumHubApiTestCest
                 'content' => [
                     'metadata' => [
                         'scheduled_at' => $scheduledDate,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
 
         $I->seeSuccessResponseContainsJson(ArrayHelper::merge($this->getRecordDefinition(16), [
             'content' => [
                 'metadata' => [
-                    'scheduled_at' => $scheduledDate
-                ]
-            ]
+                    'scheduled_at' => $scheduledDate,
+                ],
+            ],
         ]));
     }
 
@@ -93,7 +93,7 @@ class PostCest extends HumHubApiTestCest
         $I->sendPut('post/1', [
             'data' => [
                 'message' => 'Updated message for Post 1',
-            ]
+            ],
         ]);
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(1));
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2023 HumHub GmbH & Co. KG
@@ -17,7 +18,6 @@ use yii\helpers\ArrayHelper;
  */
 class ApiUser extends Model
 {
-
     public User $user;
 
     /**
