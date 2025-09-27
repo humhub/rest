@@ -21,6 +21,7 @@ class UserGroupCest extends HumHubApiTestCest
             $this->getRecordDefinition(1),
             $this->getRecordDefinition(2),
             $this->getRecordDefinition(3),
+            $this->getRecordDefinition(4),
         ]);
     }
 
@@ -48,7 +49,7 @@ class UserGroupCest extends HumHubApiTestCest
             'show_at_registration' => 0,
             'sort_order' => 1000,
         ]);
-        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(4));
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(5));
     }
 
     public function testUpdate(ApiTester $I)
