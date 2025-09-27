@@ -32,7 +32,7 @@ class LikeCest extends HumHubApiTestCest
             'model' => Post::class,
             'pk' => 123,
         ]);
-        $I->seeNotFoundMessage('Content not found!');
+        $I->seeNotFoundMessage('Object model not found!');
     }
 
     public function testView(ApiTester $I)
