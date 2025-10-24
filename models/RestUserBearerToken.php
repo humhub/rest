@@ -61,7 +61,7 @@ class RestUserBearerToken extends ActiveRecord
     {
         if ($insert) {
             $this->newToken = Yii::$app->security->generateRandomString(86);
-            $this->token = hash('sha256', $this->newToken);
+            $this->token = hash('sha256', (string) $this->newToken);
         }
 
         return parent::beforeSave($insert);

@@ -18,17 +18,12 @@ class SourceDefinitions
 {
     public static function getSource($source)
     {
-        switch (true) {
-            case $source instanceof Space:
-                return SpaceDefinitions::getSpaceShort($source);
-            case $source instanceof Post:
-                return PostDefinitions::getPost($source);
-            case $source instanceof Comment:
-                return CommentDefinitions::getComment($source);
-            case $source instanceof Like:
-                return LikeDefinitions::getLike($source);
-        }
-
-        return get_class($source) . ' definitions are not yet supported.';
+        return match (true) {
+            $source instanceof Space => SpaceDefinitions::getSpaceShort($source),
+            $source instanceof Post => PostDefinitions::getPost($source),
+            $source instanceof Comment => CommentDefinitions::getComment($source),
+            $source instanceof Like => LikeDefinitions::getLike($source),
+            default => $source::class . ' definitions are not yet supported.',
+        };
     }
 }

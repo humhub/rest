@@ -20,7 +20,7 @@ class User extends \humhub\modules\user\components\User
         $class = $this->identityClass;
 
         $accessToken = RestUserBearerToken::find()
-            ->where(['token' => hash('sha256', $token)])
+            ->where(['token' => hash('sha256', (string) $token)])
             ->andWhere(['>', 'expiration', new Expression('NOW()')])
             ->one();
 

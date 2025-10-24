@@ -18,7 +18,7 @@ class NotificationDefinitions
 
         return [
             'id' => $notification->id,
-            'class' => get_class($baseNotification),
+            'class' => $baseNotification::class,
             'output' => $baseNotification->html(),
             'originator' => UserDefinitions::getUserShort($baseNotification->originator),
             'source' => SourceDefinitions::getSource($baseNotification->source),

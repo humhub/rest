@@ -92,7 +92,7 @@ class ContentDefinitions
         $topicsParam = Yii::$app->request->get('topics');
         if (!empty($topicsParam)) {
             $topics = [];
-            foreach (explode(',', $topicsParam) as $topicName) {
+            foreach (explode(',', (string) $topicsParam) as $topicName) {
                 $topic = Topic::findOne(['contentcontainer_id' => $contentContainerId, 'name' => $topicName]);
                 if ($topic !== null) {
                     $topics[] = $topic;

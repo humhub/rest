@@ -64,9 +64,7 @@ class InviteController extends BaseController
 
         $pagination = $this->handlePagination($query, 10);
 
-        $results = ArrayHelper::getColumn($query->all(), function (Invite $invite) {
-            return InviteDefinitions::getInvite($invite);
-        });
+        $results = ArrayHelper::getColumn($query->all(), InviteDefinitions::getInvite(...));
 
         return $this->returnPagination($query, $pagination, $results);
     }

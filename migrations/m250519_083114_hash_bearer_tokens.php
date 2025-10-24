@@ -8,7 +8,7 @@ class m250519_083114_hash_bearer_tokens extends Migration
     public function safeUp()
     {
         foreach (RestUserBearerToken::find()->each() as $token) {
-            $token->token = hash('sha256', $token->token);
+            $token->token = hash('sha256', (string) $token->token);
             $token->save();
         }
     }

@@ -49,7 +49,7 @@ class AuthCest extends HumHubApiTestCest
 
         $I->sendPost('auth/login', ['username' => 'User3', 'password' => 'user^humhub@PASS%worD!']);
         $I->seeSuccessMessage('Success');
-        list($auth_token) = $I->grabDataFromResponseByJsonPath('auth_token');
+        [$auth_token] = $I->grabDataFromResponseByJsonPath('auth_token');
 
         $I->sendGet('auth/current');
         $I->seeCodeResponseContainsJson(HttpCode::UNAUTHORIZED, ['message' => 'Your request was made with invalid credentials.']);
