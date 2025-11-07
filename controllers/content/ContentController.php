@@ -24,13 +24,10 @@ class ContentController extends BaseController
             return $this->returnError(404, 'Content container not found!');
         }
 
-        switch ($orderBy) {
-            case 'lastUpdate':
-                $orderByColumn = 'updated_at';
-                break;
-            default:
-                $orderByColumn = 'created_at';
-        }
+        $orderByColumn = match ($orderBy) {
+            'lastUpdate' => 'updated_at',
+            default => 'created_at',
+        };
 
         $results = [];
         $query = (new ActiveQueryContent(Content::class))
@@ -41,14 +38,14 @@ class ContentController extends BaseController
             ->readable();
 
         if (!empty($dateUpdatedFrom)) {
-            $dateUpdatedFrom = is_numeric($dateUpdatedFrom) ? (int) $dateUpdatedFrom : strtotime($dateUpdatedFrom);
+            $dateUpdatedFrom = is_numeric($dateUpdatedFrom) ? (int) $dateUpdatedFrom : strtotime((string) $dateUpdatedFrom);
             $query->andWhere([
                 '>=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedFrom),
             ]);
         }
 
         if (!empty($dateUpdatedTo)) {
-            $dateUpdatedTo = is_numeric($dateUpdatedTo) ? (int) $dateUpdatedTo : strtotime($dateUpdatedTo);
+            $dateUpdatedTo = is_numeric($dateUpdatedTo) ? (int) $dateUpdatedTo : strtotime((string) $dateUpdatedTo);
             $query->andWhere([
                 '<=', Content::tableName() . '.updated_at', date('Y-m-d H:i:s', $dateUpdatedTo),
             ]);

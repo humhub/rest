@@ -33,7 +33,7 @@ class JwtAuth extends HttpBearerAuth
                 ) {
                     return $identity;
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 return null;
             }
         }

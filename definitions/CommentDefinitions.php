@@ -22,7 +22,7 @@ class CommentDefinitions
     {
         $result = [];
 
-        $model = get_class($record);
+        $model = $record::class;
         $pk = $record->getPrimaryKey();
         if ($record instanceof Content) {
             $model = $record->object_model;
