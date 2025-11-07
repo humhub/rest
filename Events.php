@@ -43,7 +43,7 @@ class Events
     {
 
         // Only prepare if API request
-        if (substr(Yii::$app->request->pathInfo, 0, 4) != 'api/') {
+        if (!str_starts_with(Yii::$app->request->pathInfo, 'api/')) {
             return;
         }
 
@@ -192,72 +192,42 @@ class Events
     {
         $event->addExportData('user', UserDefinitions::getUser($event->user));
 
-        $event->addExportData('password', array_map(function ($password) {
-            return UserDefinitions::getPassword($password);
-        }, Password::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('password', array_map(UserDefinitions::getPassword(...), Password::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('friendship', array_map(function ($friendship) {
-            return UserDefinitions::getFriendship($friendship);
-        }, Friendship::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('friendship', array_map(UserDefinitions::getFriendship(...), Friendship::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('mentioning', array_map(function ($mentioning) {
-            return UserDefinitions::getMentioning($mentioning);
-        }, Mentioning::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('mentioning', array_map(UserDefinitions::getMentioning(...), Mentioning::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('user-follow', array_map(function ($follow) {
-            return UserDefinitions::getUserFollow($follow);
-        }, Follow::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('user-follow', array_map(UserDefinitions::getUserFollow(...), Follow::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('auth', array_map(function ($auth) {
-            return UserDefinitions::getUserAuth($auth);
-        }, Auth::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('auth', array_map(UserDefinitions::getUserAuth(...), Auth::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('group', array_map(function ($group) {
-            return UserDefinitions::getGroup($group);
-        }, Group::find()
+        $event->addExportData('group', array_map(UserDefinitions::getGroup(...), Group::find()
             ->innerJoin('group_user', 'group_user.group_id = group.id')
             ->where(['group_user.user_id' => $event->user->id])
             ->all()));
 
-        $event->addExportData('post', array_map(function ($post) {
-            return PostDefinitions::getPost($post);
-        }, Post::findAll(['created_by' => $event->user->id])));
+        $event->addExportData('post', array_map(PostDefinitions::getPost(...), Post::findAll(['created_by' => $event->user->id])));
 
-        $event->addExportData('comment', array_map(function ($comment) {
-            return CommentDefinitions::getComment($comment);
-        }, Comment::findAll(['created_by' => $event->user->id])));
+        $event->addExportData('comment', array_map(CommentDefinitions::getComment(...), Comment::findAll(['created_by' => $event->user->id])));
 
-        $event->addExportData('like', array_map(function ($like) {
-            return LikeDefinitions::getLike($like);
-        }, Like::findAll(['created_by' => $event->user->id])));
+        $event->addExportData('like', array_map(LikeDefinitions::getLike(...), Like::findAll(['created_by' => $event->user->id])));
 
-        $event->addExportData('activity', array_map(function ($activity) {
-            return ActivityDefinitions::getActivity($activity);
-        }, Activity::find()
+        $event->addExportData('activity', array_map(ActivityDefinitions::getActivity(...), Activity::find()
             ->innerJoin('content', 'activity.id = content.object_id and content.object_model = :activityClass', ['activityClass' => Activity::class])
             ->where(['created_by' => $event->user->id])
             ->all()));
 
-        $event->addExportData('invite', array_map(function ($invite) {
-            return InviteDefinitions::getInvite($invite);
-        }, Invite::findAll(['created_by' => $event->user->id])));
+        $event->addExportData('invite', array_map(InviteDefinitions::getInvite(...), Invite::findAll(['created_by' => $event->user->id])));
 
-        $event->addExportData('notification', array_map(function ($notification) {
-            return NotificationDefinitions::getNotification($notification);
-        }, Notification::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('notification', array_map(NotificationDefinitions::getNotification(...), Notification::findAll(['user_id' => $event->user->id])));
 
-        $event->addExportData('space', array_map(function ($space) {
-            return SpaceDefinitions::getSpace($space);
-        }, Space::findAll(['created_by' => $event->user->id])));
+        $event->addExportData('space', array_map(SpaceDefinitions::getSpace(...), Space::findAll(['created_by' => $event->user->id])));
 
-        $event->addExportData('space-membership', array_map(function ($membership) {
-            return SpaceDefinitions::getSpaceMembership($membership);
-        }, Membership::findAll(['user_id' => $event->user->id])));
+        $event->addExportData('space-membership', array_map(SpaceDefinitions::getSpaceMembership(...), Membership::findAll(['user_id' => $event->user->id])));
 
         $files = File::findAll(['created_by' => $event->user->id]);
-        $event->addExportData('file', array_map(function ($file) {
-            return FileDefinitions::getFile($file);
-        }, $files));
+        $event->addExportData('file', array_map(FileDefinitions::getFile(...), $files));
 
         foreach ($files as $file) {
             $event->addExportFile($file->file_name, $file->store->get());

@@ -41,9 +41,7 @@ use yii\web\JsExpression;
                 ],
                 [
                     'attribute' => 'token',
-                    'value' => function () {
-                        return str_repeat('*', 30);
-                    }
+                    'value' => fn() => str_repeat('*', 30)
                 ],
                 'expiration:datetime',
                 [
@@ -53,12 +51,10 @@ use yii\web\JsExpression;
                         'update' => false,
                     ],
                     'buttons' => [
-                        'delete' => function ($url, $model, $id) {
-                            return Button::danger()
-                                ->link(['revoke-access-token', 'id' => $id])
-                                ->icon('trash')
-                                ->sm();
-                        },
+                        'delete' => fn($url, $model, $id) => Button::danger()
+                            ->link(['revoke-access-token', 'id' => $id])
+                            ->icon('trash')
+                            ->sm(),
                     ],
                 ],
             ],

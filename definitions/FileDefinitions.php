@@ -27,9 +27,7 @@ class FileDefinitions
             $record = $record->getPolymorphicRelation();
         }
 
-        return array_map(function ($v) {
-            return static::getFile($v);
-        }, $record->fileManager->findAll());
+        return array_map(static::getFile(...), $record->fileManager->findAll());
     }
 
 

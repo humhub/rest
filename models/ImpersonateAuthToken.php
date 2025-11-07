@@ -35,12 +35,8 @@ class ImpersonateAuthToken extends ActiveRecord
             [['user_id'], 'required'],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'targetRelation' => 'user', 'targetAttribute' => 'id'],
-            [['expiration'], 'default', 'value' => function () {
-                return new Expression('DATE_ADD(NOW(), INTERVAL 30 MINUTE)');
-            }],
-            [['token'], 'default', 'value' => function () {
-                return 'impersonated-' . Yii::$app->security->generateRandomString(73);
-            }],
+            [['expiration'], 'default', 'value' => fn() => new Expression('DATE_ADD(NOW(), INTERVAL 30 MINUTE)')],
+            [['token'], 'default', 'value' => fn() => 'impersonated-' . Yii::$app->security->generateRandomString(73)],
         ];
     }
 
