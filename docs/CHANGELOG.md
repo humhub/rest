@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.11.1 (Unreleased)
-----------------------
+0.11.1 (November 19, 2025)
+--------------------------
 - Enh #219: Improved Module Test GitHub Actions
 - Enh #220: Implement module-coding-standards
 - Enh #224: Convert swagger docs to OpenAPI 3.0
