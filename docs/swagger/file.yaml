@@ -1,73 +1,69 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
   description: |
     Welcome to the HumHub file module API reference.
-
   version: 1.0.0
   title: HumHub - File API
   contact:
     email: info@humhub.com
   license:
     name: AGPLv2
-    url: 'https://www.humhub.org/en/licences'
-basePath: /api/v1
-
-
+    url: https://www.humhub.org/en/licences
 paths:
-  '/file/download/{id}':
+  "/file/download/{id}":
     get:
       summary: Downloads a file by id
-      description: ''
-      produces:
-        - 'application/octet-stream'
+      description: ""
       parameters:
         - name: id
           in: path
           description: The id of the file to download
           required: true
-          type: integer
-      responses:
-        '200':
-          description: OK
           schema:
-            type: file
-        '404':
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
           description: File not found
-
-
-securityDefinitions:
-  $ref: "common.yaml#/securityDefinitions"
-
-definitions:
-  Files:
-    type: array
-    $ref: "#/definitions/File"
-
-  File:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14
-      guid:
-        type: string
-        readOnly: true
-        example: "bded6dc7-e6f4-417e-a638-b653525529ca"
-      mime_type:
-        type: string
-        readOnly: true
-        example: "text/plain"
-      size:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14353
-      file_name:
-        type: string
-        readOnly: true
-        example: "image.jpg"
-      url:
-        type: string
-        example: "http://localhost/p/humhub/master/file/file/download?guid=bded6dc7-e6f4-417e-a638-b653525529ca"
+servers:
+  - url: /api/v1
+components:
+  securitySchemes:
+    _ref: common.yaml#/securityDefinitions
+  schemas:
+    Files:
+      $ref: "#/components/schemas/File"
+    File:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 14
+        guid:
+          type: string
+          readOnly: true
+          example: bded6dc7-e6f4-417e-a638-b653525529ca
+        mime_type:
+          type: string
+          readOnly: true
+          example: text/plain
+        size:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 14353
+        file_name:
+          type: string
+          readOnly: true
+          example: image.jpg
+        url:
+          type: string
+          example: http://localhost/p/humhub/master/file/file/download?guid=bded6dc7-e6f4-417e-a638-b653525529ca

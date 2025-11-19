@@ -1,25 +1,20 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
   description: |
     Welcome to the HumHub user module API reference.
-
   version: 1.0.0
   title: HumHub - User API
   contact:
     email: info@humhub.com
   license:
     name: AGPLv2
-    url: 'https://www.humhub.org/en/licences'
-basePath: /api/v1
-schemes:
-  - http
-  - https
+    url: https://www.humhub.org/en/licences
 tags:
   - name: User
     description: API to access and manage user information.
     externalDocs:
       description: Find out more
-      url: 'http://docs.humhub.org'
+      url: http://docs.humhub.org
   - name: Group
     description: Group API
   - name: Invite
@@ -27,348 +22,358 @@ tags:
   - name: Session
     description: User sessions
 paths:
-  '/user':
+  /user:
     get:
       tags:
         - User
       summary: Find all users
-      description: ''
-      produces:
-        - application/json
-        - application/xml
+      description: ""
       parameters:
-        - $ref: 'common.yaml#/components/parameters/pageParam'
-        - $ref: 'common.yaml#/components/parameters/limitParam'
+        - $ref: common.yaml#/components/parameters/pageParam
+        - $ref: common.yaml#/components/parameters/limitParam
       responses:
-        '200':
+        "200":
           description: Successful operation
-          schema:
-            type: object
-            properties:
-              total:
-                $ref: 'common.yaml#/components/properties/totalProperty'
-              page:
-                $ref: 'common.yaml#/components/properties/pageProperty'
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/User'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
     post:
       tags:
         - User
       summary: Add a new user to the installation
-      description: ''
-      produces:
-        - application/json
-        - application/xml
-      parameters:
-        - in: body
-          name: body
-          description: User object to be added to the installation
-          required: true
-          schema:
-            type: object
-            required:
-              - account
-              - profile
-              - password
-            properties:
-              account:
-                $ref: "#/definitions/Account"
-              profile:
-                $ref: "#/definitions/Profile"
-              password:
-                $ref: "#/definitions/Password"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account
+                - profile
+                - password
+              properties:
+                account:
+                  $ref: "#/components/schemas/Account"
+                profile:
+                  $ref: "#/components/schemas/Profile"
+                password:
+                  $ref: "#/components/schemas/Password"
+        description: User object to be added to the installation
+        required: true
       responses:
         default:
           description: Successful operation
-
-  '/user/get-by-username':
+  /user/get-by-username:
     get:
       tags:
         - User
       summary: Get user by username
-      description: ''
-      produces:
-        - application/json
+      description: ""
       parameters:
         - name: username
           in: query
           description: The username of user
           required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
           schema:
-            $ref: "#/definitions/User"
-        '404':
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
           description: User not found
-
-  '/user/get-by-email':
+  /user/get-by-email:
     get:
       tags:
         - User
       summary: Get user by email
-      description: ''
-      produces:
-        - application/json
+      description: ""
       parameters:
         - name: email
           in: query
           description: The email of user
           required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
           schema:
-            $ref: "#/definitions/User"
-        '404':
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
           description: User not found
-
-  '/user/{id}/auth-client':
+  "/user/{id}/auth-client":
     post:
       tags:
         - User
       summary: Add a new authentication client for a user
-      description: ''
-      produces:
-        - application/json
+      description: ""
       parameters:
         - name: id
           in: path
           description: The id of the user
           required: true
-          type: integer
-        - in: body
-          name: body
-          description: Authentication client details
-          required: true
           schema:
-            type: object
-            required:
-              - source
-              - sourceId
-            properties:
-              source:
-                type: string
-                example: google
-              sourceId:
-                type: string
-                example: "1234567890"
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - source
+                - sourceId
+              properties:
+                source:
+                  type: string
+                  example: google
+                sourceId:
+                  type: string
+                  example: "1234567890"
+        description: Authentication client details
+        required: true
       responses:
-        '200':
+        "200":
           description: successful operation
-        '403':
+        "403":
           description: not allowed
-        '422':
+        "422":
           description: validation failed
-
-  '/user/get-by-authclient':
+  /user/get-by-authclient:
     get:
       tags:
         - User
       summary: Get user by authentication client
-      description: ''
-      produces:
-        - application/json
+      description: ""
       parameters:
         - name: name
           in: query
           description: Authentication client name
           required: true
-          type: string
+          schema:
+            type: string
         - name: id
           in: query
           description: Authentication client ID
           required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
           schema:
-            $ref: "#/definitions/User"
-        '404':
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
           description: User not found
-
-  '/user/{id}':
+  "/user/{id}":
     get:
       tags:
         - User
       summary: Get user by user id
-      description: ''
-      produces:
-        - application/json
+      description: ""
       parameters:
         - name: id
           in: path
           description: The id of user
           required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
           schema:
-            $ref: "#/definitions/User"
-        '400':
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
           description: Invalid user id supplied
-        '404':
+        "404":
           description: User not found
     put:
       tags:
         - User
       summary: Update an existing user
-      description: ''
+      description: ""
       operationId: updateUser
-      produces:
-        - application/json
       parameters:
         - name: id
           in: path
           description: The id of user
           required: true
-          type: integer
-        - in: body
-          name: body
-          description: Updated user object
-          required: true
           schema:
-            type: object
-            properties:
-              account:
-                $ref: "#/definitions/Account"
-              profile:
-                $ref: "#/definitions/Profile"
-              password:
-                $ref: "#/definitions/Password"
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account:
+                  $ref: "#/components/schemas/Account"
+                profile:
+                  $ref: "#/components/schemas/Profile"
+                password:
+                  $ref: "#/components/schemas/Password"
+        description: Updated user object
+        required: true
       responses:
-        '200':
+        "200":
           description: successful operation, the updated user record
-          schema:
-            $ref: "#/definitions/User"
-        '400':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
           description: Invalid user supplied
-        '404':
+        "404":
           description: User not found
     delete:
       tags:
         - User
       summary: Soft deletes an user by id
-      produces:
-        - application/json
       parameters:
         - name: id
           in: path
           description: The id of user
           required: true
-          type: integer
+          schema:
+            type: integer
       responses:
-        '200':
+        "200":
           description: successful operation
-        '400':
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: User not found
-  '/user/full/{id}':
+  "/user/full/{id}":
     delete:
       tags:
         - User
       summary: Hard deletes an user by id
-      produces:
-        - application/json
       parameters:
         - name: id
           in: path
           description: The id of user
           required: true
-          type: integer
+          schema:
+            type: integer
       responses:
-        '200':
+        "200":
           description: successful operation
-        '400':
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: User not found
-
-  #-----------------------------------------------------------------------------------------------------------------------
-  # Begin Group
-  #-----------------------------------------------------------------------------------------------------------------------
-  '/user/group':
+  /user/group:
     get:
       tags:
         - Group
       summary: Find all Groups
-      description: ''
-      produces:
-        - application/json
-        - application/xml
+      description: ""
       parameters:
-        - $ref: 'common.yaml#/components/parameters/pageParam'
-        - $ref: 'common.yaml#/components/parameters/limitParam'
+        - $ref: common.yaml#/components/parameters/pageParam
+        - $ref: common.yaml#/components/parameters/limitParam
       responses:
-        '200':
+        "200":
           description: Successful operation
-          schema:
-            type: object
-            properties:
-              total:
-                $ref: 'common.yaml#/components/properties/totalProperty'
-              page:
-                $ref: 'common.yaml#/components/properties/pageProperty'
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/Group'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Group"
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Group"
     post:
       tags:
         - Group
       summary: Adds a new group
-      description: ''
-      produces:
-        - application/json
-        - application/xml
-      parameters:
-        - in: body
-          name: body
-          description: The added Group object
-          required: true
-          schema:
-            type: Group
-            $ref: '#/definitions/Group'
-            required:
-              - name
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Group"
+        description: The added Group object
+        required: true
       responses:
         default:
           description: Successful operation
-  '/user/group/{id}':
+  "/user/group/{id}":
     get:
       tags:
         - Group
       summary: Get group by id
-      description: ''
-      produces:
-        - application/json
+      description: ""
       parameters:
         - name: id
           in: path
           description: The id of group
           required: true
-          type: integer
-      responses:
-        '200':
-          description: successful operation
           schema:
-            $ref: "#/definitions/Group"
-        '400':
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "400":
           description: Invalid group id supplied
-        '404':
+        "404":
           description: Group not found
       put:
         tags:
           - Group
         summary: Update a group
-        description: ''
+        description: ""
         produces:
           - application/json
         parameters:
@@ -382,16 +387,15 @@ paths:
             description: Updated group object
             required: true
             schema:
-              type: object
-              $ref: "#/definitions/Group"
+              $ref: "#/components/schemas/Group"
         responses:
-          '200':
+          "200":
             description: successful operation, the updated group record
             schema:
-              $ref: "#/definitions/Group"
-          '400':
+              $ref: "#/components/schemas/Group"
+          "400":
             description: Invalid group supplied
-          '404':
+          "404":
             description: Group not found
       delete:
         tags:
@@ -406,77 +410,100 @@ paths:
             required: true
             type: integer
         responses:
-          '200':
+          "200":
             description: successful operation
-          '400':
+          "400":
             description: Invalid group id supplied
-          '404':
+          "404":
             description: Group not found
-
-  '/user/group/{id}/member':
+  "/user/group/{id}/member":
     get:
       tags:
         - Group
       summary: List members
-      description: 'Lists all members of the given group id.'
-      produces:
-        - application/json
-        - application/xml
+      description: Lists all members of the given group id.
       parameters:
         - name: id
           in: path
           description: The id of the group
           required: true
-          type: integer
+          schema:
+            type: integer
       responses:
-        '200':
+        "200":
           description: Successful operation
-          schema:
-            type: object
-            properties:
-              total:
-                $ref: 'common.yaml#/components/properties/totalProperty'
-              page:
-                $ref: 'common.yaml#/components/properties/pageProperty'
-              results:
-                type: array
-                items:
-                  $ref: "user.yaml#/definitions/UserShort"
-        404:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: user.yaml#/components/schemas/UserShort
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: user.yaml#/components/schemas/UserShort
+        "404":
           description: Not found
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                example: 404
-              message:
-                type: string
-                example: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Group not found
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Group not found
     put:
       tags:
         - Group
       summary: Add a new member
-      description: 'Adds new member to the given group'
-      produces:
-        - application/json
-        - application/xml
+      description: Adds new member to the given group
       parameters:
         - name: id
           in: path
           description: The id of group
           required: true
-          type: integer
+          schema:
+            type: integer
         - name: userId
           in: query
           description: The id of user
           required: true
-          type: integer
+          schema:
+            type: integer
         - in: query
           name: isManager
-          type: boolean
           description: Is group manager
-          default: false
+          schema:
+            type: boolean
+            default: false
       responses:
         default:
           description: Successful operation
@@ -484,51 +511,46 @@ paths:
       tags:
         - Group
       summary: Removes a member
-      description: 'Removes a member from given group id.'
-      produces:
-        - application/json
-        - application/xml
+      description: Removes a member from given group id.
       parameters:
         - name: id
           in: path
           description: The id of group
           required: true
-          type: integer
+          schema:
+            type: integer
         - name: userId
           in: query
           description: The id of user
           required: true
-          type: integer
+          schema:
+            type: integer
       responses:
         default:
           description: Successful operation
-
-  #-----------------------------------------------------------------------------------------------------------------------
-  # Begin Invite
-  #-----------------------------------------------------------------------------------------------------------------------
-  '/user/invite':
+  /user/invite:
     post:
       tags:
         - Invite
       summary: Invite new users
-      description: ''
-      produces:
-        - application/json
-        - application/xml
-      parameters:
-        - in: body
-          name: body
-          description: Emails of people you want to invite
-          required: true
-          schema:
-            type: object
-            required:
-              - emails
-            properties:
-              emails:
-                type: array
-                description: An array of email addresses
-                example: [ "test1@example.com", "test2@example.com" ]
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - emails
+              properties:
+                emails:
+                  type: array
+                  description: An array of email addresses
+                  example:
+                    - test1@example.com
+                    - test2@example.com
+                  items: {}
+        description: Emails of people you want to invite
+        required: true
       responses:
         default:
           description: Successful operation
@@ -537,351 +559,346 @@ paths:
         - Invite
       summary: Pending invites
       description: Returns list of pending invites
-      produces:
-        - application/json
-        - application/xml
       responses:
-        '200':
+        "200":
           description: Successful operation
-          schema:
-            type: object
-            properties:
-              total:
-                $ref: 'common.yaml#/components/properties/totalProperty'
-              page:
-                $ref: 'common.yaml#/components/properties/pageProperty'
-              results:
-                type: array
-                items:
-                  $ref: "user.yaml#/definitions/Invite"
-  '/user/invite/{id}':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: user.yaml#/components/schemas/Invite
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  total:
+                    $ref: common.yaml#/components/schemas/totalProperty
+                  page:
+                    $ref: common.yaml#/components/schemas/pageProperty
+                  results:
+                    type: array
+                    items:
+                      $ref: user.yaml#/components/schemas/Invite
+  "/user/invite/{id}":
     patch:
       tags:
         - Invite
       summary: Resend invite
       description: Resends invitation email
-      produces:
-        - application/json
-        - application/xml
       responses:
-        '200':
+        "200":
           description: Successful operation
     delete:
       tags:
         - Invite
       summary: Cancel invite
       description: Cancels the invite, making the invitation URL no longer valid.
-      produces:
-        - application/json
-        - application/xml
       responses:
-        '200':
+        "200":
           description: Successful operation
-
-  #-----------------------------------------------------------------------------------------------------------------------
-  # Begin Session
-  #-----------------------------------------------------------------------------------------------------------------------
-  '/user/session/all/{id}':
+  "/user/session/all/{id}":
     delete:
       tags:
         - Session
       summary: Deletes all sessions for a particular user
-      produces:
-        - application/json
       parameters:
         - name: id
           in: path
           description: The id of user
           required: true
-          type: integer
+          schema:
+            type: integer
       responses:
-        '200':
+        "200":
           description: successful operation
-        '400':
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: User not found
-
-
-securityDefinitions:
-  $ref: "common.yaml#/securityDefinitions"
-
-
-definitions:
-  UserShort:
-    description: a short representation of the user
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14
-      guid:
-        type: string
-        readOnly: true
-        example: cd081891-d2e2-40d5-84a4-b47309e71c80
-      display_name:
-        type: string
-        readOnly: true
-        example: John Doe
-      url:
-        type: string
-        readOnly: true
-        example: http://localhost/p/humhub/master/u/j.doe/
-
-  User:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14
-      guid:
-        type: string
-        readOnly: true
-        example: cd081891-d2e2-40d5-84a4-b47309e71c80
-      display_name:
-        type: string
-        example: John Doe
-      url:
-        type: string
-        example: http://localhost/p/humhub/master/u/j.doe/
-      account:
-        $ref: "#/definitions/Account"
-      profile:
-        $ref: "#/definitions/Profile"
-
-  Account:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14
-      guid:
-        type: string
-        readOnly: true
-        example: cd081891-d2e2-40d5-84a4-b47309e71c80
-      username:
-        type: string
-        example: john.doe
-      email:
-        type: string
-        example: john.doe@example.com
-      visibility:
-        type: integer
-        format: int64
-      status:
-        type: integer
-        example: 1
-      tags:
-        type: array
-        items:
+servers:
+  - url: /api/v1
+components:
+  securitySchemes:
+    _ref: common.yaml#/securityDefinitions
+  schemas:
+    UserShort:
+      description: a short representation of the user
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 14
+        guid:
           type: string
-        example: [ "Administration", "Support", "HumHub" ]
-        readOnly: true
-      tagsField:
-        type: array
-        items:
+          readOnly: true
+          example: cd081891-d2e2-40d5-84a4-b47309e71c80
+        display_name:
           type: string
-        example: [ "Administration", "Support", "HumHub" ]
-        writeOnly: true
-      language:
-        type: string
-        example: DE
-      time_zone:
-        type: string
-        example: Europe/Paris
-        readOnly: true
-      contentcontainer_id:
-        type: integer
-        example: 5
-        readOnly: true
-      authclient:
-        type: string
-        example: local
-      authclient_id:
-        type: string
-        example: "0123456789"
-      last_login:
-        type: string
-        format: datetime
-        example: "2023-09-11 08:46:40"
-        readOnly: true
-    xml:
-      name: Account
-
-  Profile:
-    type: object
-    properties:
-      firstname:
-        type: string
-        example: John
-      lastname:
-        type: string
-        example: Doe
-      title:
-        type: string
-        example: Test user
-      gender:
-        type: string
-        example: male
-      street:
-        type: string
-        example: New Street 5
-      zip:
-        type: string
-        example: 80331
-      city:
-        type: string
-        example: Munich
-      country:
-        type: string
-        example: DE (ISO 3166 code)
-      state:
-        type: string
-      birthday_hide_year:
-        type: integer
-      birthday:
-        type: string
-        format: date
-        example: "1990-01-01"
-      about:
-        type: string
-      phone_private:
-        type: string
-      phone_work:
-        type: string
-      mobile:
-        type: string
-      fax:
-        type: string
-      im_skype:
-        type: string
-      im_xmpp:
-        type: string
-      url:
-        type: string
-      url_facebook:
-        type: string
-      url_linkedin:
-        type: string
-      url_xing:
-        type: string
-      url_youtube:
-        type: string
-      url_vimeo:
-        type: string
-      url_flickr:
-        type: string
-      url_myspace:
-        type: string
-      url_twitter:
-        type: string
-      image_url:
-        type: string
-      banner_url:
-        type: string
-      image:
-        description: Base64 of image (Write Only)
-        example: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACAUG/8QAKBAAAgECBAMJAAAAAAAAAAAAAQIDBAcABhEhBRJhEyQxMjRBc4Gx/8QAFQEBAQAAAAAAAAAAAAAAAAAABQb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAIRIf/aAAwDAQACEQMRAD8AzN2Ku5kl8knybn5uG01caOPhcJmkihh8iBNNeVzzlywAbYgkbjCqqMwW8eeR5TwcOzksE7JVB130HsOmD1GTPcK38MxMka5iqdFbcDuwPgeoB+sRq31tR8r/AKcShdrwj6bP/9k="
-        type: string
-        writeOnly: true
-      banner:
-        description: Base64 of banner (Write Only)
-        example: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACAUG/8QAKBAAAgECBAMJAAAAAAAAAAAAAQIDBAcABhEhBRJhEyQxMjRBc4Gx/8QAFQEBAQAAAAAAAAAAAAAAAAAABQb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAIRIf/aAAwDAQACEQMRAD8AzN2Ku5kl8knybn5uG01caOPhcJmkihh8iBNNeVzzlywAbYgkbjCqqMwW8eeR5TwcOzksE7JVB130HsOmD1GTPcK38MxMka5iqdFbcDuwPgeoB+sRq31tR8r/AKcShdrwj6bP/9k="
-        type: string
-        writeOnly: true
-    xml:
-      name: Profile
-
-  Group:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 1
-      name:
-        type: string
-        example: Example group
-      description:
-        type: string
-        example: Users of Example
-      show_at_directory:
-        type: boolean
-        example: false
-      show_at_registration:
-        type: boolean
-        example: false
-      sort_order:
-        type: int
-        example: 100
-    xml:
-      name: Group
-
-  Password:
-    type: object
-    properties:
-      newPassword:
-        type: string
-        example: SuperSecretPassword
-      mustChangePassword:
-        type: boolean
-        example: true
-    xml:
-      name: Password
-
-  Invite:
-    description: a representation of invite
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-        readOnly: true
-        example: 14
-      email:
-        type: string
-        readOnly: true
-        example: email@email.org
-      firstname:
-        type: string
-        readOnly: true
-        example: John
-      lastname:
-        type: string
-        readOnly: true
-        example: Doe
-      language:
-        type: string
-        readOnly: true
-        example: English
-      space:
-        readOnly: true
-        $ref: "space.yaml#/definitions/SpaceShort"
-      invitationUrl:
-        type: string
-        readOnly: true
-        example: "http://example.com/user/registration?token=cK4FCaopFHNP"
-      originator:
-        readOnly: true
-        $ref: "user.yaml#/definitions/UserShort"
-      createdBy:
-        readOnly: true
-        $ref: "user.yaml#/definitions/UserShort"
-      updatedBy:
-        readOnly: true
-        $ref: "user.yaml#/definitions/UserShort"
-      createdAt:
-        type: string
-        format: datetime
-        example: "2024-09-11 08:46:40"
-      updatedAt:
-        type: string
-        format: datetime
-        example: "2024-09-15 08:46:40"
+          readOnly: true
+          example: John Doe
+        url:
+          type: string
+          readOnly: true
+          example: http://localhost/p/humhub/master/u/j.doe/
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 14
+        guid:
+          type: string
+          readOnly: true
+          example: cd081891-d2e2-40d5-84a4-b47309e71c80
+        display_name:
+          type: string
+          example: John Doe
+        url:
+          type: string
+          example: http://localhost/p/humhub/master/u/j.doe/
+        account:
+          $ref: "#/components/schemas/Account"
+        profile:
+          $ref: "#/components/schemas/Profile"
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 14
+        guid:
+          type: string
+          readOnly: true
+          example: cd081891-d2e2-40d5-84a4-b47309e71c80
+        username:
+          type: string
+          example: john.doe
+        email:
+          type: string
+          example: john.doe@example.com
+        visibility:
+          type: integer
+          format: int64
+        status:
+          type: integer
+          example: 1
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - Administration
+            - Support
+            - HumHub
+          readOnly: true
+        tagsField:
+          type: array
+          items:
+            type: string
+          example:
+            - Administration
+            - Support
+            - HumHub
+          writeOnly: true
+        language:
+          type: string
+          example: DE
+        time_zone:
+          type: string
+          example: Europe/Paris
+          readOnly: true
+        contentcontainer_id:
+          type: integer
+          example: 5
+          readOnly: true
+        authclient:
+          type: string
+          example: local
+        authclient_id:
+          type: string
+          example: "0123456789"
+        last_login:
+          type: string
+          format: datetime
+          example: 2023-09-11 08:46:40
+          readOnly: true
+      xml:
+        name: Account
+    Profile:
+      type: object
+      properties:
+        firstname:
+          type: string
+          example: John
+        lastname:
+          type: string
+          example: Doe
+        title:
+          type: string
+          example: Test user
+        gender:
+          type: string
+          example: male
+        street:
+          type: string
+          example: New Street 5
+        zip:
+          type: string
+          example: 80331
+        city:
+          type: string
+          example: Munich
+        country:
+          type: string
+          example: DE (ISO 3166 code)
+        state:
+          type: string
+        birthday_hide_year:
+          type: integer
+        birthday:
+          type: string
+          format: date
+          example: 1990-01-01
+        about:
+          type: string
+        phone_private:
+          type: string
+        phone_work:
+          type: string
+        mobile:
+          type: string
+        fax:
+          type: string
+        im_skype:
+          type: string
+        im_xmpp:
+          type: string
+        url:
+          type: string
+        url_facebook:
+          type: string
+        url_linkedin:
+          type: string
+        url_xing:
+          type: string
+        url_youtube:
+          type: string
+        url_vimeo:
+          type: string
+        url_flickr:
+          type: string
+        url_myspace:
+          type: string
+        url_twitter:
+          type: string
+        image_url:
+          type: string
+        banner_url:
+          type: string
+        image:
+          description: Base64 of image (Write Only)
+          example: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACAUG/8QAKBAAAgECBAMJAAAAAAAAAAAAAQIDBAcABhEhBRJhEyQxMjRBc4Gx/8QAFQEBAQAAAAAAAAAAAAAAAAAABQb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAIRIf/aAAwDAQACEQMRAD8AzN2Ku5kl8knybn5uG01caOPhcJmkihh8iBNNeVzzlywAbYgkbjCqqMwW8eeR5TwcOzksE7JVB130HsOmD1GTPcK38MxMka5iqdFbcDuwPgeoB+sRq31tR8r/AKcShdrwj6bP/9k=
+          type: string
+          writeOnly: true
+        banner:
+          description: Base64 of banner (Write Only)
+          example: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACAUG/8QAKBAAAgECBAMJAAAAAAAAAAAAAQIDBAcABhEhBRJhEyQxMjRBc4Gx/8QAFQEBAQAAAAAAAAAAAAAAAAAABQb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAIRIf/aAAwDAQACEQMRAD8AzN2Ku5kl8knybn5uG01caOPhcJmkihh8iBNNeVzzlywAbYgkbjCqqMwW8eeR5TwcOzksE7JVB130HsOmD1GTPcK38MxMka5iqdFbcDuwPgeoB+sRq31tR8r/AKcShdrwj6bP/9k=
+          type: string
+          writeOnly: true
+      xml:
+        name: Profile
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 1
+        name:
+          type: string
+          example: Example group
+        description:
+          type: string
+          example: Users of Example
+        show_at_directory:
+          type: boolean
+          example: false
+        show_at_registration:
+          type: boolean
+          example: false
+        sort_order:
+          type: int
+          example: 100
+      xml:
+        name: Group
+    Password:
+      type: object
+      properties:
+        newPassword:
+          type: string
+          example: SuperSecretPassword
+        mustChangePassword:
+          type: boolean
+          example: true
+      xml:
+        name: Password
+    Invite:
+      description: a representation of invite
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 14
+        email:
+          type: string
+          readOnly: true
+          example: email@email.org
+        firstname:
+          type: string
+          readOnly: true
+          example: John
+        lastname:
+          type: string
+          readOnly: true
+          example: Doe
+        language:
+          type: string
+          readOnly: true
+          example: English
+        space:
+          $ref: space.yaml#/components/schemas/SpaceShort
+        invitationUrl:
+          type: string
+          readOnly: true
+          example: http://example.com/user/registration?token=cK4FCaopFHNP
+        originator:
+          $ref: user.yaml#/components/schemas/UserShort
+        createdBy:
+          $ref: user.yaml#/components/schemas/UserShort
+        updatedBy:
+          $ref: user.yaml#/components/schemas/UserShort
+        createdAt:
+          type: string
+          format: datetime
+          example: 2024-09-11 08:46:40
+        updatedAt:
+          type: string
+          format: datetime
+          example: 2024-09-15 08:46:40

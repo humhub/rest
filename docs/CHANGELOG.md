@@ -5,6 +5,7 @@ Changelog
 ----------------------
 - Enh #219: Improved Module Test GitHub Actions
 - Enh #220: Implement module-coding-standards
+- Enh #224: Convert swagger docs to OpenAPI 3.0
 
 0.11.0 (July 26, 2025)
 ----------------------

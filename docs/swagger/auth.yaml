@@ -1,26 +1,38 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
-  description: |
+  description: >
     Welcome to the HumHub auth module API reference.
+
     Humhub REST API supports the following Authentication Methods:
-    
+
+
     ## 1. HTTP Basic Authentication
+
     Uses standard HTTP Basic Authentication, requiring a username and password for each API request.
+
     Include the username and password in the `Authorization` header for each request.
-    
+
+
     Example:
+
     ```bash
+
     curl -X GET "https://yourhost/api/v1/auth/current" -H "Authorization: Basic $(echo -n 'username@example.com:password' | base64)"
       ```
-    
+
     Configuration:
+
     - **Enabled for All Registered Users**: When enabled, all registered users can use Basic Authentication.
+
     - **User Selection Dropdown**: Allows specifying individual users for whom this method is enabled.
         
     ## 2. JWT Authentication
+
     Uses JSON Web Tokens (JWT) for authentication. Users authenticate via a login endpoint to obtain a JWT token, which is then used in subsequent requests. The `auth_token` has an expiration time (`expired_at`). You must obtain a new token after it expires.
-    
+
+
     Login Process:
+
     Endpoint: `POST /auth/login`
       - Request:
         ```json
@@ -39,7 +51,8 @@ info:
         }
         ```
     Include the obtained `auth_token` in the `Authorization` header as `Bearer {auth_token}` in subsequent requests.
-    
+
+
     Example:
       - Obtain JWT Token:
         ```bash
@@ -49,28 +62,38 @@ info:
         ```bash
         curl -X GET "https://yourhost/api/v1/auth/current" -H "Authorization: Bearer your-auth-token"
         ```
-    
-    
+
+
     Configuration:
       - **Enabled for All Registered Users**: When enabled, all registered users can use JWT Authentication.
       - **User Selection Dropdown**: Allows specifying individual users for whom this method is enabled.
       - **JWT Key**: A secret key used to encrypt the JWT token, configured in the JWT Auth settings.
+
       
     ## 3. Bearer Authentication
+
     Uses predefined bearer tokens created for each user in the HumHub Bearer Authentication settings.
+
     Include the bearer token in the `Authorization` header as `Bearer {your-bearer-token}` for each request.
-    
+
+
     Example:
+
     ```bash
       curl -X GET "https://yourhost/api/v1/auth/current" -H "Authorization: Bearer your-bearer-token"
     ```
-    
+
+
     Configuration:
       - Tokens must be generated in the Bearer Auth settings for specific users.
+
       
     ## 4. Query Param Bearer Authentication
+
     Uses the same bearer tokens created in the Bearer Auth settings but passes them as a query parameter instead of a header.
+
     Append the bearer token as a query parameter `access-token={your-bearer-token}` to the request URL.
+
 
     Example:
       ```bash
@@ -79,24 +102,22 @@ info:
 
     Configuration:
       - Tokens are the same as those generated for Bearer Auth.
-    
-    ## Notes
-    
-    - Replace `https://yourhost` with the actual base URL of your HumHub instance.
-    - Ensure that the appropriate authentication method is enabled and configured in the HumHub admin panel before making API requests.
-    - Securely store and handle authentication credentials and tokens to prevent unauthorized access.    
 
+    ## Notes
+
+
+    - Replace `https://yourhost` with the actual base URL of your HumHub instance.
+
+    - Ensure that the appropriate authentication method is enabled and configured in the HumHub admin panel before making API requests.
+
+    - Securely store and handle authentication credentials and tokens to prevent unauthorized access.    
   version: 1.0.0
   title: HumHub - Auth API
   contact:
     email: info@humhub.com
   license:
     name: AGPLv2
-    url: 'https://www.humhub.org/en/licences'
-basePath: /api/v1
-schemes:
-  - http
-  - https
+    url: https://www.humhub.org/en/licences
 tags:
   - name: Authentication
 paths:
@@ -105,113 +126,140 @@ paths:
       tags:
         - Authentication
       summary: Login in the application
-      description: ''
-      produces:
-        - application/json
-        - application/xml
-      parameters:
-        - in: body
-          name: body
-          description: Credentials for login in app
-          required: true
-          schema:
-            type: object
-            required:
-              - username
-              - password
-            properties:
-              username:
-                type: string
-                description: Your username or email address
-                example: username@example.com
-              password:
-                type: string
-                example: password
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: Your username or email address
+                  example: username@example.com
+                password:
+                  type: string
+                  example: password
+        description: Credentials for login in app
+        required: true
       responses:
-        200:
+        "200":
           description: Success
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-                example: 200
-              message:
-                type: string
-                expample: Success
-              auth_token:
-                type: string
-                example: eyJ0eXAiOiJKV1QiLC .... tE_7_rLSX3vA
-              expired_at:
-                type: string
-                expample: 1552305077
-        400:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 200
+                  message:
+                    type: string
+                    expample: Success
+                  auth_token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLC .... tE_7_rLSX3vA
+                  expired_at:
+                    type: string
+                    expample: 1552305077
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 200
+                  message:
+                    type: string
+                    expample: Success
+                  auth_token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLC .... tE_7_rLSX3vA
+                  expired_at:
+                    type: string
+                    expample: 1552305077
+        "400":
           description: Bad request
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                example: 400
-              message:
-                type: string
-                example: Wrong username or password
-
-  '/auth/current':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Wrong username or password
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Wrong username or password
+  /auth/current:
     get:
       tags:
         - User
       summary: Get current user
-      description: ''
-      produces:
-        - application/json
+      description: ""
       responses:
-        '200':
+        "200":
           description: successful operation
-          schema:
-            $ref: "user.yaml#/definitions/User"
-        '401':
+          content:
+            application/json:
+              schema:
+                $ref: user.yaml#/components/schemas/User
+        "401":
           description: Unauthorized
-
-  '/auth/impersonate':
+  /auth/impersonate:
     post:
       tags:
         - User
       summary: Impersonate user
-      description: ''
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: id of user to Impersonate
-          required: true
-          schema:
-            type: object
-            required:
-              - userId
-            properties:
-              userId:
-                type: integer
-                description: id of user to Impersonate
-                example: 1
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: integer
+                  description: id of user to Impersonate
+                  example: 1
+        description: id of user to Impersonate
+        required: true
       responses:
-        '200':
+        "200":
           description: Successful operation
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
-                description: 'Use in header: "Authorization: Impersonate $token"'
-                example: 'impersonated-YvyEVcbzCvg0wLjb9yXylj1bkbotlCwkKjNKTZD9xMO86o1G-V9p-wklm5pUdXhdkSGj5dk-l'
-              expires:
-                type: integer
-                description: Expiration timestamp of token
-                example: 1681671865
-        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: 'Use in header: "Authorization: Impersonate $token"'
+                    example: impersonated-YvyEVcbzCvg0wLjb9yXylj1bkbotlCwkKjNKTZD9xMO86o1G-V9p-wklm5pUdXhdkSGj5dk-l
+                  expires:
+                    type: integer
+                    description: Expiration timestamp of token
+                    example: 1681671865
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: User not Found
+servers:
+  - url: /api/v1
