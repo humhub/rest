@@ -20,8 +20,8 @@ class CommentController extends BaseController
             throw new ForbiddenHttpException();
         }
 
-        $parentComment = ($parentCommentId) ?
-            Comment::findOne(['id' => $parentCommentId, 'content_id' => $contentId]) : null;
+        $parentComment = ($parentCommentId)
+            ? Comment::findOne(['id' => $parentCommentId, 'content_id' => $contentId]) : null;
 
         $model = new Comment();
         $model->content_id = $content->id;
