@@ -1,17 +1,11 @@
 <?php
 
-/**
- * @link https://www.humhub.org/
- * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
- * @license https://www.humhub.com/licences
- */
-
 namespace humhub\modules\rest\controllers\like;
 
 use humhub\components\behaviors\PolymorphicRelation;
-use humhub\helpers\DataTypeHelper;
-use humhub\modules\content\components\ContentActiveRecord;
-use humhub\modules\content\components\ContentAddonActiveRecord;
+use humhub\models\RecordMap;
+use humhub\modules\content\interfaces\ContentProvider;
+use humhub\modules\like\services\LikeService;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\LikeDefinitions;
 use humhub\modules\like\models\Like;
@@ -21,30 +15,22 @@ class LikeController extends BaseController
 {
     public function actionFindByObject()
     {
-        $model = Yii::$app->request->get('model');
-        $pk = (int)Yii::$app->request->get('pk');
+        $object = RecordMap::getByModelAndPk(
+            Yii::$app->request->get('model'),
+            (int)Yii::$app->request->get('pk'), ContentProvider::class);
 
-        if (DataTypeHelper::matchClassType($model, [ContentActiveRecord::class, ContentAddonActiveRecord::class]) === null) {
-            return $this->returnError(400, 'Invalid object model!');
-        }
-
-        $object = $model::findOne(['id' => $pk]);
         if ($object === null) {
             return $this->returnError(404, 'Object model not found!');
         }
 
-        if (!$object->content->canView()) {
+        $likeService = new LikeService($object);
+
+        if (!$likeService->canLike()) {
             return $this->returnError(403, 'You cannot view this content!');
         }
 
-        $contentFilter = [
-            'object_model' => PolymorphicRelation::getObjectModel($object),
-            'object_id' => $object->getPrimaryKey(),
-        ];
-
-        $results = [];
         $query = Like::find();
-        $query->andWhere($contentFilter);
+        $likeService->addScopeQueryCondition($query);
         $query->orderBy(['created_at' => SORT_DESC]);
 
         $pagination = $this->handlePagination($query);
