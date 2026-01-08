@@ -17,7 +17,9 @@ class LikeController extends BaseController
     {
         $object = RecordMap::getByModelAndPk(
             Yii::$app->request->get('model'),
-            (int)Yii::$app->request->get('pk'), ContentProvider::class);
+            (int)Yii::$app->request->get('pk'),
+            ContentProvider::class,
+        );
 
         if ($object === null) {
             return $this->returnError(404, 'Object model not found!');
