@@ -21,7 +21,7 @@ class FileController extends BaseController
         if ($file === null) {
             return $this->returnError(404, 'File not found!');
         }
-        if (!$file->canRead()) {
+        if (!$file->canView()) {
             return $this->returnError(403, 'You cannot download this file!');
         }
         if (!file_exists($file->store->get())) {

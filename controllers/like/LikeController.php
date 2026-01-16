@@ -51,7 +51,7 @@ class LikeController extends BaseController
         if ($like === null) {
             return $this->returnError(404, 'Like not found!');
         }
-        if (!$like->canRead()) {
+        if (!$like->canView()) {
             return $this->returnError(403, 'You cannot read this content!');
         }
 
