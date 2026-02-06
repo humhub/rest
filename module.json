@@ -3,9 +3,10 @@
     "name": "RESTful API",
     "description": "Provides a RESTful API to the HumHub installation",
     "keywords": [
-        "api", "rest"
+        "api",
+        "rest"
     ],
-    "version": "0.11.1",
+    "version": "0.11.2",
     "homepage": "https://github.com/humhub/rest",
     "humhub": {
         "minVersion": "1.18",
