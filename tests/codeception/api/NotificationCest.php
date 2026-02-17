@@ -4,6 +4,7 @@ namespace rest\api;
 
 use humhub\modules\notification\models\Notification;
 use humhub\modules\rest\definitions\NotificationDefinitions;
+use humhub\modules\rest\notifications\CustomTextNotification;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
@@ -55,4 +56,42 @@ class NotificationCest extends HumHubApiTestCest
         $I->seeSuccessMessage('All notifications successfully marked as seen');
     }
 
+    public function testSendCustom(ApiTester $I)
+    {
+        $I->wantTo('send a custom text notification to a user');
+        $I->amAdmin();
+
+        $I->sendPost('notification/send-custom', [
+            'userId' => 2,
+            'text' => 'API custom notification',
+            'url' => 'https://example.com/custom',
+        ]);
+        $I->seeSuccessMessage('Notification successfully sent');
+        $I->seeRecord(Notification::class, [
+            'class' => CustomTextNotification::class,
+            'user_id' => 2,
+            'originator_user_id' => 1,
+            'module' => 'rest',
+        ]);
+    }
+
+    public function testSendCustomValidation(ApiTester $I)
+    {
+        $I->wantTo('validate custom notification payload');
+        $I->amAdmin();
+
+        $I->sendPost('notification/send-custom', [
+            'userId' => 123,
+            'text' => 'API custom notification',
+            'url' => 'https://example.com/custom',
+        ]);
+        $I->seeBadMessage('User Id is invalid.');
+
+        $I->sendPost('notification/send-custom', [
+            'userId' => 2,
+            'text' => 'API custom notification',
+            'url' => '',
+        ]);
+        $I->seeBadMessage('Text cannot be blank.');
+    }
 }

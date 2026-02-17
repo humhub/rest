@@ -8,14 +8,25 @@
 
 namespace humhub\modules\rest\controllers\notification;
 
+use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\notification\models\forms\FilterForm;
 use humhub\modules\notification\models\Notification;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\NotificationDefinitions;
+use humhub\modules\rest\notifications\CustomTextNotification;
+use humhub\modules\user\models\User;
 use Yii;
+use yii\base\DynamicModel;
 
 class NotificationController extends BaseController
 {
+    protected function getAccessRules()
+    {
+        return [
+            ['permissions' => [ManageUsers::class], 'actions' => ['send-custom']],
+        ];
+    }
+
     public function actionIndex()
     {
         $results = [];
@@ -68,5 +79,34 @@ class NotificationController extends BaseController
         Notification::updateAll(['seen' => 1], ['user_id' => Yii::$app->user->id]);
 
         return $this->returnSuccess('All notifications successfully marked as seen');
+    }
+
+    public function actionSendCustom()
+    {
+        $model = DynamicModel::validateData([
+            'userId' => Yii::$app->request->post('userId'),
+            'text' => Yii::$app->request->post('text'),
+            'url' => Yii::$app->request->post('url'),
+        ], [
+            [['text', 'url'], 'trim'],
+            [['text', 'userId', 'url'], 'required'],
+            ['userId', 'exist', 'targetClass' => User::class, 'targetAttribute' => ['userId' => 'id']],
+        ]);
+
+        if ($model->hasErrors()) {
+            return $this->returnError(422, array_values($model->getFirstErrors())[0]);
+        }
+
+        $receiver = User::findOne(['id' => $model->userId]);
+
+        CustomTextNotification::instance()
+            ->from(Yii::$app->user->identity)
+            ->payload([
+                'text' => $model->text,
+                'url' => $model->url,
+            ])
+            ->send($receiver);
+
+        return $this->returnSuccess('Notification successfully sent');
     }
 }
