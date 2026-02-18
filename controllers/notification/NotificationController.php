@@ -90,14 +90,22 @@ class NotificationController extends BaseController
         ], [
             [['text', 'url'], 'trim'],
             [['text', 'userId', 'url'], 'required'],
-            ['userId', 'exist', 'targetClass' => User::class, 'targetAttribute' => ['userId' => 'id']],
+            [
+                ['userId'],
+                'exist',
+                'targetClass' => User::class,
+                'targetAttribute' => ['userId' => 'id'],
+                'filter' => function($query) {
+                    $query->active();
+                }
+            ],
         ]);
 
         if ($model->hasErrors()) {
             return $this->returnError(422, array_values($model->getFirstErrors())[0]);
         }
 
-        $receiver = User::findOne(['id' => $model->userId]);
+        $receiver = User::find()->where(['id' => $model->userId])->active()->one();
 
         CustomTextNotification::instance()
             ->from(Yii::$app->user->identity)

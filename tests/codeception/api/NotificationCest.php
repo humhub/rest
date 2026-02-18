@@ -81,6 +81,13 @@ class NotificationCest extends HumHubApiTestCest
         $I->amAdmin();
 
         $I->sendPost('notification/send-custom', [
+            'userId' => 5,
+            'text' => 'API custom notification',
+            'url' => 'https://example.com/custom',
+        ]);
+        $I->seeBadMessage('User Id is invalid.');
+
+        $I->sendPost('notification/send-custom', [
             'userId' => 123,
             'text' => 'API custom notification',
             'url' => 'https://example.com/custom',
