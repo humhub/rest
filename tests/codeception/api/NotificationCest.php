@@ -99,6 +99,6 @@ class NotificationCest extends HumHubApiTestCest
             'text' => 'API custom notification',
             'url' => '',
         ]);
-        $I->seeValidationMessage('Text cannot be blank.');
+        $I->seeValidationMessage('Url cannot be blank.');
     }
 }
