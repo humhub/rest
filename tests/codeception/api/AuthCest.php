@@ -56,7 +56,7 @@ class AuthCest extends HumHubApiTestCest
 
         $I->amBearerAuthenticated($auth_token);
         $I->sendGet('auth/current');
-        $I->seeUserDefinitions(['User3']);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('User3'));
     }
 
     public function testLoginByBearerAccessToken(ApiTester $I)
@@ -67,7 +67,7 @@ class AuthCest extends HumHubApiTestCest
 
         $I->amBearerAuthenticated($accessToken);
         $I->sendGet('auth/current');
-        $I->seeUserDefinitions(['User1']);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('User1'));
     }
 
     public function testLoginByQueryParamBearerAccessToken(ApiTester $I)
@@ -77,7 +77,7 @@ class AuthCest extends HumHubApiTestCest
         $I->wantTo('login by Bearer Access Token');
 
         $I->sendGet("auth/current?access-token=$accessToken");
-        $I->seeUserDefinitions(['User1']);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('User1'));
     }
 
     public function testCurrent(ApiTester $I)
@@ -85,7 +85,7 @@ class AuthCest extends HumHubApiTestCest
         $I->wantTo('see current logged in Admin');
         $I->amAdmin();
         $I->sendGet('auth/current');
-        $I->seeUserDefinitions(['Admin']);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('Admin'));
     }
 
     public function testImpersonateByAdmin(ApiTester $I)
@@ -98,7 +98,7 @@ class AuthCest extends HumHubApiTestCest
         [$adminToken] = $I->grabDataFromResponseByJsonPath('auth_token');
         $I->amBearerAuthenticated($adminToken);
         $I->sendGet('auth/current');
-        $I->seeUserDefinitions(['Admin']);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('Admin'));
 
         // Login as impersonated user 2
         $I->sendPost('auth/impersonate', ['userId' => 2]);
@@ -106,7 +106,7 @@ class AuthCest extends HumHubApiTestCest
         [$auth_token] = $I->grabDataFromResponseByJsonPath('token');
         $I->haveHttpHeader('Authorization', "Impersonate $auth_token");
         $I->sendGet('auth/current');
-        $I->seeUserDefinitions(['User1']);
+        $I->seeSuccessResponseContainsJson($I->getUserDefinition('User1'));
     }
 
     public function testImpersonateByUser(ApiTester $I)
