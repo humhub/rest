@@ -85,20 +85,20 @@ class NotificationCest extends HumHubApiTestCest
             'text' => 'API custom notification',
             'url' => 'https://example.com/custom',
         ]);
-        $I->seeBadMessage('User Id is invalid.');
+        $I->seeValidationMessage('User Id is invalid.');
 
         $I->sendPost('notification/send-custom', [
             'userId' => 123,
             'text' => 'API custom notification',
             'url' => 'https://example.com/custom',
         ]);
-        $I->seeBadMessage('User Id is invalid.');
+        $I->seeValidationMessage('User Id is invalid.');
 
         $I->sendPost('notification/send-custom', [
             'userId' => 2,
             'text' => 'API custom notification',
             'url' => '',
         ]);
-        $I->seeBadMessage('Text cannot be blank.');
+        $I->seeValidationMessage('Text cannot be blank.');
     }
 }

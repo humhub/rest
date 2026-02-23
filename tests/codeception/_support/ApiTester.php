@@ -4,6 +4,7 @@ namespace rest;
 
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\user\models\User;
+use Codeception\Util\HttpCode;
 
 /**
  * Inherited Methods
@@ -44,8 +45,8 @@ class ApiTester extends \ApiTester
         return $userDefinitions;
     }
 
-    public function seeUserDefinition($username)
+    public function seeValidationMessage($message)
     {
-        $this->seeSuccessResponseContainsJson($this->getUserDefinition($username));
+        $this->seeCodeResponseContainsJson(HttpCode::UNPROCESSABLE_ENTITY, ['message' => $message]);
     }
 }
