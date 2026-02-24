@@ -95,9 +95,9 @@ class NotificationController extends BaseController
                 'exist',
                 'targetClass' => User::class,
                 'targetAttribute' => ['userId' => 'id'],
-                'filter' => function($query) {
+                'filter' => function ($query) {
                     $query->active();
-                }
+                },
             ],
         ]);
 
