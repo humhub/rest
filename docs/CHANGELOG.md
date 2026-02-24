@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.11.2 (Unreleased)
--------------------
+0.11.2 (February 24, 2026)
+--------------------------
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
 - Enh #232: Add custom notification endpoint
 
