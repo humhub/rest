@@ -110,9 +110,7 @@ use yii\web\JsExpression;
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <?= Html::submitButton(Yii::t('base', 'Add'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
-                </div>
+                <?= Button::save(Yii::t('RestModule.base', 'Add'))->submit() ?>
             </div>
         </div>
         <?php ActiveForm::end(); ?>

@@ -10,9 +10,8 @@
  * @var \humhub\modules\rest\models\JwtAuthForm $model
  */
 
+use humhub\widgets\bootstrap\Button;
 use humhub\widgets\form\ActiveForm;
-use yii\helpers\Html;
-
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'configure-form', 'enableClientValidation' => false, 'enableClientScript' => false]); ?>
@@ -20,8 +19,6 @@ use yii\helpers\Html;
 <?= $form->field($model, 'jwtKey'); ?>
 <?= $form->field($model, 'jwtExpire'); ?>
 
-<div class="mb-3">
-    <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
-</div>
+<?= Button::save()->submit() ?>
 
 <?php ActiveForm::end(); ?>
