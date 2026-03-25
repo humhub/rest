@@ -11,6 +11,7 @@
  */
 
 use humhub\modules\user\widgets\UserPickerField;
+use humhub\widgets\bootstrap\Button;
 use humhub\widgets\form\ActiveForm;
 use yii\helpers\Html;
 
@@ -36,9 +37,7 @@ $apiModuleOptions = $model->getApiModuleOptions();
 <?= $form->field($model, 'apiModules')->checkboxList($apiModuleOptions)
     ->hint(empty($apiModuleOptions) ? Yii::t('RestModule.base', 'No enabled modules found with additional REST API endpoints.') : false); ?>
 
-<div class="mb-3">
-    <?= Html::submitButton(Yii::t('base', 'Save'), ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
-</div>
+<?= Button::save()->submit() ?>
 
 <?php ActiveForm::end(); ?>
 

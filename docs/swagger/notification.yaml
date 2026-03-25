@@ -82,6 +82,62 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Notification"
+  /notification/send-custom:
+    post:
+      tags:
+        - Notification
+      summary: Send a custom notification to a user
+      description: Send a free text notification with target URL to a specific user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - text
+                - url
+              properties:
+                userId:
+                  type: integer
+                  description: Target user ID.
+                  example: 2
+                text:
+                  type: string
+                  description: Notification text shown to the user.
+                  example: Your report is ready.
+                url:
+                  type: string
+                  description: Target URL Absolute or Relative to HumHub base URL.
+                  example: https://example.com/reports/42
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Notification successfully sent
+        "422":
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: Text cannot be blank.
   "/notification/{id}":
     get:
       tags:

@@ -156,6 +156,7 @@ class Events
 
             // Notification
             ['pattern' => 'notification/', 'route' => 'rest/notification/notification/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'notification/send-custom/', 'route' => 'rest/notification/notification/send-custom', 'verb' => ['POST']],
             ['pattern' => 'notification/unseen/', 'route' => 'rest/notification/notification/unseen', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'notification/mark-as-seen/', 'route' => 'rest/notification/notification/mark-as-seen', 'verb' => ['PATCH']],
             ['pattern' => 'notification/<id:\d+>', 'route' => 'rest/notification/notification/view', 'verb' => ['GET', 'HEAD']],

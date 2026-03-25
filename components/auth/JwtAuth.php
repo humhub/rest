@@ -21,7 +21,7 @@ class JwtAuth extends HttpBearerAuth
     {
         $authHeader = $request->getHeaders()->get($this->header);
 
-        if ($request->getHeaders()->get($this->header) && $this->pattern !== null && preg_match($this->pattern, $authHeader, $matches)) {
+        if ($request->getHeaders()->get($this->header) && $this->pattern !== null && preg_match($this->pattern, (string) $authHeader, $matches)) {
             $token = $matches[1];
 
             try {
