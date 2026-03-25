@@ -6,11 +6,10 @@
         "api",
         "rest"
     ],
-    "version": "0.11.3",
+    "version": "0.12.0",
     "homepage": "https://github.com/humhub/rest",
     "humhub": {
-        "minVersion": "1.18",
-        "maxVersion": "1.18"
+        "minVersion": "1.19"
     },
     "screenshots": []
 }

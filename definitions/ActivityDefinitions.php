@@ -8,45 +8,31 @@
 
 namespace humhub\modules\rest\definitions;
 
-use humhub\components\rendering\ViewPathRenderer;
 use humhub\modules\activity\models\Activity;
-use Yii;
-use yii\base\Exception;
+use humhub\modules\activity\services\RenderService;
 
 class ActivityDefinitions
 {
     public static function getActivity(Activity $activity)
     {
-        $baseActivity = $activity->getActivityBaseClass();
-
         return [
             'id' => $activity->id,
             'class' => $activity->class,
-            'content' => static::getActivityContent($activity, $baseActivity),
-            'originator' => UserDefinitions::getUserShort($baseActivity->originator),
-            'source' => SourceDefinitions::getSource($baseActivity->source),
+            'content' => static::getActivityContent($activity),
+            'originator' => UserDefinitions::getUserShort($activity->createdBy),
+            'source' => SourceDefinitions::getSource($activity->content->getPolymorphicRelation()),
             'createdAt' => $activity->content->created_at,
         ];
     }
 
-    private static function getActivityContent($activity, $baseActivity)
+    private static function getActivityContent($activity)
     {
         return [
             'id' => $activity->content->id,
             'guid' => $activity->content->guid,
             'pinned' => (bool) $activity->content->pinned,
             'archived' => (bool) $activity->content->archived,
-            'output' => static::getActivityOutput($baseActivity),
+            'output' => (new RenderService($activity))->getWeb(),
         ];
-    }
-
-    private static function getActivityOutput($baseActivity)
-    {
-        try {
-            return (new ViewPathRenderer())->renderView($baseActivity, $baseActivity->getViewParams());
-        } catch (Exception $exception) {
-            Yii::error('Could not render activity output. ' . $exception->getMessage(), 'api');
-            return '';
-        }
     }
 }

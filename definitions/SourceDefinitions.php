@@ -10,7 +10,6 @@ namespace humhub\modules\rest\definitions;
 
 use humhub\modules\comment\models\Comment;
 use humhub\modules\like\models\Like;
-use humhub\modules\notification\models\Notification;
 use humhub\modules\post\models\Post;
 use humhub\modules\space\models\Space;
 

@@ -26,7 +26,7 @@ class ContentDefinitions
             'id' => $content->id,
             'metadata' => static::getContentMetadata($content),
             'comments' => CommentDefinitions::getCommentsSummary($content),
-            'likes' => LikeDefinitions::getLikesSummary($content),
+            'likes' => LikeDefinitions::getLikesSummary($content->getModel()),
             'topics' => static::getTopics($content),
             'files' => FileDefinitions::getFiles($content),
         ];
