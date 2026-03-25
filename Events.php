@@ -215,8 +215,7 @@ class Events
         $event->addExportData('like', array_map(LikeDefinitions::getLike(...), Like::findAll(['created_by' => $event->user->id])));
 
         $event->addExportData('activity', array_map(ActivityDefinitions::getActivity(...), Activity::find()
-            ->innerJoin('content', 'activity.id = content.object_id and content.object_model = :activityClass', ['activityClass' => Activity::class])
-            ->where(['created_by' => $event->user->id])
+            ->where(['content.created_by' => $event->user->id])
             ->all()));
 
         $event->addExportData('invite', array_map(InviteDefinitions::getInvite(...), Invite::findAll(['created_by' => $event->user->id])));
@@ -231,7 +230,7 @@ class Events
         $event->addExportData('file', array_map(FileDefinitions::getFile(...), $files));
 
         foreach ($files as $file) {
-            $event->addExportFile($file->file_name, $file->store->get());
+            $event->addExportFile($file->file_name, $file);
         }
     }
 }

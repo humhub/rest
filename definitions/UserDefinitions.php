@@ -60,7 +60,7 @@ class UserDefinitions
         ArrayHelper::setValue(
             $attributes,
             'banner_url',
-            Url::to($user->profileBannerImage->getUrl(), true),
+            Url::to($user->bannerImage->getUrl(), true),
         );
 
         return $attributes;

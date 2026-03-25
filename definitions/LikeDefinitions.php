@@ -11,6 +11,7 @@ namespace humhub\modules\rest\definitions;
 use humhub\modules\content\interfaces\ContentProvider;
 use humhub\modules\like\models\Like;
 use humhub\modules\like\services\LikeService;
+use humhub\modules\user\models\User;
 
 /**
  * Class CommentDefinitions
@@ -21,7 +22,7 @@ class LikeDefinitions
     public static function getLikesSummary(ContentProvider $record)
     {
         $result = [];
-        $result['total'] = (new LikeService($record))->getCount();
+        $result['total'] = (new LikeService($record, new User()))->getCount();
         return $result;
     }
 
