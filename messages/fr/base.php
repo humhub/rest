@@ -1,7 +1,7 @@
 <?php
 return [
   '<strong>REST</strong> Configuration' => 'Configuration <strong>REST</strong>',
-  'Access Token for {user}' => '',
+  'Access Token for {user}' => 'Jeton d\'accès pour {user}',
   'Access Tokens' => 'Jetons d’accès (tokens)',
   'Add Access Token' => 'Ajouter un jeton d’accès',
   'Allow Bearer Authentication' => 'Permettre l’authentification du ou de la titulaire',
@@ -10,7 +10,7 @@ return [
   'Allow Query Param Bearer Authentication' => 'Permettre l’authentification du ou de la titulaire via les paramètres de requête',
   'Bearer Access Token Successfully Revoked' => 'Le jeton d’accès du ou de la titulaire a été révoqué avec succès',
   'Bearer Auth' => 'Authentification du ou de la titulaire',
-  'Bearer Token Created Successfully' => '',
+  'Bearer Token Created Successfully' => 'Jeton du titulaire créé avec succès',
   'Copy to clipboard' => 'Copier vers le presse-papier',
   'Enabled for all registered users' => 'Activé pour tous les membres enregistrés',
   'Expiration' => 'Expiration',
@@ -24,7 +24,7 @@ return [
   'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.' => '',
   'Token' => 'Jeton',
   'User' => 'Utilisateur',
-  'Validation failed' => '',
-  'You are not allowed to do this action!' => '',
-  '{attribute} is already in use!' => '',
+  'Validation failed' => 'Validation échoué',
+  'You are not allowed to do this action!' => 'Vous n\'êtes pas autorisé à effectuer cette action !',
+  '{attribute} is already in use!' => '{attribute} est déjà utilisé !',
 ];
