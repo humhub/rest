@@ -4,6 +4,7 @@ Changelog
 0.11.3 (Unreleased)
 -------------------
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
+- Fix #238: Skip 2FA checks for module REST API controllers
 
 0.11.2 (February 24, 2026)
 --------------------------
