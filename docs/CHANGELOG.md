@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.11.4 (Unreleased)
+0.11.4 (May 28, 2026)
 ---------------------
 - Fix #240: Fix activity and notification definitions with deleted/obsolete related objects
 
