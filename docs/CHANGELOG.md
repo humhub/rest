@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.11.4 (Unreleased)
+---------------------
+- Fix #240: Fix activity and notification definitions with deleted/obsolete related objects
+
 0.11.3 (May 15, 2026)
 ---------------------
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
