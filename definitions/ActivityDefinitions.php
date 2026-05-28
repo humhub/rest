@@ -17,16 +17,21 @@ class ActivityDefinitions
 {
     public static function getActivity(Activity $activity)
     {
-        $baseActivity = $activity->getActivityBaseClass();
+        try {
+            $baseActivity = $activity->getActivityBaseClass();
 
-        return [
-            'id' => $activity->id,
-            'class' => $activity->class,
-            'content' => static::getActivityContent($activity, $baseActivity),
-            'originator' => UserDefinitions::getUserShort($baseActivity->originator),
-            'source' => SourceDefinitions::getSource($baseActivity->source),
-            'createdAt' => $activity->content->created_at,
-        ];
+            return [
+                'id' => $activity->id,
+                'class' => $activity->class,
+                'content' => static::getActivityContent($activity, $baseActivity),
+                'originator' => UserDefinitions::getUserShort($baseActivity->originator),
+                'source' => SourceDefinitions::getSource($baseActivity->source),
+                'createdAt' => $activity->content->created_at,
+            ];
+        } catch (Exception $exception) {
+            Yii::error('Could not get activity. ' . $exception->getMessage(), 'api');
+            return null;
+        }
     }
 
     private static function getActivityContent($activity, $baseActivity)
@@ -45,7 +50,9 @@ class ActivityDefinitions
         try {
             return (new ViewPathRenderer())->renderView($baseActivity, $baseActivity->getViewParams());
         } catch (Exception $exception) {
-            Yii::error('Could not render activity output. ' . $exception->getMessage(), 'api');
+            Yii::error('Could not render activity output. '
+                . (is_object($baseActivity) ? get_class($baseActivity) . '#' . $baseActivity->record?->id . ': ' : '')
+                . $exception->getMessage(), 'api');
             return '';
         }
     }
