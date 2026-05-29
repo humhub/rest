@@ -51,7 +51,7 @@ class ActivityDefinitions
             return (new ViewPathRenderer())->renderView($baseActivity, $baseActivity->getViewParams());
         } catch (Exception $exception) {
             Yii::error('Could not render activity output. '
-                . (is_object($baseActivity) ? get_class($baseActivity) . '#' . $baseActivity->record?->id . ': ' : '')
+                . (is_object($baseActivity) ? $baseActivity::class . '#' . $baseActivity->record?->id . ': ' : '')
                 . $exception->getMessage(), 'api');
             return '';
         }
