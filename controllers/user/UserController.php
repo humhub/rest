@@ -14,6 +14,7 @@ use humhub\modules\rest\components\UploadedImageHandler;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\ApiUser;
 use humhub\modules\rest\models\UserAuthForm;
+use humhub\modules\user\models\Auth;
 use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
@@ -86,27 +87,25 @@ class UserController extends BaseController
     }
 
     /**
-     * Get User by authclient
+     * Get User by external auth client identity.
      *
-     * @param string $name Name of auth client
-     * @param string $id ID of auth client
+     * Looks up the `user_auth` table by (source, source_id). Since HumHub 1.19
+     * all external auth-client identities — including LDAP — live there.
+     *
+     * @param string $name AuthClient ID (e.g. 'ldap', 'github', 'saml')
+     * @param string $id External identifier as provided by the AuthClient
      * @return array
      * @throws HttpException
      */
     public function actionGetByAuthclient($name, $id)
     {
-        $user = User::find()
-            ->alias('u')
-            ->joinWith('auths a', false)
-            ->where(['u.auth_mode' => $name, 'u.authclient_id' => $id])
-            ->orWhere(['a.source' => $name, 'a.source_id' => $id])
-            ->one();
+        $auth = Auth::findOne(['source' => $name, 'source_id' => $id]);
 
-        if ($user === null) {
+        if ($auth === null || $auth->user === null) {
             return $this->returnError(404, 'User not found!');
         }
 
-        return $this->actionView($user->id);
+        return $this->actionView($auth->user_id);
     }
 
     public function actionView($id)
