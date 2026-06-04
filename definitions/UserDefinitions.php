@@ -25,26 +25,26 @@ use yii\helpers\Url;
  */
 class UserDefinitions
 {
-    public static function getUserShort(User $user)
+    public static function getUserShort(?User $user)
     {
-        return [
+        return $user ? [
             'id' => $user->id,
             'guid' => $user->guid,
             'display_name' => $user->displayName,
             'url' => Url::to(['/', 'container' => $user], true),
-        ];
+        ] : null;
     }
 
-    public static function getUser(User $user)
+    public static function getUser(?User $user)
     {
-        return [
+        return $user ? [
             'id' => $user->id,
             'guid' => $user->guid,
             'display_name' => $user->displayName,
             'url' => Url::to(['/', 'container' => $user], true),
             'account' => static::getAccount($user),
             'profile' => static::getProfile($user),
-        ];
+        ] : null;
     }
 
     public static function getProfile(User $user)
