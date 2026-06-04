@@ -20,8 +20,8 @@ class NotificationDefinitions
             'id' => $notification->id,
             'class' => $baseNotification::class,
             'output' => $baseNotification->html(),
-            'originator' => UserDefinitions::getUserShort($baseNotification->originator),
-            'source' => SourceDefinitions::getSource($baseNotification->source),
+            'originator' => $baseNotification->originator ? UserDefinitions::getUserShort($baseNotification->originator) : null,
+            'source' => $baseNotification->source ? SourceDefinitions::getSource($baseNotification->source) : null,
             'createdAt' => $notification->created_at,
         ];
     }

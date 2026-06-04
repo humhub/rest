@@ -3,6 +3,7 @@ return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> konfiguráció',
   'Access Token for {user}' => '',
   'Access Tokens' => 'Hozzáférési tokenek',
+  'Add' => 'Hozzáadás',
   'Add Access Token' => 'Hozzáférési token hozzáadása',
   'Allow Bearer Authentication' => 'Adathordozó hitelesítés engedélyezése',
   'Allow HTTP Basic Authentication' => 'HTTP alapszintű hitelesítés engedélyezése',

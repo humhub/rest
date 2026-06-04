@@ -10,19 +10,26 @@ namespace humhub\modules\rest\definitions;
 
 use humhub\modules\activity\models\Activity;
 use humhub\modules\activity\services\RenderService;
+use Yii;
+use yii\base\Exception;
 
 class ActivityDefinitions
 {
     public static function getActivity(Activity $activity)
     {
-        return [
-            'id' => $activity->id,
-            'class' => $activity->class,
-            'content' => static::getActivityContent($activity),
-            'originator' => UserDefinitions::getUserShort($activity->createdBy),
-            'source' => SourceDefinitions::getSource($activity->content->getPolymorphicRelation()),
-            'createdAt' => $activity->content->created_at,
-        ];
+        try {
+            return [
+                'id' => $activity->id,
+                'class' => $activity->class,
+                'content' => static::getActivityContent($activity),
+                'originator' => UserDefinitions::getUserShort($activity->createdBy),
+                'source' => SourceDefinitions::getSource($activity->content->getPolymorphicRelation()),
+                'createdAt' => $activity->content->created_at,
+            ];
+        } catch (Exception $exception) {
+            Yii::error('Could not get activity. ' . $exception->getMessage(), 'api');
+            return null;
+        }
     }
 
     private static function getActivityContent($activity)

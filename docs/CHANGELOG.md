@@ -13,6 +13,15 @@ Changelog
   columns were dropped in core 1.19.
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
 
+0.11.4 (May 28, 2026)
+---------------------
+- Fix #240: Fix activity and notification definitions with deleted/obsolete related objects
+
+0.11.3 (May 15, 2026)
+---------------------
+- Enh: Automated code refactoring for HumHub 1.18 using Rector
+- Fix #238: Skip 2FA checks for module REST API controllers
+
 0.11.2 (February 24, 2026)
 --------------------------
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
