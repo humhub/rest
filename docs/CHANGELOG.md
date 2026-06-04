@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.12.0 (Unreleased)
--------------------
+0.12.0 (June 4, 2026)
+---------------------
 - Enh: Raised minimum HumHub version to 1.19 (UserSource architecture)
 - Enh: Replaced legacy `authclient` / `authclient_id` response fields on `/user`
   with `user_source` to match the new core schema. Requests using the
