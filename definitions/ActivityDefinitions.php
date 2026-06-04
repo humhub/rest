@@ -23,8 +23,8 @@ class ActivityDefinitions
                 'class' => $activity->class,
                 'content' => static::getActivityContent($activity),
                 'originator' => UserDefinitions::getUserShort($activity->createdBy),
-                'source' => SourceDefinitions::getSource($activity->content->getPolymorphicRelation()),
-                'createdAt' => $activity->content->created_at,
+                'source' => SourceDefinitions::getSource($activity->content?->getPolymorphicRelation()),
+                'createdAt' => $activity->created_at,
             ];
         } catch (Exception $exception) {
             Yii::error('Could not get activity. ' . $exception->getMessage(), 'api');
@@ -34,12 +34,12 @@ class ActivityDefinitions
 
     private static function getActivityContent($activity)
     {
-        return [
+        return $activity->content ? [
             'id' => $activity->content->id,
             'guid' => $activity->content->guid,
             'pinned' => (bool) $activity->content->pinned,
             'archived' => (bool) $activity->content->archived,
             'output' => (new RenderService($activity))->getWeb(),
-        ];
+        ] : [];
     }
 }

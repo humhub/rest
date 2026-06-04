@@ -17,9 +17,9 @@ class InviteDefinitions
             'language' => $invite->language,
             'space' => $invite->space ? SpaceDefinitions::getSpaceShort($invite->space) : null,
             'invitationUrl' => Url::to(['/user/registration', 'token' => $invite->token], true),
-            'originator' => $invite->originator ? UserDefinitions::getUserShort($invite->originator) : null,
-            'createdBy' => $invite->createdBy ? UserDefinitions::getUserShort($invite->createdBy) : null,
-            'updatedBy' => $invite->updatedBy ? UserDefinitions::getUserShort($invite->updatedBy) : null,
+            'originator' => UserDefinitions::getUserShort($invite->originator),
+            'createdBy' => UserDefinitions::getUserShort($invite->createdBy),
+            'updatedBy' => UserDefinitions::getUserShort($invite->updatedBy),
             'createdAt' => $invite->created_at,
             'updatedAt' => $invite->updated_at,
         ];

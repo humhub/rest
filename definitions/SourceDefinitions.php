@@ -22,6 +22,7 @@ class SourceDefinitions
             $source instanceof Post => PostDefinitions::getPost($source),
             $source instanceof Comment => CommentDefinitions::getComment($source),
             $source instanceof Like => LikeDefinitions::getLike($source),
+            $source === null => null,
             default => $source::class . ' definitions are not yet supported.',
         };
     }
