@@ -8,9 +8,10 @@
 
 namespace humhub\modules\rest\controllers\space;
 
+use humhub\modules\activity\services\ActivityManager;
 use humhub\modules\rest\components\BaseController;
-use humhub\modules\space\activities\SpaceArchived;
-use humhub\modules\space\activities\SpaceUnArchived;
+use humhub\modules\space\activities\SpaceArchivedActivity;
+use humhub\modules\space\activities\SpaceUnArchivedActivity;
 use humhub\modules\space\models\Space;
 use Yii;
 
@@ -38,7 +39,7 @@ class ArchiveController extends BaseController
         $space->archive();
 
         // Create Activity when the space in archived
-        SpaceArchived::instance()->from(Yii::$app->user->getIdentity())->about($space->owner)->save();
+        ActivityManager::dispatch(SpaceArchivedActivity::class, $space);
 
         return $this->returnSuccess('Space successfully archived!');
     }
@@ -62,7 +63,7 @@ class ArchiveController extends BaseController
         $space->unarchive();
 
         // Create Activity when the space in unarchived
-        SpaceUnArchived::instance()->from(Yii::$app->user->getIdentity())->about($space->owner)->save();
+        ActivityManager::dispatch(SpaceUnArchivedActivity::class, $space);
 
         return $this->returnSuccess('Space successfully unarchived!');
     }
