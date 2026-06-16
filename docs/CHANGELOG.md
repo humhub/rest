@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.12.1 (Unreleased)
+-------------------
+- Fix: Make m230401_174208_add_allow_jwt_auth migration resilient when module is not bootstrapped
+
 0.12.0 (June 4, 2026)
 ---------------------
 - Enh: Raised minimum HumHub version to 1.19 (UserSource architecture)
