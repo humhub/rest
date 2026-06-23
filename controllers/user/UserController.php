@@ -186,11 +186,11 @@ class UserController extends BaseController
             }
 
             if ($profileImage = ArrayHelper::getValue($profileData, 'image')) {
-                UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), $profileImage);
+                UploadedImageHandler::instance()->handle($apiUser->user->image, $profileImage);
             }
 
             if ($bannerImage = ArrayHelper::getValue($profileData, 'banner')) {
-                UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), $bannerImage);
+                UploadedImageHandler::instance()->handle($apiUser->user->bannerImage, $bannerImage);
             }
 
             $transaction->commit();
@@ -199,8 +199,6 @@ class UserController extends BaseController
 
             return $this->returnError(500, $e->getMessage());
         }
-
-
 
         return $this->actionView($apiUser->id);
     }
@@ -254,17 +252,16 @@ class UserController extends BaseController
 
             if ($profile->save()) {
                 if ($profileImage = ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'image')) {
-                    UploadedImageHandler::instance()->handle($apiUser->user->getProfileImage(), $profileImage);
+                    UploadedImageHandler::instance()->handle($apiUser->user->image, $profileImage);
                 }
 
                 if ($bannerImage = ArrayHelper::getValue(Yii::$app->request->getBodyParam('profile', []), 'banner')) {
-                    UploadedImageHandler::instance()->handle($apiUser->user->getProfileBannerImage(), $bannerImage);
+                    UploadedImageHandler::instance()->handle($apiUser->user->bannerImage, $bannerImage);
                 }
 
                 return $this->actionView($apiUser->id);
             }
         }
-
 
         Yii::error('Could not create validated user.', 'api');
 

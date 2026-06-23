@@ -55,7 +55,7 @@ class UserDefinitions
         ArrayHelper::setValue(
             $attributes,
             'image_url',
-            Url::to($user->profileImage->getUrl(), true),
+            Url::to($user->image->getUrl(), true),
         );
         ArrayHelper::setValue(
             $attributes,
