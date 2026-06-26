@@ -9,7 +9,6 @@
 namespace humhub\modules\rest\controllers\activity;
 
 use humhub\modules\activity\models\Activity;
-use humhub\modules\content\models\Content;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ActivityDefinitions;
 use Yii;
@@ -21,9 +20,9 @@ class ActivityController extends BaseController
         $results = [];
 
         $query = Activity::find()
-            ->where(['!=', Content::tableName() . '.created_by', Yii::$app->user->id])
-            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
-            ->readable();
+            ->where(['!=', Activity::tableName() . '.created_by', Yii::$app->user->id])
+            ->orderBy([Activity::tableName() . '.created_at' => SORT_DESC])
+            ->visible();
 
         $pagination = $this->handlePagination($query, 10);
         foreach ($query->all() as $activity) {
@@ -35,11 +34,11 @@ class ActivityController extends BaseController
     public function actionView($id)
     {
         $activity = Activity::find()
-            ->where([Content::tableName() . '.object_id' => $id])
-            ->readable()
+            ->where([Activity::tableName() . '.id' => $id])
+            ->visible()
             ->one();
 
-        if (!$activity) {
+        if (!$activity instanceof Activity) {
             return $this->returnError(404, 'Activity not found');
         }
 
@@ -51,10 +50,10 @@ class ActivityController extends BaseController
         $results = [];
 
         $query = Activity::find()
-            ->where([Content::tableName() . '.contentcontainer_id' => $containerId])
-            ->andWhere(['!=', Content::tableName() . '.created_by', Yii::$app->user->id])
-            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
-            ->readable();
+            ->where([Activity::tableName() . '.contentcontainer_id' => $containerId])
+            ->andWhere(['!=', Activity::tableName() . '.created_by', Yii::$app->user->id])
+            ->orderBy([Activity::tableName() . '.created_at' => SORT_DESC])
+            ->visible();
 
         $pagination = $this->handlePagination($query, 10);
         foreach ($query->all() as $activity) {

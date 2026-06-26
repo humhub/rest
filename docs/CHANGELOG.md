@@ -1,9 +1,22 @@
 Changelog
 =========
 
-0.11.5 (Unreleased)
+0.12.1 (Unreleased)
 -------------------
 - Fix: Make m230401_174208_add_allow_jwt_auth migration resilient when module is not bootstrapped
+- Fix #245: Update user images
+- Enh #246: Add aria-label attribute for icon-only buttons
+
+0.12.0 (June 4, 2026)
+---------------------
+- Enh: Raised minimum HumHub version to 1.19 (UserSource architecture)
+- Enh: Replaced legacy `authclient` / `authclient_id` response fields on `/user`
+  with `user_source` to match the new core schema. Requests using the
+  `authclient` field are still accepted as an alias for `user_source` for one
+  release.
+- Enh: `/user/get-by-authclient` now looks up external identities via the
+  `user_auth` table only — the legacy `user.auth_mode` / `user.authclient_id`
+  columns were dropped in core 1.19.
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
 
 0.11.4 (May 28, 2026)

@@ -20,5 +20,6 @@ return [
         'humhub\modules\rest\tests\codeception\fixtures\TopicFixture',
         'humhub\modules\rest\tests\codeception\fixtures\SettingFixture',
         'humhub\modules\rest\tests\codeception\fixtures\BearerAccessTokenFixture',
+        'humhub\modules\rest\tests\codeception\fixtures\RecordMapFixture',
     ],
 ];

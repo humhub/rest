@@ -3,6 +3,7 @@ return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> Configuratie',
   'Access Token for {user}' => 'Toegangstoken voor {user}',
   'Access Tokens' => 'Toegangstokens',
+  'Add' => 'Toevoegen',
   'Add Access Token' => 'Toegangstoken toevoegen',
   'Allow Bearer Authentication' => 'Bearer-authenticatie toestaan',
   'Allow HTTP Basic Authentication' => 'HTTP-basisverificatie toestaan',
