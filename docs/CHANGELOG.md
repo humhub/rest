@@ -5,6 +5,7 @@ Changelog
 -------------------
 - Fix: Make m230401_174208_add_allow_jwt_auth migration resilient when module is not bootstrapped
 - Fix #245: Update user images
+- Enh #246: Add aria-label attribute for icon-only buttons
 
 0.12.0 (June 4, 2026)
 ---------------------
