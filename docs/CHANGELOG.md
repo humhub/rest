@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.12.1 (Unreleased)
--------------------
+0.12.1 (July 8, 2026)
+---------------------
 - Fix #245: Update user images
 - Enh #246: Add aria-label attribute for icon-only buttons
 
