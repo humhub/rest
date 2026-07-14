@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.12.2 (Unreleased)
+-------------------
+- Chg: Removed the obsolete `twofa.beforeCheck` listener (`Module::ignoreTwofaCheck()`) — the event no longer exists since the twofa module moved to the core user gate system; token-authenticated API requests are not intercepted by the gate, so the REST API keeps working for users with 2FA enabled without any opt-out
+
 0.12.1 (July 8, 2026)
 ---------------------
 - Fix #245: Update user images
