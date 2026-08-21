@@ -19,9 +19,13 @@ method, in addition to the existing token methods.
 6. **`SessionAuth` (if `enableSessionAuth`) — always last**
 
 **Token wins:** a request carrying a valid token is authenticated as the token
-user even when a session cookie is present. An *invalid* token falls through to
-session auth (standard CompositeAuth fall-through). Guests without token and
-session get the usual 401 JSON.
+user even when a session cookie is present. Note the fall-through is not uniform:
+only `JwtAuth` returns `null` on failure (falling through to session auth); the
+Bearer/QueryParam/Basic/Impersonate methods throw on an invalid credential, so a
+malformed token on a login-required action yields 401 rather than silently
+downgrading to the session. On the guest-allowed actions (`optional` list) an
+invalid token downgrades to guest. Guests without token and session get the usual
+401 JSON.
 
 ### CSRF contract
 
@@ -33,15 +37,19 @@ session get the usual 401 JSON.
   `Events::onBeforeRequest`).
 - GET/HEAD/OPTIONS are exempt. Token-authenticated requests remain CSRF-exempt
   exactly as before.
-- Implementation detail: `BaseController` keeps `enableCsrfCookie = false` for
-  API responses; `SessionAuth` re-enables cookie lookup only while validating,
-  because the browser's true token lives in the `_csrf` cookie (core default).
+- Implementation detail: `SessionAuth` does **not** call
+  `Request::validateCsrfToken()` (that method generates and Set-Cookies a fresh
+  `_csrf` token when the request carries none, which would clobber the browser
+  page's real token). It reads the raw token straight from the `_csrf` cookie
+  (core default), unmasks the client-supplied token and compares timing-safely.
+  No API response ever emits a `_csrf` Set-Cookie.
 
 ### Setting
 
 - `enableSessionAuth` (module setting, checkbox on the admin config form,
-  `ConfigureForm`). **Default: enabled** on this branch — owner decision for
-  the Vue experiment; the upstream default may change on merge.
+  `ConfigureForm`). **Default: disabled**, like every other auth method — a
+  module update must never silently open a new authentication surface. The
+  dev/Vue-islands instance enables it explicitly in the admin config form.
 
 ### Allowlist decision
 
@@ -68,6 +76,40 @@ user allowlist gate (`BaseController::isUserEnabled()`):
 - Token logins can never write into the browser session: the API user
   component stays session-less (`enableSession = false`); `SessionAuth` reads
   the session through a temporary window only.
+
+### 4.4 Gate enforcement (2FA and other non-API gates)
+
+Core's `GateFilter::getRequestClass()` infers `RequestClass::Api` purely from
+`Yii::$app->user->enableSession === false`, which `BaseController` pins for every
+REST request. A cookie-authenticated request would therefore be misclassified as
+an API request and skip every gate that does not apply to API requests (2FA,
+legal, onboarding, …) — so a user who passed only the first factor could reach
+every endpoint. `SessionAuth` closes this: after restoring the identity it
+re-classifies the request the way `GateFilter` would for a real browser session
+(Ajax/FullPage, never Api) via `gateManager->findOpenGate()` and throws a 403
+JSON when an open gate intercepts it. Gates that also apply to `Api` (e.g.
+must-change-password, maintenance mode) are already enforced by the core
+`GateFilter` on the same request and are not applied twice.
+
+**Core-side follow-up:** the correct long-term fix is an explicit
+"authenticated-by-session" signal on the request that `GateFilter` consumes,
+instead of inferring the class from `enableSession`. The module-side guard above
+is the interim; it should be revisited when this lands in core.
+
+### 4.5 Impersonation (fail-closed on this branch)
+
+`Impersonation::isActive()` short-circuits `false` while `enableSession` is off,
+so core 1.19's private-content restriction (core #8372) would silently not apply
+to a session-authenticated impersonation — an impersonating admin would see
+through the API the private content the web UI hides. Both cases are handled:
+
+- **Impersonate token** (`ImpersonateAuth`): the removed `isImpersonated` write
+  is gone (commit "Fix impersonate token auth on HumHub 1.19"); the restriction
+  is session-bound and does not apply to token requests. Re-applying an
+  equivalent restriction to impersonate-token API access is a tracked follow-up.
+- **Session impersonation** (`SessionAuth`): rejected outright (403) — detected
+  from the `Impersonation::SESSION_KEY` session marker — until the core-side
+  explicit-session signal (§4.4) lets the restriction evaluate correctly.
 
 ## 2. Endpoint gap analysis: core Vue islands vs. current REST module
 

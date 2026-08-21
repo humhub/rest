@@ -218,31 +218,40 @@ class CommentWindowCest extends HumHubApiTestCest
     {
         $I->wantTo('use the window endpoints with both session and token auth');
 
-        // Session auth (User1 = id 2). amLoggedInAs() must run before the first API request
-        // of the test: the first request replaces the app's user component with the
-        // session-less API one, after which the Yii2 module can no longer seed a session.
-        $I->amLoggedInAs(2);
-        $I->sendGet('comment/window', ['contentId' => 10]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['total' => 0, 'rootTotal' => 0]);
+        // Session auth defaults OFF (see ConfigureForm); enable it for the session portion and
+        // restore the default so it does not leak to other cests on the shared DB.
+        $settings = Yii::$app->getModule('rest')->settings;
+        $settings->set('enableSessionAuth', true);
 
-        // Session-authenticated mutation requires the CSRF token
-        $I->sendPost('comment/full', ['message' => 'No CSRF', 'contentId' => 10]);
-        $I->seeResponseCodeIs(403);
+        try {
+            // Session auth (User1 = id 2). amLoggedInAs() must run before the first API request
+            // of the test: the first request replaces the app's user component with the
+            // session-less API one, after which the Yii2 module can no longer seed a session.
+            $I->amLoggedInAs(2);
+            $I->sendGet('comment/window', ['contentId' => 10]);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseContainsJson(['total' => 0, 'rootTotal' => 0]);
 
-        $rawToken = Yii::$app->security->generateRandomString();
-        $I->setCookie('_csrf', $rawToken);
-        $I->haveHttpHeader('X-CSRF-Token', Yii::$app->security->maskToken($rawToken));
-        $I->sendPost('comment/full', ['message' => 'With CSRF', 'contentId' => 10]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['message' => 'With CSRF', 'canEdit' => true]);
+            // Session-authenticated mutation requires the CSRF token
+            $I->sendPost('comment/full', ['message' => 'No CSRF', 'contentId' => 10]);
+            $I->seeResponseCodeIs(403);
 
-        // Token (bearer) auth — takes precedence over the still-present session (same user
-        // here) and sees the comment created above
-        $I->amBearerAuthenticated(self::USER1_BEARER_TOKEN);
-        $I->sendGet('comment/window', ['contentId' => 10]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['total' => 1, 'rootTotal' => 1]);
+            $rawToken = Yii::$app->security->generateRandomString();
+            $I->setCookie('_csrf', $rawToken);
+            $I->haveHttpHeader('X-CSRF-Token', Yii::$app->security->maskToken($rawToken));
+            $I->sendPost('comment/full', ['message' => 'With CSRF', 'contentId' => 10]);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseContainsJson(['message' => 'With CSRF', 'canEdit' => true]);
+
+            // Token (bearer) auth — takes precedence over the still-present session (same user
+            // here) and sees the comment created above
+            $I->amBearerAuthenticated(self::USER1_BEARER_TOKEN);
+            $I->sendGet('comment/window', ['contentId' => 10]);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseContainsJson(['total' => 1, 'rootTotal' => 1]);
+        } finally {
+            $settings->set('enableSessionAuth', false);
+        }
     }
 
     public function testGuestAccess(ApiTester $I)

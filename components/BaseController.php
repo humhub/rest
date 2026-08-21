@@ -17,6 +17,7 @@ use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
 use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
+use humhub\modules\rest\Module;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\user\helpers\AuthHelper;
 use humhub\modules\user\models\User;
@@ -29,6 +30,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 use yii\web\JsonParser;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class BaseController
@@ -117,6 +119,16 @@ abstract class BaseController extends Controller
      */
     public function beforeAction($action)
     {
+        // Defence in depth: hard-fail any request that reached a REST controller off the API
+        // URL rules — i.e. whose path is not under the API prefix (a bare `/rest/<controller>/
+        // <action>` URL). Together with the `rest/<tmpParam>` catch-all in
+        // Events::onBeforeRequest() this guarantees a mutating action can never be executed
+        // off-rule as an unconstrained, CSRF-exempt plain request. Must run before auth.
+        if (!str_starts_with(Yii::$app->request->pathInfo, Module::API_URL_PREFIX)) {
+            Yii::$app->response->format = 'json';
+            throw new NotFoundHttpException();
+        }
+
         $appUser = Yii::$app->getUser();
 
         Yii::$app->set('user', [

@@ -41,6 +41,21 @@ class Events
 {
     public static function onBeforeRequest($event)
     {
+        // The bare `/rest/...` URL space is reserved for the admin config page and an
+        // explicit catch-all. These rules must be registered for EVERY request (not only
+        // `api/` requests): otherwise a bare `/rest/<controller>/<action>` URL falls through
+        // to Yii's default routing and resolves straight to a REST controller action — an
+        // unconstrained, CSRF-exempt plain GET (see docs/vue-session-api.md §5 and the
+        // defence-in-depth guard in BaseController::beforeAction()).
+        Yii::$app->urlManager->addRules([
+
+            // API Config
+            ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
+
+            // Catch all to ensure verbs
+            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
+
+        ], true);
 
         // Only prepare if API request
         if (!str_starts_with(Yii::$app->request->pathInfo, 'api/')) {
@@ -181,16 +196,6 @@ class Events
             ['pattern' => 'file/download/<id:\d+>', 'route' => 'rest/file/file/download', 'verb' => ['GET', 'HEAD']],
 
         ]);
-
-        Yii::$app->urlManager->addRules([
-
-            // API Config
-            ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
-
-            // Catch all to ensure verbs
-            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
-
-        ], true);
 
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
     }

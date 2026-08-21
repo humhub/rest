@@ -16,6 +16,8 @@ use humhub\modules\comment\services\CommentJsonService;
 use humhub\modules\content\models\Content;
 use humhub\modules\rest\components\BaseController;
 use Yii;
+use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -53,6 +55,27 @@ class WindowController extends BaseController
      * in the service); mutations are for logged-in users only.
      */
     protected array $guestAllowedActions = ['index', 'view'];
+
+    /**
+     * Per-action HTTP method guards so a mutating action can never run on a safe method,
+     * even if it were ever reached off the URL rules — mirrors core `CommentController`'s
+     * `RULE_POST => ['create']` verb constraint. Wrong verb → 405.
+     *
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return ArrayHelper::merge(parent::behaviors(), [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'create' => ['POST'],
+                    'update' => ['PUT', 'PATCH'],
+                    'delete' => ['DELETE'],
+                ],
+            ],
+        ]);
+    }
 
     /**
      * Resolves the target comment / parent comment / content exactly like the core

@@ -108,30 +108,39 @@ class LikeStateCest extends HumHubApiTestCest
 
         $recordId = $this->getPostRecordId(10);
 
-        // Session auth (User1 = id 2). amLoggedInAs() must run before the first API request
-        // of the test: the first request replaces the app's user component with the
-        // session-less API one, after which the Yii2 module can no longer seed a session.
-        $I->amLoggedInAs(2);
-        $I->sendGet('like/info', ['recordId' => $recordId]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['currentUserLiked' => false, 'likeCounter' => 0]);
+        // Session auth defaults OFF (see ConfigureForm); enable it for the session portion and
+        // restore the default so it does not leak to other cests on the shared DB.
+        $settings = Yii::$app->getModule('rest')->settings;
+        $settings->set('enableSessionAuth', true);
 
-        // Session-authenticated mutation requires the CSRF token
-        $I->sendPost("like?recordId=$recordId");
-        $I->seeResponseCodeIs(403);
+        try {
+            // Session auth (User1 = id 2). amLoggedInAs() must run before the first API request
+            // of the test: the first request replaces the app's user component with the
+            // session-less API one, after which the Yii2 module can no longer seed a session.
+            $I->amLoggedInAs(2);
+            $I->sendGet('like/info', ['recordId' => $recordId]);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseContainsJson(['currentUserLiked' => false, 'likeCounter' => 0]);
 
-        $rawToken = Yii::$app->security->generateRandomString();
-        $I->setCookie('_csrf', $rawToken);
-        $I->haveHttpHeader('X-CSRF-Token', Yii::$app->security->maskToken($rawToken));
-        $I->sendPost("like?recordId=$recordId");
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['currentUserLiked' => true, 'likeCounter' => 1]);
+            // Session-authenticated mutation requires the CSRF token
+            $I->sendPost("like?recordId=$recordId");
+            $I->seeResponseCodeIs(403);
 
-        // Token (bearer) auth — takes precedence over the still-present session (same user here)
-        $I->amBearerAuthenticated(self::USER1_BEARER_TOKEN);
-        $I->sendGet('like/info', ['recordId' => $recordId]);
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(['currentUserLiked' => true, 'likeCounter' => 1]);
+            $rawToken = Yii::$app->security->generateRandomString();
+            $I->setCookie('_csrf', $rawToken);
+            $I->haveHttpHeader('X-CSRF-Token', Yii::$app->security->maskToken($rawToken));
+            $I->sendPost("like?recordId=$recordId");
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseContainsJson(['currentUserLiked' => true, 'likeCounter' => 1]);
+
+            // Token (bearer) auth — takes precedence over the still-present session (same user here)
+            $I->amBearerAuthenticated(self::USER1_BEARER_TOKEN);
+            $I->sendGet('like/info', ['recordId' => $recordId]);
+            $I->seeResponseCodeIs(200);
+            $I->seeResponseContainsJson(['currentUserLiked' => true, 'likeCounter' => 1]);
+        } finally {
+            $settings->set('enableSessionAuth', false);
+        }
     }
 
     public function testGuestAccess(ApiTester $I)

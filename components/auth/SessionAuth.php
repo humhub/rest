@@ -8,6 +8,8 @@
 
 namespace humhub\modules\rest\components\auth;
 
+use humhub\components\gates\RequestClass;
+use humhub\modules\user\components\Impersonation;
 use Yii;
 use yii\filters\auth\AuthMethod;
 use yii\web\ForbiddenHttpException;
@@ -46,6 +48,17 @@ use yii\web\User;
  *   API user component) — core re-establishes the session on any regular page load before a
  *   browser UI issues API calls.
  *
+ * - A session-authenticated request is made gate-visible: the same user gates a browser
+ *   session is subject to (2FA and other non-API gates) are enforced here, because the
+ *   session-less API user component would otherwise make core's `GateFilter` misclassify the
+ *   request as an API request and skip them (a 2FA-pending user must not reach the API).
+ *   See {@see enforceOpenGates()} and `docs/vue-session-api.md` §4.4.
+ *
+ * - An active admin impersonation is bound to the browser session and cannot use the API on
+ *   this branch: it is detected from the session marker and rejected (fail closed), because
+ *   the session-less API user component prevents core 1.19's impersonation private-content
+ *   restriction from applying. See {@see isImpersonationSession()} and §4.5 of that document.
+ *
  * @since 0.13
  */
 class SessionAuth extends AuthMethod
@@ -75,7 +88,67 @@ class SessionAuth extends AuthMethod
             throw new ForbiddenHttpException('Unable to verify your data submission. Session-authenticated modifying requests require a valid CSRF token (X-CSRF-Token header).');
         }
 
+        // I3: an admin impersonation is bound to the browser session. Because the API user
+        // component is session-less, core's `Impersonation::isActive()` cannot detect it and
+        // its 1.19 private-content restriction would silently not apply — so a session-bound
+        // impersonation is rejected (fail closed) until the core-side explicit-session signal
+        // lands (see docs/vue-session-api.md §4.5).
+        if ($this->isImpersonationSession()) {
+            throw new ForbiddenHttpException('Impersonation is not supported over the API. Stop the impersonation to continue.');
+        }
+
+        // C2: enforce the user gates a browser session must pass (2FA and other non-API gates).
+        $this->enforceOpenGates();
+
         return $identity;
+    }
+
+    /**
+     * Whether the current browser session is an active admin impersonation.
+     *
+     * The session identity has just been restored, so the session is open and the marker can
+     * be read directly. Core's {@see Impersonation::isActive()} cannot be used here: it
+     * short-circuits `false` while `enableSession` is off, which the API user component pins.
+     */
+    private function isImpersonationSession(): bool
+    {
+        return Yii::$app->has('session') && Yii::$app->session->has(Impersonation::SESSION_KEY);
+    }
+
+    /**
+     * Enforces the user gates a browser session is subject to on a session-authenticated
+     * request.
+     *
+     * Core's `GateFilter::getRequestClass()` infers {@see RequestClass::Api} purely from
+     * `Yii::$app->user->enableSession === false`, which `BaseController` pins for every REST
+     * request. A cookie-authenticated request is therefore misclassified as an API request
+     * and skips every gate that does not apply to API requests (2FA, legal, onboarding, …) —
+     * so a user who passed only the first factor could call every endpoint.
+     *
+     * This re-classifies the request the way `GateFilter` would for a real browser session
+     * (never Api) and rejects it when a gate is open. Gates that also apply to
+     * {@see RequestClass::Api} (e.g. must-change-password, maintenance mode) are already
+     * enforced by the core `GateFilter` on this same request, so only the misclassification
+     * gap is closed here — they are not applied twice.
+     *
+     * @throws ForbiddenHttpException when an open gate intercepts the request
+     */
+    private function enforceOpenGates(): void
+    {
+        if (!Yii::$app->has('gateManager')) {
+            return;
+        }
+
+        $request = Yii::$app->request;
+        $requestClass = ($request->getIsAjax() || $request->getIsPjax())
+            ? RequestClass::Ajax
+            : RequestClass::FullPage;
+
+        $gate = Yii::$app->gateManager->findOpenGate($requestClass, (string)Yii::$app->requestedRoute);
+
+        if ($gate !== null && !$gate->appliesTo(RequestClass::Api)) {
+            throw new ForbiddenHttpException('This action requires completing the "' . $gate->getId() . '" step first.');
+        }
     }
 
     /**
@@ -107,21 +180,39 @@ class SessionAuth extends AuthMethod
     }
 
     /**
-     * Validates the CSRF token for state-changing requests; safe methods (GET/HEAD/OPTIONS)
-     * always pass — see `yii\web\Request::validateCsrfToken()`.
+     * Validates the CSRF token for state-changing requests without ever minting one; safe
+     * methods (GET/HEAD/OPTIONS) always pass.
      *
-     * `BaseController::beforeAction()` disables the CSRF cookie so API responses never emit
-     * one, but the browser's true CSRF token lives in the `_csrf` cookie (HumHub core default),
-     * so cookie lookup must be re-enabled while validating.
+     * `yii\web\Request::validateCsrfToken()` is deliberately NOT used: it calls
+     * `getCsrfToken()`, which — with the CSRF cookie enabled — generates a fresh token and
+     * emits a `_csrf` Set-Cookie whenever the request carries none, clobbering the page's real
+     * token (M5). Instead the browser's true token is read straight from the `_csrf` cookie
+     * (HumHub core default) and compared timing-safely against the client-supplied token; no
+     * cookie means no valid token. No API response ever sets a cookie this way.
      */
     private function validateCsrfToken(Request $request): bool
     {
-        $enableCsrfCookie = $request->enableCsrfCookie;
-        $request->enableCsrfCookie = true;
-        try {
-            return $request->validateCsrfToken();
-        } finally {
-            $request->enableCsrfCookie = $enableCsrfCookie;
+        if (in_array($request->getMethod(), $request->csrfTokenSafeMethods, true)) {
+            return true;
         }
+
+        // The `_csrf` cookie holds the raw token; missing cookie ⇒ no valid token.
+        $trueToken = $request->getCookies()->getValue($request->csrfParam);
+        if (!is_string($trueToken) || $trueToken === '') {
+            return false;
+        }
+
+        // The client sends the masked token via the X-CSRF-Token header (or the `_csrf` body
+        // param), exactly like `humhub.client` does in the browser.
+        $clientToken = $request->getCsrfTokenFromHeader() ?? $request->getBodyParam($request->csrfParam);
+        if (!is_string($clientToken) || $clientToken === '') {
+            return false;
+        }
+
+        $security = Yii::$app->security;
+
+        // `unmaskToken()` recovers the raw token from the masked client value for a timing-safe
+        // comparison — no token generation, no Set-Cookie.
+        return $security->compareString($security->unmaskToken($clientToken), $trueToken);
     }
 }

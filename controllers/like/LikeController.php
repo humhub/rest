@@ -12,6 +12,8 @@ use humhub\modules\like\models\Like;
 use humhub\modules\user\models\User;
 use humhub\modules\user\services\UserJsonService;
 use Yii;
+use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -24,6 +26,26 @@ class LikeController extends BaseController
      * the like state of content they can view, everything else stays logged-in only.
      */
     protected array $guestAllowedActions = ['info'];
+
+    /**
+     * Per-action HTTP method guards so a mutating action can never run on a safe method,
+     * even if it were ever reached off the URL rules — mirrors core `LikeController`'s
+     * `forcePostRequest()`. Wrong verb → 405.
+     *
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return ArrayHelper::merge(parent::behaviors(), [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'like' => ['POST'],
+                    'unlike' => ['DELETE'],
+                ],
+            ],
+        ]);
+    }
     public function actionFindByObject()
     {
         $object = RecordMap::getByModelAndPk(

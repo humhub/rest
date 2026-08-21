@@ -3,7 +3,7 @@ Changelog
 
 0.13.0 (Unreleased)
 -------------------
-- Enh: Added session authentication (`enableSessionAuth` setting): API requests may be authenticated by the regular HumHub browser session; state-changing requests require the CSRF token, token auth methods take precedence
+- Enh: Added session authentication (`enableSessionAuth` setting, disabled by default): API requests may be authenticated by the regular HumHub browser session; state-changing requests require the CSRF token, token auth methods take precedence, 2FA/other browser gates are enforced, and active impersonation is rejected
 - Fix: Impersonate token authentication crashed on HumHub 1.19 (`isImpersonated` was removed by the core impersonation refactor, core #8372)
 - Enh: Added unstable, UI-coupled endpoints serving the core Vue islands 1:1 via the core JSON services (`comment/window`, `comment/<id>/full[...]`, `like/info`, `POST/DELETE like`, `like/user-list`), see `docs/vue-session-api.md`
 - Enh: Added guest access to guest-visible island endpoints (`BaseController::$guestAllowedActions`, honored only while guest access is enabled globally)
