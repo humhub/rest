@@ -12,6 +12,7 @@ use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
 use humhub\modules\rest\components\auth\ImpersonateAuth;
+use humhub\modules\rest\components\auth\SessionAuth;
 use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
 use humhub\modules\rest\components\auth\JwtAuth;
@@ -81,6 +82,11 @@ abstract class BaseController extends Controller
                     [[
                         'class' => ImpersonateAuth::class,
                     ]],
+                    // Session auth must stay LAST in the chain: every token method takes
+                    // precedence over the browser session, see the SessionAuth docblock.
+                    ConfigureForm::getInstance()->enableSessionAuth ? [[
+                        'class' => SessionAuth::class,
+                    ]] : [],
                 ),
             ],
             'languagePicker' => [
@@ -94,10 +100,19 @@ abstract class BaseController extends Controller
      */
     public function beforeAction($action)
     {
+        $appUser = Yii::$app->getUser();
+
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,
+            // Always session-less: token logins (`yii\web\User::login()`) must never write
+            // into the browser session. SessionAuth restores the session identity through
+            // its own temporary window instead — see SessionAuth::getSessionIdentity().
             'enableSession' => false,
+            // Session-authenticated requests honor the same idle/absolute session expiry
+            // rules as the regular web UI (irrelevant for the session-less token methods).
+            'authTimeout' => $appUser->authTimeout,
+            'absoluteAuthTimeout' => $appUser->absoluteAuthTimeout,
         ]);
 
         Yii::$app->response->format = 'json';

@@ -31,6 +31,7 @@ $apiModuleOptions = $model->getApiModuleOptions();
 
 <?= $form->field($model, 'enableBearerAuth')->checkbox(); ?>
 <?= $form->field($model, 'enableQueryParamAuth')->checkbox(); ?>
+<?= $form->field($model, 'enableSessionAuth')->checkbox(); ?>
 
 <br/>
 
