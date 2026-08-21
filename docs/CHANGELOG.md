@@ -4,6 +4,7 @@ Changelog
 0.13.0 (Unreleased)
 -------------------
 - Enh: Added session authentication (`enableSessionAuth` setting): API requests may be authenticated by the regular HumHub browser session; state-changing requests require the CSRF token, token auth methods take precedence
+- Fix: Impersonate token authentication crashed on HumHub 1.19 (`isImpersonated` was removed by the core impersonation refactor, core #8372)
 
 0.12.2 (July 16, 2026)
 ----------------------
