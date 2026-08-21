@@ -18,6 +18,7 @@ use humhub\modules\rest\components\User as UserComponent;
 use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\models\ConfigureForm;
+use humhub\modules\user\helpers\AuthHelper;
 use humhub\modules\user\models\User;
 use Yii;
 use yii\data\Pagination;
@@ -54,11 +55,27 @@ abstract class BaseController extends Controller
      */
     protected $doNotInterceptActionIds = ['*'];
 
+    /**
+     * @var string[] ids of actions guests may call without any authentication, mirroring core's
+     * `AccessControl::$guestAllowedActions`. Only honored while guest access is enabled globally
+     * ({@see AuthHelper::isGuestAccessEnabled()}) — with guest access disabled, guests keep
+     * getting the usual 401, exactly like the corresponding core web controllers. Implemented
+     * via the authenticator's standard `optional` list: requests carrying valid credentials
+     * (token or session) are still authenticated normally and run with that identity, while
+     * requests without (or with invalid) credentials run as guest — standard Yii `optional`
+     * semantics. Actions listed here remain responsible for their own guest-safe authorization
+     * (e.g. `Content::canView()`).
+     *
+     * @since 0.13
+     */
+    protected array $guestAllowedActions = [];
+
     public function behaviors()
     {
         return ArrayHelper::merge([
             'authenticator' => [
                 'class' => CompositeAuth::class,
+                'optional' => AuthHelper::isGuestAccessEnabled() ? $this->guestAllowedActions : [],
                 'authMethods' => ArrayHelper::merge(
                     ConfigureForm::getInstance()->enableJwtAuth ? [[
                         'class' => JwtAuth::class,

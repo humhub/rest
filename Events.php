@@ -127,10 +127,26 @@ class Events
             ['pattern' => 'comment/content/<id:\d+>', 'route' => 'rest/comment/comment/find-by-content', 'verb' => 'GET'],
             ['pattern' => 'comment/parent/<id:\d+>', 'route' => 'rest/comment/comment/find-by-parent', 'verb' => 'GET'],
 
+            // Comment: island shape (UNSTABLE / UI-coupled, mirrors the core comment Vue endpoints —
+            // see controllers/comment/WindowController.php and docs/vue-session-api.md)
+            ['pattern' => 'comment/window', 'route' => 'rest/comment/window/index', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'comment/full', 'route' => 'rest/comment/window/create', 'verb' => 'POST'],
+            ['pattern' => 'comment/<id:\d+>/full', 'route' => 'rest/comment/window/view', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'comment/<id:\d+>/full', 'route' => 'rest/comment/window/update', 'verb' => ['PUT', 'PATCH']],
+            ['pattern' => 'comment/<id:\d+>/full', 'route' => 'rest/comment/window/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'comment/<id:\d+>/full/edit', 'route' => 'rest/comment/window/edit', 'verb' => ['GET', 'HEAD']],
+
             // Like
             ['pattern' => 'like/<id:\d+>', 'route' => 'rest/like/like/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'like/<id:\d+>', 'route' => 'rest/like/like/delete', 'verb' => 'DELETE'],
             ['pattern' => 'like/find-by-object', 'route' => 'rest/like/like/find-by-object', 'verb' => 'GET'],
+
+            // Like: island shape (UNSTABLE / UI-coupled, mirrors the core like Vue endpoints —
+            // see the corresponding actions in controllers/like/LikeController.php and docs/vue-session-api.md)
+            ['pattern' => 'like/info', 'route' => 'rest/like/like/info', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'like/user-list', 'route' => 'rest/like/like/user-list', 'verb' => ['GET', 'HEAD']],
+            ['pattern' => 'like', 'route' => 'rest/like/like/like', 'verb' => 'POST'],
+            ['pattern' => 'like', 'route' => 'rest/like/like/unlike', 'verb' => 'DELETE'],
 
             // Post
             ['pattern' => 'post/', 'route' => 'rest/post/post/find', 'verb' => ['GET', 'HEAD']],

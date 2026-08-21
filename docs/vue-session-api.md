@@ -126,54 +126,93 @@ Core `UserJsonService::serialize()` (shared island shape, `<UserImage>` props):
 REST `UserDefinitions::getUserShort()`: `id, guid, display_name, url` —
 snake_case naming, no `imageUrl`/`online`/`contentContainerId`/`imageAlt`.
 
-## 3. Convergence proposal (per endpoint)
+## 3. Island endpoints (implemented on this branch)
 
 Guiding principle: the core `*JsonService` classes are controller-agnostic —
-**reuse them from new REST controllers instead of re-modelling their output in
-`Definitions`**. Existing REST endpoints/definitions stay untouched (they are a
-public, versioned contract also used by the legal data export and third-party
-integrations; injecting viewer-dependent fields there would change their
-semantics). The owner explicitly allows new, "internal" REST endpoints.
+**they are reused verbatim from new REST controllers instead of re-modelling
+their output in `Definitions`**. Existing REST endpoints/definitions stay
+untouched (they are a public, versioned contract also used by the legal data
+export and third-party integrations; injecting viewer-dependent fields there
+would change their semantics).
 
-| Island need | Proposal |
-|---|---|
-| Comment window | New `GET /comment/window` (`rest/comment/window/list`) with `contentId`/`parentCommentId`, `commentId`, `direction`, `pageSize` → return `CommentJsonService::serializeWindow()` verbatim |
-| Single comment (island shape) | New `GET /comment/<id>/full` (`?showBlocked=1`) → `serializeComment()` |
-| Create/update for islands | New `POST /comment/full?contentId=…` and `PUT /comment/<id>/full` returning `serializeComment()` with core's 422 `errors` contract (or: extend existing actions with a `?format=full` switch — less clean, mixes error contracts) |
-| Admin delete w/ notification | New `DELETE /comment/<id>/full` accepting `notify`/`message` (mirrors `AdminDeleteCommentForm`) |
-| Like state / like / unlike | New `GET /like/info`, `POST /like`, `DELETE /like` keyed by `model`+`pk` (RecordMap), returning `{currentUserLiked, likeCounter}` |
-| Like user list | New `GET /like/user-list` returning `{total, users, hasMore, nextPage}` via `UserJsonService` |
-| User shape | Use `UserJsonService` in all new endpoints; leave `UserDefinitions` untouched |
-| `extensions` batch event | Comes for free by reusing `CommentJsonService` (fires `EVENT_SERIALIZE_COMMENTS`) |
+All routes below are **UNSTABLE / UI-COUPLED**: they serve the HumHub frontend
+(the core Vue islands) 1:1 and may change together with core — they are not
+part of the stable public REST contract. This is flagged in every action
+docblock; there is no artificial `/internal/` path prefix (owner decision —
+naming may still be revisited before merge).
 
-Net effect: the islands can switch from `/comment/...` core routes to
-`/api/v1/...` by swapping the base URL + auth stays the browser session +
-CSRF header they already send today.
+### Final routes
 
-Naming/versioning: mark these routes as **internal** (serving the HumHub
-frontend, shape may change with core) — either under a `/api/v1/internal/…`
-prefix or via documentation flag in swagger — so they don't freeze into the
-public API contract.
+| Method + route | Controller action | Core call / contract |
+|---|---|---|
+| `GET /api/v1/comment/window` | `rest/comment/window/index` | `CommentJsonService::serializeWindow()` — params `contentId`/`parentCommentId`, `commentId`, `direction`, `pageSize`; returns `{comments, prevCount, nextCount, total, rootTotal}` incl. per-root `children` previews and the `extensions` namespace (mirror of core `comment/comment/list`) |
+| `GET /api/v1/comment/<id>/full` | `rest/comment/window/view` | `CommentJsonService::serializeComment()` — `?showBlocked=1` lifts the blocked-author mask (mirror of core `comment/comment/info`) |
+| `POST /api/v1/comment/full` | `rest/comment/window/create` | Comment create from `message`/`fileList`/`parentCommentId` (+`contentId`), one-nesting-level guard, `canComment()` check; returns `serializeComment()` or `422 {"errors": {attr: [...]}}` (mirror of core `comment/comment/create`) |
+| `PUT /api/v1/comment/<id>/full` | `rest/comment/window/update` | Comment save; returns `serializeComment()` or the 422 `errors` contract (mirror of core `comment/comment/update` POST mode) |
+| `GET /api/v1/comment/<id>/full/edit` | `rest/comment/window/edit` | `{"message": <raw markdown>}` for the editor (mirror of core `comment/comment/update` GET mode) |
+| `DELETE /api/v1/comment/<id>/full` | `rest/comment/window/delete` | Delete incl. optional `AdminDeleteCommentForm[notify]`/`[message]` author notification; returns `{"success": bool}` (mirror of core `comment/comment/delete`) |
+| `GET /api/v1/like/info` | `rest/like/like/info` | `{currentUserLiked, likeCounter}` via `LikeService`, keyed by `recordId` (RecordMap id — exactly what `LikeButton.vue` sends); guest-allowed (mirror of core `like/like/info`) |
+| `POST /api/v1/like` | `rest/like/like/like` | `LikeService::like()` after `canLike()`; returns the state shape (mirror of core `like/like/like`) |
+| `DELETE /api/v1/like` | `rest/like/like/unlike` | `LikeService::unlike()`; returns the state shape (mirror of core `like/like/unlike`) |
+| `GET /api/v1/like/user-list` | `rest/like/like/user-list` | `{total, users, hasMore, nextPage}` with `UserJsonService` rows and the `limit` clamp to `[1, userListPaginationSize]` (mirror of core `like/like/user-list`) |
+
+Contract notes (all deliberate, for 1:1 island fidelity):
+
+- Payloads are byte-compatible with the core JSON controllers — no REST
+  envelope rewrap. Viewer-context fields (`canEdit`/`canDelete`/`likes.liked`),
+  blocked-author masking, the `guestHideComments` gate, `extensions`, and
+  `message`+`messageRenderOptions` all come from the delegated core services.
+- Errors are HTTP exceptions (404/403 with Yii's JSON error body, same as the
+  core controllers) and validation failures are `422 {"errors": ...}` — NOT
+  the module's usual `400 {"code", "message"}` envelope. The pre-existing
+  comment/like CRUD endpoints keep their envelope unchanged.
+- The core `actionDelete` notification block (`CommentDeleted`) is currently
+  duplicated in `WindowController::actionDelete()` because core has not
+  extracted it into a service; when the core controllers are removed in favor
+  of these endpoints, it should move into a core service.
+- The admin-delete modal HTML (`comment/comment/get-admin-delete-modal`)
+  remains a core route — it returns rendered widget HTML, not island JSON.
+
+### Guest access
+
+Core allows guests on some of these actions (comment window/single view, like
+info) subject to `Content::canView()` and `guestHideComments`. The REST module
+previously had no guest mechanism at all (401 for everything). Implemented
+minimal mechanism: `BaseController::$guestAllowedActions` — a per-controller
+list of action ids wired to the `CompositeAuth` authenticator's standard
+`optional` list, honored **only while guest access is enabled globally**
+(`AuthHelper::isGuestAccessEnabled()`), mirroring core's
+`AccessControl::$guestAllowedActions` semantics. Requests with valid
+credentials still authenticate normally; without credentials the action runs
+as guest and is responsible for its own guest-safe authorization (all
+delegated core services/`canView()` checks already are).
+
+Declared lists: `WindowController` → `['index', 'view']`;
+`LikeController` → `['info']` (its stable CRUD actions stay logged-in only).
+
+Net effect: the islands can switch from the core `/comment/...`, `/like/...`
+routes to `/api/v1/...` by swapping the base URL — auth stays the browser
+session + CSRF header they already send today, guest behavior included.
 
 ## 4. Open questions for the owner
 
-1. **Shape fidelity:** serve the island payloads 1:1 under `/api/v1`
-   (recommended above) or migrate the Vue clients to REST-envelope conventions
-   (offset pagination, `code`/`message` errors)? 1:1 keeps the islands
-   backend-agnostic and diff-free; REST-envelope would make them "real" public
-   API consumers but requires island rework (window pagination is UX-relevant).
-2. **Internal namespace:** `/api/v1/internal/...` prefix, or plain routes with
-   an "internal/unstable" documentation flag?
+1. **Shape fidelity:** ~~serve the island payloads 1:1 under `/api/v1`?~~
+   **Decided & implemented:** 1:1 fidelity, no REST envelope rewrap (see §3).
+2. **Internal namespace:** ~~`/api/v1/internal/...` prefix?~~ **Decided:**
+   plain routes flagged unstable/UI-coupled in docblocks and this document.
+   Naming may be revisited before merge.
 3. **HTML fragments:** `attachmentsHtml` (and the admin-delete modal, which
    stays a core HTML route) — acceptable in API responses, or should
    attachments become structured JSON + a client-side renderer first?
 4. **Client wiring:** will the islands' fetch wrapper reuse `humhub.client`'s
    CSRF header mechanism as assumed? (The session-auth CSRF contract relies on
    `X-CSRF-Token`.)
-5. **ImpersonateAuth breakage (pre-existing):** `ImpersonateAuth` sets
-   `Yii::$app->user->isImpersonated`, a property removed by core 1.19's
-   impersonation refactor (core PR #8372) — `AuthCest::testImpersonateByAdmin`
-   fails against current core on a clean checkout. Fix on this branch or
-   separately?
+5. **ImpersonateAuth breakage (pre-existing):** ~~fix on this branch or
+   separately?~~ **Fixed on this branch** (own commit, intended to be
+   cherry-picked to `develop` as an independent core-compat PR): the write to
+   the removed `isImpersonated` property is gone. Applying core 1.19's
+   impersonation private-content restriction to impersonate-token requests
+   remains a separate follow-up (the API user component is session-less, so
+   `Impersonation::isActive()` can never apply as-is).
 6. **Rate limiting:** browser-session traffic will multiply API request volume
    — is throttling needed before the islands switch over?
