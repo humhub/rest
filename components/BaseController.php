@@ -11,23 +11,15 @@ namespace humhub\modules\rest\components;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
-use humhub\modules\rest\components\auth\ImpersonateAuth;
-use humhub\modules\rest\components\auth\SessionAuth;
+use humhub\modules\rest\components\auth\AuthMethods;
 use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
-use humhub\modules\rest\components\auth\JwtAuth;
-use humhub\modules\rest\controllers\auth\AuthController;
 use humhub\modules\rest\Module;
-use humhub\modules\rest\models\ConfigureForm;
-use humhub\modules\user\helpers\AuthHelper;
 use humhub\modules\user\models\User;
 use Yii;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 use yii\web\JsonParser;
 use yii\web\NotFoundHttpException;
@@ -57,56 +49,15 @@ abstract class BaseController extends Controller
      */
     protected $doNotInterceptActionIds = ['*'];
 
-    /**
-     * @var string[] ids of actions guests may call without any authentication, mirroring core's
-     * `AccessControl::$guestAllowedActions`. Only honored while guest access is enabled globally
-     * ({@see AuthHelper::isGuestAccessEnabled()}) — with guest access disabled, guests keep
-     * getting the usual 401, exactly like the corresponding core web controllers. Implemented
-     * via the authenticator's standard `optional` list: requests carrying valid credentials
-     * (token or session) are still authenticated normally and run with that identity, while
-     * requests without (or with invalid) credentials run as guest — standard Yii `optional`
-     * semantics. Actions listed here remain responsible for their own guest-safe authorization
-     * (e.g. `Content::canView()`).
-     *
-     * @since 0.13
-     */
-    protected array $guestAllowedActions = [];
-
     public function behaviors()
     {
         return ArrayHelper::merge([
             'authenticator' => [
                 'class' => CompositeAuth::class,
-                'optional' => AuthHelper::isGuestAccessEnabled() ? $this->guestAllowedActions : [],
-                'authMethods' => ArrayHelper::merge(
-                    ConfigureForm::getInstance()->enableJwtAuth ? [[
-                        'class' => JwtAuth::class,
-                    ]] : [],
-                    ConfigureForm::getInstance()->enableBearerAuth ? [[
-                        'class' => HttpBearerAuth::class,
-                    ]] : [],
-                    ConfigureForm::getInstance()->enableBearerAuth && ConfigureForm::getInstance()->enableQueryParamAuth ? [[
-                        'class' => QueryParamAuth::class,
-                    ]] : [],
-                    ConfigureForm::getInstance()->enableBasicAuth ? [[
-                        'class' => HttpBasicAuth::class,
-                        'auth' => function ($username, $password) {
-                            if (($identity = AuthController::authByUserAndPassword($username, $password)) && $this->isUserEnabled($identity)) {
-                                return $identity;
-                            }
-
-                            return null;
-                        },
-                    ]] : [],
-                    [[
-                        'class' => ImpersonateAuth::class,
-                    ]],
-                    // Session auth must stay LAST in the chain: every token method takes
-                    // precedence over the browser session, see the SessionAuth docblock.
-                    ConfigureForm::getInstance()->enableSessionAuth ? [[
-                        'class' => SessionAuth::class,
-                    ]] : [],
-                ),
+                // The same methods this module contributes to core's API controllers, see
+                // {@see AuthMethods}. `/api/v1` is token-only: browser-session
+                // authentication is a core opt-in, per controller.
+                'authMethods' => AuthMethods::collect(),
             ],
             'languagePicker' => [
                 'class' => LanguagePickerBehavior::class,
@@ -129,19 +80,12 @@ abstract class BaseController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $appUser = Yii::$app->getUser();
-
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,
             // Always session-less: token logins (`yii\web\User::login()`) must never write
-            // into the browser session. SessionAuth restores the session identity through
-            // its own temporary window instead — see SessionAuth::getSessionIdentity().
+            // into the browser session.
             'enableSession' => false,
-            // Session-authenticated requests honor the same idle/absolute session expiry
-            // rules as the regular web UI (irrelevant for the session-less token methods).
-            'authTimeout' => $appUser->authTimeout,
-            'absoluteAuthTimeout' => $appUser->absoluteAuthTimeout,
         ]);
 
         Yii::$app->response->format = 'json';
@@ -173,18 +117,7 @@ abstract class BaseController extends Controller
      */
     public function isUserEnabled(User $user)
     {
-        $config = new ConfigureForm();
-        $config->loadSettings();
-
-        if (!empty($config->enabledForAllUsers)) {
-            return true;
-        }
-
-        if (in_array($user->guid, (array)$config->enabledUsers)) {
-            return true;
-        }
-
-        return false;
+        return AuthMethods::isUserEnabled($user);
     }
 
 

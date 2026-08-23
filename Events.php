@@ -8,6 +8,7 @@
 
 namespace humhub\modules\rest;
 
+use humhub\components\api\AuthMethodsEvent;
 use humhub\components\Event;
 use humhub\modules\activity\models\Activity;
 use humhub\modules\comment\models\Comment;
@@ -17,6 +18,7 @@ use humhub\modules\legal\events\UserDataCollectionEvent;
 use humhub\modules\like\models\Like;
 use humhub\modules\notification\models\Notification;
 use humhub\modules\post\models\Post;
+use humhub\modules\rest\components\auth\AuthMethods;
 use humhub\modules\rest\definitions\ActivityDefinitions;
 use humhub\modules\rest\definitions\CommentDefinitions;
 use humhub\modules\rest\definitions\FileDefinitions;
@@ -45,8 +47,8 @@ class Events
         // explicit catch-all. These rules must be registered for EVERY request (not only
         // `api/` requests): otherwise a bare `/rest/<controller>/<action>` URL falls through
         // to Yii's default routing and resolves straight to a REST controller action — an
-        // unconstrained, CSRF-exempt plain GET (see docs/vue-session-api.md §5 and the
-        // defence-in-depth guard in BaseController::beforeAction()).
+        // unconstrained, CSRF-exempt plain GET (the same reasoning behind core's own
+        // off-prefix guard, see the defence-in-depth check in BaseController::beforeAction()).
         Yii::$app->urlManager->addRules([
 
             // API Config
@@ -142,26 +144,10 @@ class Events
             ['pattern' => 'comment/content/<id:\d+>', 'route' => 'rest/comment/comment/find-by-content', 'verb' => 'GET'],
             ['pattern' => 'comment/parent/<id:\d+>', 'route' => 'rest/comment/comment/find-by-parent', 'verb' => 'GET'],
 
-            // Comment: island shape (UNSTABLE / UI-coupled, mirrors the core comment Vue endpoints —
-            // see controllers/comment/WindowController.php and docs/vue-session-api.md)
-            ['pattern' => 'comment/window', 'route' => 'rest/comment/window/index', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'comment/full', 'route' => 'rest/comment/window/create', 'verb' => 'POST'],
-            ['pattern' => 'comment/<id:\d+>/full', 'route' => 'rest/comment/window/view', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'comment/<id:\d+>/full', 'route' => 'rest/comment/window/update', 'verb' => ['PUT', 'PATCH']],
-            ['pattern' => 'comment/<id:\d+>/full', 'route' => 'rest/comment/window/delete', 'verb' => 'DELETE'],
-            ['pattern' => 'comment/<id:\d+>/full/edit', 'route' => 'rest/comment/window/edit', 'verb' => ['GET', 'HEAD']],
-
             // Like
             ['pattern' => 'like/<id:\d+>', 'route' => 'rest/like/like/view', 'verb' => ['GET', 'HEAD']],
             ['pattern' => 'like/<id:\d+>', 'route' => 'rest/like/like/delete', 'verb' => 'DELETE'],
             ['pattern' => 'like/find-by-object', 'route' => 'rest/like/like/find-by-object', 'verb' => 'GET'],
-
-            // Like: island shape (UNSTABLE / UI-coupled, mirrors the core like Vue endpoints —
-            // see the corresponding actions in controllers/like/LikeController.php and docs/vue-session-api.md)
-            ['pattern' => 'like/info', 'route' => 'rest/like/like/info', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'like/user-list', 'route' => 'rest/like/like/user-list', 'verb' => ['GET', 'HEAD']],
-            ['pattern' => 'like', 'route' => 'rest/like/like/like', 'verb' => 'POST'],
-            ['pattern' => 'like', 'route' => 'rest/like/like/unlike', 'verb' => 'DELETE'],
 
             // Post
             ['pattern' => 'post/', 'route' => 'rest/post/post/find', 'verb' => ['GET', 'HEAD']],
@@ -198,6 +184,19 @@ class Events
         ]);
 
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
+    }
+
+    /**
+     * Contributes this module's authentication methods to every API controller of the
+     * platform, so the core endpoints (`/api/v2`) can be called with a token too - see
+     * {@see AuthMethods} for the list and `docs/api-stack.md` for the model. Core appends its own
+     * session authentication after them, keeping the "token wins" ordering intact.
+     *
+     * @since 0.13
+     */
+    public static function onCollectApiAuthMethods(AuthMethodsEvent $event): void
+    {
+        $event->authMethods = array_merge($event->authMethods, AuthMethods::collect());
     }
 
     private static function addModuleNotFoundRoutes($moduleId)
