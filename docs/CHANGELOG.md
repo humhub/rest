@@ -3,8 +3,9 @@ Changelog
 
 0.13.0 (Unreleased)
 -------------------
-- Enh: The module's authentication methods (JWT, Bearer, query param, Basic, Impersonate) now apply to the API endpoints of core 1.19 as well (`/api/v2`), contributed through the core API framework; `/api/v1` stays token-only, browser-session authentication is a core opt-in per endpoint (see `docs/api-stack.md`)
-- Enh: Documented core's `/api/v2` endpoints (comment, like, account, incl. the batched `like/states` and per-comment `permissions` calls) under `docs/swagger/v2/`, until core ships its own API documentation; `build-all.sh` renders them to `docs/html/v2/` and no longer builds a page for the shared-components file
+- Chg: Raised minimum HumHub version to 1.20 — the module builds on the HTTP API framework of core (`humhub\components\api\`)
+- Enh: The module's authentication methods (JWT, Bearer, query param, Basic, Impersonate) now apply to the API endpoints of core 1.20 as well (`/api/v2`), contributed through the core API framework; `/api/v1` stays token-only, browser-session authentication is a core opt-in per endpoint (see `docs/api-stack.md`)
+- Chg: The `/api/v2` documentation lives in core (`docs/api/`), not in this module — this module's Swagger sources cover its own `/api/v1` surface again; `build-all.sh` no longer builds a page for the shared-components file
 - Enh: Hardened the `/rest/...` URL space — the admin-page and catch-all rules are registered for every request, and a REST controller reached off the `api/v1/` prefix (e.g. through Yii's fallback routing) now fails with a 404 before authentication runs
 - Fix: Impersonate token authentication crashed on HumHub 1.19 (`isImpersonated` was removed by the core impersonation refactor, core #8372)
 - Chg: Replies are validated to nest at most one level (core `Comment` model rule, surfaced through the validation envelope)

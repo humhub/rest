@@ -1,6 +1,6 @@
 # This module and the platform API stack
 
-HumHub 1.19 ships an HTTP API framework in core (`humhub\components\api\`): base
+HumHub 1.20 ships an HTTP API framework in core (`humhub\components\api\`): base
 controller, request/response conventions, URL-rule registration, the serialize
 extension point and browser-session authentication. Core's own endpoints live next
 to the modules that own them (`humhub\modules\<module>\controllers\api\`) and answer
@@ -74,22 +74,19 @@ Both require pretty URLs, as the API always has.
 
 ## Documentation layout
 
-`docs/swagger/` holds the OpenAPI sources, one document per module, rendered to
-`docs/html/` by `build-all.sh`:
+`docs/swagger/` holds the OpenAPI sources of **this module's `/api/v1` surface**, one
+document per module, rendered to `docs/html/` by `build-all.sh`.
 
-- the flat files are this module's `/api/v1` surface,
-- `v2/` documents the endpoints **core** ships (`docs/html/v2/`), with `v2/common.yaml`
-  holding the shared schemas, parameters, error responses and security schemes.
-
-The v2 documents live here only until core ships the Swagger sources for its own
-endpoints — keeping them in their own directory is what makes that a move rather than a
-rename, and it leaves every published `/api/v1` documentation URL untouched.
+The endpoints **core** ships (`/api/v2`) are documented by core itself, in `docs/api/` of the
+core repository — sources in `docs/api/src/`, the rendered references next to them, and an
+index page an installation serves at `/docs/api/`. This module documented them here while core
+had no place for them; the move left every published `/api/v1` documentation URL untouched.
 
 ## Version bounds
 
-This module version requires core 1.19 (`humhub.minVersion`) — it uses the core
+This module version requires core 1.20 (`humhub.minVersion`) — it uses the core
 framework's collect event. The previous module line still needs a `humhub.maxVersion`, so
-the marketplace does not offer a version without the core stack for 1.19+. Those fields
+the marketplace does not offer a version without the core stack for 1.20+. Those fields
 are marketplace metadata, not runtime enforcement: core does not evaluate them when
 loading a module, so an administrator copying an outdated module in by hand bypasses
 them.
