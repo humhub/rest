@@ -11,22 +11,18 @@ namespace humhub\modules\rest\components;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
-use humhub\modules\rest\components\auth\ImpersonateAuth;
+use humhub\modules\rest\components\auth\AuthMethods;
 use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
-use humhub\modules\rest\components\auth\JwtAuth;
-use humhub\modules\rest\controllers\auth\AuthController;
-use humhub\modules\rest\models\ConfigureForm;
+use humhub\modules\rest\Module;
 use humhub\modules\user\models\User;
 use Yii;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 use yii\web\JsonParser;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class BaseController
@@ -58,30 +54,10 @@ abstract class BaseController extends Controller
         return ArrayHelper::merge([
             'authenticator' => [
                 'class' => CompositeAuth::class,
-                'authMethods' => ArrayHelper::merge(
-                    ConfigureForm::getInstance()->enableJwtAuth ? [[
-                        'class' => JwtAuth::class,
-                    ]] : [],
-                    ConfigureForm::getInstance()->enableBearerAuth ? [[
-                        'class' => HttpBearerAuth::class,
-                    ]] : [],
-                    ConfigureForm::getInstance()->enableBearerAuth && ConfigureForm::getInstance()->enableQueryParamAuth ? [[
-                        'class' => QueryParamAuth::class,
-                    ]] : [],
-                    ConfigureForm::getInstance()->enableBasicAuth ? [[
-                        'class' => HttpBasicAuth::class,
-                        'auth' => function ($username, $password) {
-                            if (($identity = AuthController::authByUserAndPassword($username, $password)) && $this->isUserEnabled($identity)) {
-                                return $identity;
-                            }
-
-                            return null;
-                        },
-                    ]] : [],
-                    [[
-                        'class' => ImpersonateAuth::class,
-                    ]],
-                ),
+                // The same methods this module contributes to core's API controllers, see
+                // {@see AuthMethods}. `/api/v1` is token-only: browser-session
+                // authentication is a core opt-in, per controller.
+                'authMethods' => AuthMethods::collect(),
             ],
             'languagePicker' => [
                 'class' => LanguagePickerBehavior::class,
@@ -94,9 +70,21 @@ abstract class BaseController extends Controller
      */
     public function beforeAction($action)
     {
+        // Defence in depth: hard-fail any request that reached a REST controller off the API
+        // URL rules — i.e. whose path is not under the API prefix (a bare `/rest/<controller>/
+        // <action>` URL). Together with the `rest/<tmpParam>` catch-all in
+        // Events::onBeforeRequest() this guarantees a mutating action can never be executed
+        // off-rule as an unconstrained, CSRF-exempt plain request. Must run before auth.
+        if (!str_starts_with(Yii::$app->request->pathInfo, Module::API_URL_PREFIX)) {
+            Yii::$app->response->format = 'json';
+            throw new NotFoundHttpException();
+        }
+
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,
+            // Always session-less: token logins (`yii\web\User::login()`) must never write
+            // into the browser session.
             'enableSession' => false,
         ]);
 
@@ -129,18 +117,7 @@ abstract class BaseController extends Controller
      */
     public function isUserEnabled(User $user)
     {
-        $config = new ConfigureForm();
-        $config->loadSettings();
-
-        if (!empty($config->enabledForAllUsers)) {
-            return true;
-        }
-
-        if (in_array($user->guid, (array)$config->enabledUsers)) {
-            return true;
-        }
-
-        return false;
+        return AuthMethods::isUserEnabled($user);
     }
 
 

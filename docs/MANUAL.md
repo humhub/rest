@@ -6,14 +6,19 @@ Following RESTful API endpoints are available.
 
 **Base URL:**
 
-The base url for all APIs is: `https://yourhost/api/v1/`
+The base url for the endpoints of this module is: `https://yourhost/api/v1/`
+
+Since HumHub 1.20 the platform itself ships API endpoints under
+`https://yourhost/api/v2/`, in modernized conventions (ISO-8601 timestamps, camelCase,
+plain HTTP status codes). This module's authentication methods apply to them as well — see
+the **v2 APIs** below and `docs/api-stack.md`.
 
 **Language**
 
 Logged-in user's language will be used. Can be overwritten by `Accept-Language` header.
 
 
-**Core APIs:**
+**v1 APIs (this module):**
 
 - [User](https://marketplace.humhub.com/module/rest/docs/html/user.html)
 - [Content](https://marketplace.humhub.com/module/rest/docs/html/content.html)
@@ -26,6 +31,11 @@ Logged-in user's language will be used. Can be overwritten by `Accept-Language` 
 - [Notification](https://marketplace.humhub.com/module/rest/docs/html/notification.html)
 - [Space](https://marketplace.humhub.com/module/rest/docs/html/space.html)
 - [Content Topics](https://marketplace.humhub.com/module/rest/docs/html/topic.html)
+
+**v2 APIs (endpoints shipped by HumHub core, 1.20+):**
+
+Documented by core itself and served by every installation at `/docs/api/` — this module only
+contributes the token authentication those endpoints accept.
 
 **Module APIs** 
 

@@ -8,6 +8,7 @@
 
 namespace humhub\modules\rest;
 
+use humhub\components\api\AuthMethodsEvent;
 use humhub\components\Event;
 use humhub\modules\activity\models\Activity;
 use humhub\modules\comment\models\Comment;
@@ -17,6 +18,7 @@ use humhub\modules\legal\events\UserDataCollectionEvent;
 use humhub\modules\like\models\Like;
 use humhub\modules\notification\models\Notification;
 use humhub\modules\post\models\Post;
+use humhub\modules\rest\components\auth\AuthMethods;
 use humhub\modules\rest\definitions\ActivityDefinitions;
 use humhub\modules\rest\definitions\CommentDefinitions;
 use humhub\modules\rest\definitions\FileDefinitions;
@@ -41,6 +43,21 @@ class Events
 {
     public static function onBeforeRequest($event)
     {
+        // The bare `/rest/...` URL space is reserved for the admin config page and an
+        // explicit catch-all. These rules must be registered for EVERY request (not only
+        // `api/` requests): otherwise a bare `/rest/<controller>/<action>` URL falls through
+        // to Yii's default routing and resolves straight to a REST controller action — an
+        // unconstrained, CSRF-exempt plain GET (the same reasoning behind core's own
+        // off-prefix guard, see the defence-in-depth check in BaseController::beforeAction()).
+        Yii::$app->urlManager->addRules([
+
+            // API Config
+            ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
+
+            // Catch all to ensure verbs
+            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
+
+        ], true);
 
         // Only prepare if API request
         if (!str_starts_with(Yii::$app->request->pathInfo, 'api/')) {
@@ -166,17 +183,20 @@ class Events
 
         ]);
 
-        Yii::$app->urlManager->addRules([
-
-            // API Config
-            ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
-
-            // Catch all to ensure verbs
-            ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
-
-        ], true);
-
         Event::trigger(Module::class, Module::EVENT_REST_API_ADD_RULES);
+    }
+
+    /**
+     * Contributes this module's authentication methods to every API controller of the
+     * platform, so the core endpoints (`/api/v2`) can be called with a token too - see
+     * {@see AuthMethods} for the list and `docs/api-stack.md` for the model. Core appends its own
+     * session authentication after them, keeping the "token wins" ordering intact.
+     *
+     * @since 0.13
+     */
+    public static function onCollectApiAuthMethods(AuthMethodsEvent $event): void
+    {
+        $event->authMethods = array_merge($event->authMethods, AuthMethods::collect());
     }
 
     private static function addModuleNotFoundRoutes($moduleId)
