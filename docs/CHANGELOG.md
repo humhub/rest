@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.11.6 (Unreleased)
+-------------------
+- Enh: Automated code refactoring for HumHub 1.18 using Rector
+
 0.11.5 (July 8, 2026)
 ---------------------
 - Fix: Make m230401_174208_add_allow_jwt_auth migration resilient when module is not bootstrapped
