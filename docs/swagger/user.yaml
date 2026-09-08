@@ -725,12 +725,15 @@ components:
           type: integer
           example: 5
           readOnly: true
-        authclient:
+        user_source:
           type: string
+          description: >
+            Identifier of the UserSource that owns this user (e.g. `local`,
+            `ldap`, or any configured external source). Since HumHub 1.19 this
+            replaces the legacy `authclient` / `authclient_id` fields. External
+            auth-client identities (OAuth, SAML, LDAP) are now exposed via
+            `GET /user/get-by-authclient`.
           example: local
-        authclient_id:
-          type: string
-          example: "0123456789"
         last_login:
           type: string
           format: datetime

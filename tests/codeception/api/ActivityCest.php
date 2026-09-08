@@ -15,7 +15,7 @@ class ActivityCest extends HumHubApiTestCest
     public function testList(ApiTester $I)
     {
         $I->wantTo('see all activities');
-        $I->amAdmin();
+        $I->amUser1();
 
         $I->seePaginationGetResponse('activity', $this->getRecordDefinitions([100, 101, 102, 103]), ['perPage' => 10]);
     }
@@ -23,7 +23,7 @@ class ActivityCest extends HumHubApiTestCest
     public function testView(ApiTester $I)
     {
         $I->wantTo('see an activity by id');
-        $I->amAdmin();
+        $I->amUser1();
 
         $I->sendGet('activity/100');
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(100));
@@ -35,7 +35,7 @@ class ActivityCest extends HumHubApiTestCest
     public function testFindByContainer(ApiTester $I)
     {
         $I->wantTo('find activities by container');
-        $I->amAdmin();
+        $I->amUser1();
 
         $I->seePaginationGetResponse('activity/container/4', $this->getRecordDefinitions([100, 101, 102]), ['perPage' => 10]);
         $I->seePaginationGetResponse('activity/container/7', $this->getRecordDefinitions([103]), ['perPage' => 10]);

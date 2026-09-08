@@ -60,7 +60,7 @@ class SpaceDefinitions
             'can_cancel_membership' => $membership->can_cancel_membership,
             'send_notifications' => $membership->send_notifications,
             'show_at_dashboard' => $membership->show_at_dashboard,
-            'originator_user' => ($membership->originator !== null) ? UserDefinitions::getUserShort($membership->originator) : null,
+            'originator_user' => UserDefinitions::getUserShort($membership->originator),
             'member_since' => $membership->created_at,
             'request_message' => $membership->request_message,
             'updated_at' => $membership->updated_at,

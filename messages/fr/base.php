@@ -3,6 +3,7 @@ return [
   '<strong>REST</strong> Configuration' => 'Configuration <strong>REST</strong>',
   'Access Token for {user}' => 'Jeton d\'accès pour {user}',
   'Access Tokens' => 'Jetons d’accès (tokens)',
+  'Add' => 'Ajouter',
   'Add Access Token' => 'Ajouter un jeton d’accès',
   'Allow Bearer Authentication' => 'Permettre l’authentification du ou de la titulaire',
   'Allow HTTP Basic Authentication' => 'Permettre l’authentification HTTP Basic',

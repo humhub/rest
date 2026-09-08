@@ -3,6 +3,7 @@ return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> 構成',
   'Access Token for {user}' => '',
   'Access Tokens' => 'アクセストークン',
+  'Add' => '追加',
   'Add Access Token' => 'アクセストークンの追加',
   'Allow Bearer Authentication' => 'ベアラー認証を許可する',
   'Allow HTTP Basic Authentication' => 'HTTP 基本認証を許可する',

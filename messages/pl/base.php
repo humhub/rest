@@ -3,6 +3,7 @@ return [
   '<strong>REST</strong> Configuration' => '<strong>REST</strong> Konfiguracja',
   'Access Token for {user}' => 'Token dostępu dla {user}',
   'Access Tokens' => 'Tokeny dostępowe',
+  'Add' => 'Dodaj',
   'Add Access Token' => 'Dodaj token dostępowy',
   'Allow Bearer Authentication' => 'Zezwól na Bearer Authentication',
   'Allow HTTP Basic Authentication' => 'Zezwól na HTTP Basic Authentication',

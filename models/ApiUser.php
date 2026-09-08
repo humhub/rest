@@ -13,17 +13,15 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 /**
- * Is needed because the user model should not be extended directly,
- * but we need some extra validators for auth_mode.
+ * Thin wrapper around the User model used by the REST API.
+ *
+ * Since HumHub 1.19 the legacy `auth_mode` / `authclient_id` columns are
+ * replaced by `user.user_source` (provenance) and the `user_auth` table
+ * (external identity per AuthClient — managed via `POST /user/{id}/auth-client`).
  */
 class ApiUser extends Model
 {
     public User $user;
-
-    /**
-     * @var string
-     */
-    public $authclient_id;
 
     /**
      * @var int User ID
@@ -38,25 +36,16 @@ class ApiUser extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        $rules = parent::rules();
-        $rules[] = [['authclient_id'], 'string', 'max' => 60];
-        return $rules;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function load($data, $formName = null)
     {
+        // Back-compat alias: requests written for ≤0.11.x sent `authclient`
+        // (carrying the auth-client / source name). Map it to `user_source`.
         if (isset($data['authclient'])) {
-            $data['auth_mode'] = $data['authclient'];
+            $data['user_source'] = $data['authclient'];
             unset($data['authclient']);
         }
 
         $result = parent::load($data, $formName);
-        $this->user->authclient_id = $this->authclient_id;
 
         return $this->user->load($data, $formName) && $result;
     }
@@ -68,7 +57,7 @@ class ApiUser extends Model
     {
         $result = parent::validate($attributeNames, $clearErrors);
 
-        $userAttributes = ['username', 'email', 'status', 'visibility', 'language', 'tagsField', 'auth_mode', 'authclient_id'];
+        $userAttributes = ['username', 'email', 'status', 'visibility', 'language', 'tagsField', 'user_source'];
 
         return $this->user->validate($userAttributes, $clearErrors) && $result;
     }

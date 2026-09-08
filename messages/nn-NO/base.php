@@ -5,6 +5,7 @@ return [
     '<strong>REST</strong> Configuration' => '',
     'Access Token for {user}' => '',
     'Access Tokens' => '',
+    'Add' => '',
     'Add Access Token' => '',
     'Allow Bearer Authentication' => '',
     'Allow HTTP Basic Authentication' => '',
