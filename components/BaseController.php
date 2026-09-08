@@ -44,11 +44,6 @@ abstract class BaseController extends Controller
      */
     public $access = ControllerAccess::class;
 
-    /**
-     * @inheritdoc
-     */
-    protected $doNotInterceptActionIds = ['*'];
-
     public function behaviors()
     {
         return ArrayHelper::merge([

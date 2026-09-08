@@ -38,7 +38,7 @@ session.
 
 **Which endpoints accept which method?** Contributed token methods apply everywhere.
 Browser-session authentication is an opt-in *per controller*
-(`humhub\components\api\BaseController::$enableSessionAuth`, default off) and core
+(`humhub\components\api\BaseController::$allowSessionAuth`, default off) and core
 enables it only for the endpoints its own UI needs. `/api/v1` is therefore
 token-only: a session cookie authenticates nothing here.
 
