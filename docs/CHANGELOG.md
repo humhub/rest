@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.11.6 (Unreleased)
--------------------
+0.11.6 (October 4, 2026)
+------------------------
 - Enh: Automated code refactoring for HumHub 1.18 using Rector
 - Fix: Improved permission checks
 
