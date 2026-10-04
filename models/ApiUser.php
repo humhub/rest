@@ -56,7 +56,12 @@ class ApiUser extends Model
         }
 
         $result = parent::load($data, $formName);
-        $this->user->authclient_id = $this->authclient_id;
+        if (array_key_exists('authclient_id', $data)) {
+            $this->user->authclient_id = $this->authclient_id;
+        }
+        if (array_key_exists('auth_mode', $data)) {
+            $this->user->auth_mode = $data['auth_mode'];
+        }
 
         return $this->user->load($data, $formName) && $result;
     }

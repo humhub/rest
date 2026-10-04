@@ -61,6 +61,11 @@ class GroupController extends BaseController
         if ($group === null) {
             return $this->returnError(404, 'Group not found!');
         }
+
+        if (!$group->canManage()) {
+            return $this->returnError(403, 'You are not allowed to manage this group!');
+        }
+
         $group->load(Yii::$app->request->getBodyParams(), '');
         $group->validate();
 
@@ -101,6 +106,14 @@ class GroupController extends BaseController
             return $this->returnError(404, 'Group not found!');
         }
 
+        if (!$group->canManage()) {
+            return $this->returnError(403, 'You are not allowed to manage this group!');
+        }
+
+        if (!$group->canDelete()) {
+            return $this->returnError(403, 'This group cannot be deleted!');
+        }
+
         if ($group->delete()) {
             return $this->returnSuccess('Group successfully deleted!');
         }
@@ -127,6 +140,10 @@ class GroupController extends BaseController
             return $this->returnError(404, 'Group not found!');
         }
 
+        if (!$group->canManage()) {
+            return $this->returnError(403, 'You are not allowed to manage this group!');
+        }
+
         $userId = Yii::$app->request->get('userId');
         $user = User::findOne(['id' => $userId]);
         if ($user === null) {
@@ -149,6 +166,10 @@ class GroupController extends BaseController
         $group = Group::findOne(['id' => $id]);
         if ($group === null) {
             return $this->returnError(404, 'Group not found!');
+        }
+
+        if (!$group->canManage()) {
+            return $this->returnError(403, 'You are not allowed to manage this group!');
         }
 
         $userId = Yii::$app->request->get('userId');
