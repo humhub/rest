@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.12.4 (October 4, 2026)
+------------------------
+- Fix: Improved permission checks
+
 0.12.3 (September 8, 2026)
 --------------------------
 - Chg: Set the maximum HumHub version to 1.19 — from HumHub 1.20 on the HTTP API framework ships in core, and this module line would register its own rules next to it; use 0.13.x there
