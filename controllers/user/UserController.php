@@ -132,7 +132,7 @@ class UserController extends BaseController
 
         $apiUser = ApiUser::findOne(['id' => $id]);
 
-        $userData = Yii::$app->request->getBodyParam('account', []);
+        $userData = $this->getAccountData();
         if (!empty($userData)) {
             $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
             $apiUser->load($userData, '');
@@ -217,10 +217,8 @@ class UserController extends BaseController
     public function actionCreate()
     {
         $apiUser = new ApiUser();
-        if (Yii::$app->user->isAdmin()) {
-            $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
-        }
-        $apiUser->load(Yii::$app->request->getBodyParam('account', []), '');
+        $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
+        $apiUser->load($this->getAccountData(), '');
         $apiUser->validate();
 
         $profile = new Profile();
@@ -326,6 +324,17 @@ class UserController extends BaseController
         }
 
         return $this->returnSuccess('successfully Saved!');
+    }
+
+    private function getAccountData(): array
+    {
+        $data = (array) Yii::$app->request->getBodyParam('account', []);
+
+        if (!Yii::$app->user->isAdmin()) {
+            unset($data['authclient'], $data['auth_mode'], $data['authclient_id']);
+        }
+
+        return $data;
     }
 
     private function canManageUser(User $user): bool
