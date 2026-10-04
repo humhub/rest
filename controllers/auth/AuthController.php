@@ -79,7 +79,7 @@ class AuthController extends BaseController
     public static function authByUserAndPassword($username, $password)
     {
         $login = new Login();
-        if (!$login->load(['username' => $username, 'password' => $password], '') || !$login->validate()) {
+        if (!$login->load(['username' => (string)$username, 'password' => (string)$password], '') || !$login->validate()) {
             return null;
         }
 

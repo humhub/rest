@@ -8,8 +8,8 @@
 
 namespace humhub\modules\rest\definitions;
 
-use humhub\components\ActiveRecord;
 use humhub\modules\comment\models\Comment;
+use humhub\modules\comment\services\CommentListService;
 use humhub\modules\content\models\Content;
 
 /**
@@ -18,22 +18,16 @@ use humhub\modules\content\models\Content;
  */
 class CommentDefinitions
 {
-    public static function getCommentsSummary(ActiveRecord $record)
+    public static function getCommentsSummary(Content $content)
     {
+        $commentListService = new CommentListService($content, null);
+
         $result = [];
-
-        $model = $record::class;
-        $pk = $record->getPrimaryKey();
-        if ($record instanceof Content) {
-            $model = $record->object_model;
-            $pk = $record->object_id;
-        }
-
-        $result['total'] = Comment::GetCommentCount($model, $pk);
+        $result['total'] = $commentListService->getCount();
         $result['latest'] = [];
 
         if (!empty($result['total'])) {
-            foreach (Comment::GetCommentsLimited($model, $pk) as $comment) {
+            foreach ($commentListService->getLimited(3) as $comment) {
                 $result['latest'][] = static::getComment($comment);
             }
         }
@@ -46,47 +40,15 @@ class CommentDefinitions
         $result = [
             'id' => $comment->id,
             'message' => $comment->message,
-            'objectModel' => $comment->object_model,
-            'objectId' => $comment->object_id,
-            'createdBy' => UserDefinitions::getUserShort($comment->user),
+            'contentId' => $comment->content_id,
+            'parentCommentId' => $comment->parent_comment_id,
+            'createdBy' => UserDefinitions::getUserShort($comment->createdBy),
             'createdAt' => $comment->created_at,
             'likes' => LikeDefinitions::getLikesSummary($comment),
             'files' => FileDefinitions::getFiles($comment),
+            'childCount' => $comment->getChildCount(),
         ];
-
-        $subComments = static::getSubComments($comment);
-        $subCommentsCount = count($subComments);
-        if ($subCommentsCount) {
-            $result['commentsCount'] = $subCommentsCount;
-            $result['comments'] = $subComments;
-        }
 
         return $result;
     }
-
-    /**
-     * @param Comment $comment
-     * @return Comment[]
-     */
-    public static function getSubComments(Comment $comment): array
-    {
-        $comments = [];
-
-        if (Comment::isSubComment($comment)) {
-            // Sub-comment doesn't have sub-comments with level 2
-            return $comments;
-        }
-
-        $query = Comment::find()
-            ->where(['object_model' => Comment::class])
-            ->andWhere(['object_id' => $comment->id])
-            ->orderBy(['created_at' => SORT_ASC]);
-
-        foreach ($query->all() as $comment) {
-            $comments[] = static::getComment($comment);
-        }
-
-        return $comments;
-    }
-
 }

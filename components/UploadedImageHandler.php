@@ -2,14 +2,14 @@
 
 namespace humhub\modules\rest\components;
 
+use humhub\components\assets\AssetImage;
+use humhub\models\forms\UploadProfileImage;
 use Yii;
 use yii\base\StaticInstanceInterface;
 use yii\base\StaticInstanceTrait;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
-use humhub\models\forms\UploadProfileImage;
-use humhub\libs\ProfileImage;
 
 class UploadedImageHandler implements StaticInstanceInterface
 {
@@ -57,7 +57,7 @@ class UploadedImageHandler implements StaticInstanceInterface
         ]);
     }
 
-    public function handle(ProfileImage $image, string $imageData): void
+    public function handle(AssetImage $image, string $imageData): void
     {
         $uploadedFile = $this->convertBase64ImgToUploadedFile($imageData);
 
@@ -71,6 +71,6 @@ class UploadedImageHandler implements StaticInstanceInterface
             throw new \InvalidArgumentException($model->getFirstError('image'));
         }
 
-        $image->setNew($model->image);
+        $image->setUploadedFile($uploadedFile);
     }
 }

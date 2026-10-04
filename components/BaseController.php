@@ -16,7 +16,6 @@ use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
 use humhub\modules\rest\components\auth\JwtAuth;
 use humhub\modules\rest\controllers\auth\AuthController;
-use humhub\modules\rest\Module as RestModule;
 use humhub\modules\rest\models\ConfigureForm;
 use humhub\modules\user\models\User;
 use Yii;
@@ -95,8 +94,6 @@ abstract class BaseController extends Controller
      */
     public function beforeAction($action)
     {
-        RestModule::ignoreTwofaCheck($action);
-
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,

@@ -98,9 +98,10 @@ class ContentController extends BaseController
             return $this->returnError(403, 'You cannot delete this content!');
         }
 
-        if ($content->delete()) {
+        if ($content->getPolymorphicRelation()->delete()) {
             return $this->returnSuccess('Content successfully deleted!');
         }
+
         return $this->returnError(500, 'Internal error while delete content!');
     }
 }

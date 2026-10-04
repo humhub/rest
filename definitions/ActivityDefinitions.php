@@ -8,8 +8,8 @@
 
 namespace humhub\modules\rest\definitions;
 
-use humhub\components\rendering\ViewPathRenderer;
 use humhub\modules\activity\models\Activity;
+use humhub\modules\activity\services\RenderService;
 use Yii;
 use yii\base\Exception;
 
@@ -18,15 +18,13 @@ class ActivityDefinitions
     public static function getActivity(Activity $activity)
     {
         try {
-            $baseActivity = $activity->getActivityBaseClass();
-
             return [
                 'id' => $activity->id,
                 'class' => $activity->class,
-                'content' => static::getActivityContent($activity, $baseActivity),
-                'originator' => UserDefinitions::getUserShort($baseActivity->originator),
-                'source' => SourceDefinitions::getSource($baseActivity->source),
-                'createdAt' => $activity->content->created_at,
+                'content' => static::getActivityContent($activity),
+                'originator' => UserDefinitions::getUserShort($activity->createdBy),
+                'source' => SourceDefinitions::getSource($activity->content?->getPolymorphicRelation()),
+                'createdAt' => $activity->created_at,
             ];
         } catch (Exception $exception) {
             Yii::error('Could not get activity. ' . $exception->getMessage(), 'api');
@@ -34,26 +32,14 @@ class ActivityDefinitions
         }
     }
 
-    private static function getActivityContent($activity, $baseActivity)
+    private static function getActivityContent($activity)
     {
-        return [
+        return $activity->content ? [
             'id' => $activity->content->id,
             'guid' => $activity->content->guid,
             'pinned' => (bool) $activity->content->pinned,
             'archived' => (bool) $activity->content->archived,
-            'output' => static::getActivityOutput($baseActivity),
-        ];
-    }
-
-    private static function getActivityOutput($baseActivity)
-    {
-        try {
-            return (new ViewPathRenderer())->renderView($baseActivity, $baseActivity->getViewParams());
-        } catch (Exception $exception) {
-            Yii::error('Could not render activity output. '
-                . (is_object($baseActivity) ? $baseActivity::class . '#' . $baseActivity->record?->id . ': ' : '')
-                . $exception->getMessage(), 'api');
-            return '';
-        }
+            'output' => (new RenderService($activity))->getWeb(),
+        ] : [];
     }
 }

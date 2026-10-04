@@ -8,9 +8,10 @@
 
 namespace humhub\modules\rest\definitions;
 
-use humhub\components\ActiveRecord;
-use humhub\modules\content\models\Content;
+use humhub\modules\content\interfaces\ContentProvider;
 use humhub\modules\like\models\Like;
+use humhub\modules\like\services\LikeService;
+use humhub\modules\user\models\User;
 
 /**
  * Class CommentDefinitions
@@ -18,18 +19,10 @@ use humhub\modules\like\models\Like;
  */
 class LikeDefinitions
 {
-    public static function getLikesSummary(ActiveRecord $record)
+    public static function getLikesSummary(ContentProvider $record)
     {
         $result = [];
-
-        $model = $record::class;
-        $pk = $record->getPrimaryKey();
-        if ($record instanceof Content) {
-            $model = $record->object_model;
-            $pk = $record->object_id;
-        }
-
-        $result['total'] = count(Like::GetLikes($model, $pk));
+        $result['total'] = (new LikeService($record, new User()))->getCount();
         return $result;
     }
 
@@ -37,7 +30,7 @@ class LikeDefinitions
     {
         return [
             'id' => $like->id,
-            'createdBy' => UserDefinitions::getUserShort($like->user),
+            'createdBy' => UserDefinitions::getUserShort($like->createdBy),
             'createdAt' => $like->created_at,
         ];
     }
