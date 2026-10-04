@@ -120,16 +120,20 @@ class UserController extends BaseController
 
     public function actionUpdate($id)
     {
-        $apiUser = ApiUser::findOne(['id' => $id]);
-        if ($apiUser->user === null) {
+        $user = User::findOne(['id' => $id]);
+        if ($user === null) {
             return $this->returnError(404, 'User not found!');
         }
 
-        $userData = Yii::$app->request->getBodyParam('account', []);
+        if (!$this->canManageUser($user)) {
+            return $this->returnError(403, 'You are not allowed to update this user!');
+        }
+
+        $apiUser = ApiUser::findOne(['id' => $id]);
+
+        $userData = $this->getAccountData();
         if (!empty($userData)) {
-            if (Yii::$app->user->isAdmin() || !$apiUser->user->isSystemAdmin()) {
-                $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
-            }
+            $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
             $apiUser->load($userData, '');
             $apiUser->validate();
         }
@@ -139,9 +143,7 @@ class UserController extends BaseController
 
         if (!empty($profileData)) {
             $profile = $apiUser->user->profile;
-            if (Yii::$app->user->isAdmin() || !$apiUser->user->isSystemAdmin()) {
-                $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
-            }
+            $profile->scenario = Profile::SCENARIO_EDIT_ADMIN;
             $profile->load($profileData, '');
             $profile->validate();
         }
@@ -212,10 +214,8 @@ class UserController extends BaseController
     public function actionCreate()
     {
         $apiUser = new ApiUser();
-        if (Yii::$app->user->isAdmin()) {
-            $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
-        }
-        $apiUser->load(Yii::$app->request->getBodyParam('account', []), '');
+        $apiUser->user->scenario = User::SCENARIO_EDIT_ADMIN;
+        $apiUser->load($this->getAccountData(), '');
         $apiUser->validate();
 
         $profile = new Profile();
@@ -275,6 +275,10 @@ class UserController extends BaseController
             return $this->returnError(404, 'User not found!');
         }
 
+        if (!$this->canManageUser($user) || $user->isCurrentUser()) {
+            return $this->returnError(403, 'You are not allowed to soft delete this user!');
+        }
+
         if ($user->softDelete()) {
             return $this->returnSuccess('User successfully soft deleted!');
         }
@@ -287,6 +291,10 @@ class UserController extends BaseController
         $user = User::findOne(['id' => $id]);
         if ($user === null) {
             return $this->returnError(404, 'User not found!');
+        }
+
+        if (!$this->canManageUser($user) || $user->isCurrentUser()) {
+            return $this->returnError(403, 'You are not allowed to delete this user!');
         }
 
         if ($user->delete()) {
@@ -312,5 +320,21 @@ class UserController extends BaseController
         }
 
         return $this->returnSuccess('successfully Saved!');
+    }
+
+    private function getAccountData(): array
+    {
+        $data = (array) Yii::$app->request->getBodyParam('account', []);
+
+        if (!Yii::$app->user->isAdmin()) {
+            unset($data['authclient'], $data['user_source']);
+        }
+
+        return $data;
+    }
+
+    private function canManageUser(User $user): bool
+    {
+        return Yii::$app->user->isAdmin() || !$user->isSystemAdmin();
     }
 }

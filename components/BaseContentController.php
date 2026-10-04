@@ -143,6 +143,10 @@ abstract class BaseContentController extends BaseController
 
         $contentRecord->content->container = $container;
 
+        if (!$contentRecord->content->canEdit()) {
+            return $this->returnError(403, 'You are not allowed to create content here!');
+        }
+
         if ($this->saveRecord($contentRecord)) {
             return $this->returnContentDefinition($contentRecord);
         }

@@ -46,6 +46,9 @@ class ApiUser extends Model
         }
 
         $result = parent::load($data, $formName);
+        if (array_key_exists('user_source', $data)) {
+            $this->user->user_source = $data['user_source'];
+        }
 
         return $this->user->load($data, $formName) && $result;
     }
