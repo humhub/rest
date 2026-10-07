@@ -16,6 +16,10 @@ class CommentController extends BaseController
     public function actionCreate(int $contentId, ?int $parentCommentId = null)
     {
         $content = Content::findOne(['id' => $contentId]);
+        if ($content === null) {
+            return $this->returnError(404, 'Content not found!');
+        }
+
         if (!$this->getCommentModule()->canComment($content)) {
             throw new ForbiddenHttpException();
         }

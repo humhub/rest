@@ -117,6 +117,8 @@ paths:
           description: Validation failed
         "403":
           description: You cannot comment the content!
+        "404":
+          description: Content not found!
   "/comment/{id}":
     get:
       summary: Get comment by id
