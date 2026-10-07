@@ -15,8 +15,13 @@ class LikeController extends BaseController
 {
     public function actionFindByObject()
     {
+        $model = Yii::$app->request->get('model');
+        if (!is_string($model) || $model === '') {
+            return $this->returnError(400, 'Parameter model is required!');
+        }
+
         $object = RecordMap::getByModelAndPk(
-            Yii::$app->request->get('model'),
+            $model,
             (int)Yii::$app->request->get('pk'),
             ContentProvider::class,
         );

@@ -9,6 +9,7 @@
 namespace humhub\modules\rest\controllers\activity;
 
 use humhub\modules\activity\models\Activity;
+use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ActivityDefinitions;
 use Yii;
@@ -22,7 +23,8 @@ class ActivityController extends BaseController
         $query = Activity::find()
             ->where(['!=', Activity::tableName() . '.created_by', Yii::$app->user->id])
             ->orderBy([Activity::tableName() . '.created_at' => SORT_DESC])
-            ->visible();
+            ->visible()
+            ->subscribedContentContainers(Yii::$app->user->identity);
 
         $pagination = $this->handlePagination($query, 10);
         foreach ($query->all() as $activity) {
@@ -36,6 +38,7 @@ class ActivityController extends BaseController
         $activity = Activity::find()
             ->where([Activity::tableName() . '.id' => $id])
             ->visible()
+            ->subscribedContentContainers(Yii::$app->user->identity)
             ->one();
 
         if (!$activity instanceof Activity) {
@@ -49,11 +52,16 @@ class ActivityController extends BaseController
     {
         $results = [];
 
+        $contentContainer = ContentContainer::findOne(['id' => $containerId]);
+        if ($contentContainer === null) {
+            return $this->returnError(404, 'Content container not found!');
+        }
+
         $query = Activity::find()
-            ->where([Activity::tableName() . '.contentcontainer_id' => $containerId])
             ->andWhere(['!=', Activity::tableName() . '.created_by', Yii::$app->user->id])
             ->orderBy([Activity::tableName() . '.created_at' => SORT_DESC])
-            ->visible();
+            ->visible()
+            ->contentContainer($contentContainer, Yii::$app->user->identity);
 
         $pagination = $this->handlePagination($query, 10);
         foreach ($query->all() as $activity) {

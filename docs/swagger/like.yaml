@@ -84,9 +84,11 @@ paths:
                     items:
                       $ref: "#/components/schemas/Like"
         "400":
-          description: Invalid like id supplied
+          description: Parameter model is required!
+        "403":
+          description: You cannot view this content!
         "404":
-          description: Like not found
+          description: Object model not found!
 servers:
   - url: /api/v1
 components:
