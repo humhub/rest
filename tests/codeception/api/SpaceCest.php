@@ -74,6 +74,18 @@ class SpaceCest extends HumHubApiTestCest
         $I->seeSuccessResponseContainsJson($this->getRecordDefinition(2));
     }
 
+    public function testUpdatePartial(ApiTester $I)
+    {
+        $I->wantTo('update only the name of a space');
+        $I->amAdmin();
+
+        $I->sendPut('space/2', ['name' => 'Partially updated Space 2']);
+        $I->seeSuccessResponseContainsJson($this->getRecordDefinition(2));
+
+        $I->sendPut('space/2', ['name' => 'Space 2', 'defaultStreamSort' => 'invalid']);
+        $I->seeCodeResponseContainsJson(422, ['message' => 'Validation failed']);
+    }
+
     public function testDelete(ApiTester $I)
     {
         $I->wantTo('delete a space');

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.11.7 (Unreleased)
+-------------------
+- Fix #252: Config page JS error caused by missing semicolons; Bearer token revocation now requires POST with a CSRF check; Adding a nonexistent user to a space returns 404; Partial PUT /space/<id> no longer fails with 422 on defaultStreamSort
+
 0.11.6 (October 4, 2026)
 ------------------------
 - Enh: Automated code refactoring for HumHub 1.18 using Rector

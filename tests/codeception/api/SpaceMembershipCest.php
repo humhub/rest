@@ -26,6 +26,15 @@ class SpaceMembershipCest extends HumHubApiTestCest
         $I->seeSuccessMessage('Member added!');
     }
 
+    public function testAddNonexistentUser(ApiTester $I)
+    {
+        $I->wantTo('see an error when adding a nonexistent user to a space');
+        $I->amAdmin();
+
+        $I->sendPost('space/1/membership/99999');
+        $I->seeNotFoundMessage('User not found!');
+    }
+
     public function testRole(ApiTester $I)
     {
         $I->wantTo('change a member role in a space');

@@ -270,6 +270,13 @@ paths:
                   type: integer
                   format: int64
                   example: 1
+                defaultStreamSort:
+                  type: string
+                  enum:
+                    - c
+                    - u
+                  description: "Content sort order: c = creation time, u = last update. Optional, defaults to c."
+                  example: c
                 hideMembers:
                   type: boolean
                   example: true

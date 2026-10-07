@@ -9,11 +9,13 @@
 namespace humhub\modules\rest\controllers\space;
 
 use Colors\RandomColor;
+use humhub\modules\admin\models\forms\SpaceSettingsForm;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Space;
 use humhub\modules\space\permissions\CreatePrivateSpace;
 use humhub\modules\space\permissions\CreatePublicSpace;
+use humhub\modules\stream\actions\Stream;
 use Yii;
 
 /**
@@ -100,6 +102,11 @@ class SpaceController extends BaseController
             return $this->returnError(422, 'Validation failed', [
                 'space' => $space->getErrors(),
             ]);
+        }
+
+        // The default sort order from the settings may be invalid, so partial updates would fail
+        if (!array_key_exists((string)$space->getAdvancedSettings()->defaultStreamSort, SpaceSettingsForm::defaultStreamSortOptions())) {
+            $space->getAdvancedSettings()->defaultStreamSort = Stream::SORT_CREATED_AT;
         }
 
         $space->getAdvancedSettings()->load(Yii::$app->request->getBodyParams(), '');

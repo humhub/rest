@@ -53,6 +53,7 @@ use yii\web\JsExpression;
                     'buttons' => [
                         'delete' => fn($url, $model, $id) => Button::danger()
                             ->link(['revoke-access-token', 'id' => $id])
+                            ->options(['data-method' => 'POST'])
                             ->icon('trash')
                             ->sm(),
                     ],
