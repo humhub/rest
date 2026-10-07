@@ -12,6 +12,7 @@ use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
 use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
+use humhub\modules\user\models\User;
 use Yii;
 
 /**
@@ -50,8 +51,13 @@ class MembershipController extends BaseController
             return $this->returnError(400, 'You cannot administer this space!');
         }
 
+        $user = User::findOne(['id' => (int)$userId]);
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
+
         $space->addMember(
-            $userId,
+            $user->id,
             Yii::$app->request->get('canLeave', true),
             Yii::$app->request->get('silent', false),
             Space::USERGROUP_MEMBER,

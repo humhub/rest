@@ -83,6 +83,8 @@ class AdminController extends Controller
 
     public function actionRevokeAccessToken($id)
     {
+        $this->forcePostRequest();
+
         RestUserBearerToken::deleteAll(['id' => $id]);
 
         $this->view->success(Yii::t('RestModule.base', 'Bearer Access Token Successfully Revoked'));

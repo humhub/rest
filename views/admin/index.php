@@ -13,7 +13,7 @@
 use humhub\modules\user\widgets\UserPickerField;
 use humhub\widgets\bootstrap\Button;
 use humhub\widgets\form\ActiveForm;
-use yii\helpers\Html;
+use humhub\helpers\Html;
 
 $apiModuleOptions = $model->getApiModuleOptions();
 ?>
@@ -41,9 +41,7 @@ $apiModuleOptions = $model->getApiModuleOptions();
 
 <?php ActiveForm::end(); ?>
 
-<?php
-
-$js = <<<JS
+<script <?= Html::nonce() ?>>
 function enabledUsers() {
     if ($('#configureform-enabledforallusers').prop('checked')) {
         $('.field-configureform-enabledusers').hide()
@@ -82,6 +80,4 @@ $('#configureform-enablebasicauth').change(enabledUsersBlockquote)
 $('#configureform-enablejwtauth').change(enabledUsersBlockquote)
 $('#configureform-enablebearerauth').change(checkBearerAuth)
 $('#configureform-enablequeryparamauth').change(checkQueryParamBearerAuth)
-JS;
-
-$this->registerJs($js);
+</script>
