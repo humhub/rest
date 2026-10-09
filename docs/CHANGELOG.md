@@ -4,7 +4,7 @@ Changelog
 0.11.7 (Unreleased)
 -------------------
 - Fix #252: Config page JS error caused by missing semicolons; Bearer token revocation now requires POST with a CSRF check; Adding a nonexistent user to a space returns 404; Partial PUT /space/<id> no longer fails with 422 on defaultStreamSort
-- Fix #254: Deleted content returns 404 on view, update, delete and file endpoints instead of being exposed
+- Fix #256: Deleted content (in trash or pending purge) is no longer exposed by `GET /content/<id>` and single-record content endpoints; View, update, delete, attach and remove file now return 404 for it
 
 0.11.6 (October 4, 2026)
 ------------------------

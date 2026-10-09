@@ -147,7 +147,7 @@ paths:
         "400":
           description: Invalid post id supplied
         "404":
-          description: Post not found
+          description: Post not found or deleted
     put:
       summary: Updates a post by id
       parameters:
@@ -167,7 +167,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Post"
         "404":
-          description: Post not found
+          description: Post not found or deleted
     delete:
       summary: Deletes a post by id
       parameters:
@@ -181,7 +181,7 @@ paths:
         "200":
           description: successful operation
         "404":
-          description: Post not found
+          description: Post not found or deleted
   "/post/{id}/upload-files":
     post:
       summary: Upload files to Post by id

@@ -285,7 +285,7 @@ paths:
         "400":
           description: Invalid content id supplied
         "404":
-          description: Content not found
+          description: Content not found or deleted
     delete:
       tags:
         - Content
@@ -301,6 +301,6 @@ paths:
         "200":
           description: successful operation
         "404":
-          description: Content not found
+          description: Content not found or deleted
 servers:
   - url: /api/v1
