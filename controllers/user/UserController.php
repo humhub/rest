@@ -165,9 +165,9 @@ class UserController extends BaseController
             || ($profile !== null && $profile->hasErrors())
         ) {
             return $this->returnError(400, 'Validation failed', [
-                'profile' => ($profile !== null) ? $profile->getErrors() : null,
+                'profile' => $profile?->getErrors(),
                 'account' => $apiUser->getErrors(),
-                'password' => ($password !== null) ? $password->getErrors() : null,
+                'password' => $password?->getErrors(),
             ]);
         }
 
