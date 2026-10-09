@@ -2,6 +2,8 @@
 
 namespace rest\api;
 
+use humhub\modules\space\models\Membership;
+use humhub\modules\space\models\Space;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
@@ -130,6 +132,54 @@ class UserCest extends HumHubApiTestCest
 
         $I->sendDelete('user/full/4');
         $I->seeNotFoundMessage('User not found!');
+    }
+
+    public function testSoftDeleteTransfersOwnedSpaces(ApiTester $I)
+    {
+        $I->wantTo('soft delete a space owner and see the owned space transferred to me');
+        $I->amAdmin();
+
+        $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 2]);
+
+        $I->sendDelete('user/2');
+        $I->seeSuccessMessage('User successfully soft deleted!');
+
+        $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 1]);
+        $I->seeRecord(Membership::class, ['space_id' => 2, 'user_id' => 1, 'group_id' => Space::USERGROUP_ADMIN]);
+    }
+
+    public function testSoftDeleteWithDeleteSpaces(ApiTester $I)
+    {
+        $I->wantTo('soft delete a space owner together with the owned spaces');
+        $I->amAdmin();
+
+        $I->sendDelete('user/2?deleteSpaces=1');
+        $I->seeSuccessMessage('User successfully soft deleted!');
+
+        $I->dontSeeRecord(Space::class, ['id' => 2]);
+    }
+
+    public function testHardDeleteTransfersOwnedSpaces(ApiTester $I)
+    {
+        $I->wantTo('hard delete a space owner and see the owned space transferred to me');
+        $I->amAdmin();
+
+        $I->sendDelete('user/full/2');
+        $I->seeSuccessMessage('User successfully deleted!');
+
+        $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 1]);
+        $I->seeRecord(Membership::class, ['space_id' => 2, 'user_id' => 1, 'group_id' => Space::USERGROUP_ADMIN]);
+    }
+
+    public function testHardDeleteWithDeleteSpaces(ApiTester $I)
+    {
+        $I->wantTo('hard delete a space owner together with the owned spaces');
+        $I->amAdmin();
+
+        $I->sendDelete('user/full/2?deleteSpaces=1');
+        $I->seeSuccessMessage('User successfully deleted!');
+
+        $I->dontSeeRecord(Space::class, ['id' => 2]);
     }
 
 }

@@ -16,6 +16,7 @@ use humhub\modules\space\models\Space;
 use humhub\modules\space\permissions\CreatePrivateSpace;
 use humhub\modules\space\permissions\CreatePublicSpace;
 use humhub\modules\stream\actions\Stream;
+use humhub\modules\user\models\User;
 use Yii;
 
 /**
@@ -124,6 +125,39 @@ class SpaceController extends BaseController
 
         Yii::error('Could not update space.', 'api');
         return $this->returnError(500, 'Internal error while update space!');
+    }
+
+    public function actionChangeOwner($id)
+    {
+        $space = Space::findOne(['id' => (int)$id]);
+        if ($space === null) {
+            return $this->returnError(404, 'Space not found!');
+        }
+
+        if (!Yii::$app->user->isAdmin() && !$space->isSpaceOwner()) {
+            return $this->returnError(403, 'You are not allowed to change the owner of this space!');
+        }
+
+        $userId = Yii::$app->request->getBodyParam('userId');
+        $userId ??= Yii::$app->request->get('userId');
+        if (empty($userId)) {
+            return $this->returnError(400, 'User id is required!');
+        }
+
+        $user = User::findOne(['id' => (int)$userId]);
+        if ($user === null) {
+            return $this->returnError(404, 'User not found!');
+        }
+
+        if ((int)$user->status !== User::STATUS_ENABLED) {
+            return $this->returnError(400, 'User is not active!');
+        }
+
+        $space->addMember($user->id);
+        $space->setSpaceOwner($user->id);
+        $space->refresh();
+
+        return SpaceDefinitions::getSpace($space);
     }
 
     public function actionDelete($id)

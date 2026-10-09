@@ -260,6 +260,11 @@ paths:
       tags:
         - User
       summary: Soft deletes an user by id
+      description: |
+        Soft deletes the user (profile data and memberships are removed, the user's own content is kept).
+
+        Spaces owned by the user are transferred to the API user who performs the request, unless `deleteSpaces=1` is given.
+        **Warning:** with `deleteSpaces=1` the owned spaces are deleted irrevocably, including the content of other users.
       parameters:
         - name: id
           in: path
@@ -267,11 +272,24 @@ paths:
           required: true
           schema:
             type: integer
+        - name: deleteSpaces
+          in: query
+          description: |
+            How to handle the spaces owned by the user:
+            - `0` (default): the ownership of each owned space is transferred to the API user who performs the request.
+            - `1`: the owned spaces are **deleted irrevocably**, including all memberships and all content and files of **other users** in these spaces.
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+            default: 0
       responses:
         "200":
           description: successful operation
         "400":
           description: Invalid username supplied
+        "403":
+          description: Not allowed to delete this user
         "404":
           description: User not found
   "/user/full/{id}":
@@ -279,6 +297,11 @@ paths:
       tags:
         - User
       summary: Hard deletes an user by id
+      description: |
+        Deletes the user completely, including the user's own content.
+
+        Spaces owned by the user are transferred to the API user who performs the request, unless `deleteSpaces=1` is given.
+        **Warning:** with `deleteSpaces=1` the owned spaces are deleted irrevocably, including the content of other users.
       parameters:
         - name: id
           in: path
@@ -286,11 +309,24 @@ paths:
           required: true
           schema:
             type: integer
+        - name: deleteSpaces
+          in: query
+          description: |
+            How to handle the spaces owned by the user:
+            - `0` (default): the ownership of each owned space is transferred to the API user who performs the request.
+            - `1`: the owned spaces are **deleted irrevocably**, including all memberships and all content and files of **other users** in these spaces.
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+            default: 0
       responses:
         "200":
           description: successful operation
         "400":
           description: Invalid username supplied
+        "403":
+          description: Not allowed to delete this user
         "404":
           description: User not found
   /user/group:
