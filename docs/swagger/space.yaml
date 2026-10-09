@@ -483,6 +483,83 @@ paths:
                   message:
                     type: string
                     example: Internal error while delete space!
+  "/space/{id}/owner":
+    put:
+      tags:
+        - Space
+      summary: Change the space owner
+      description: |
+        Transfers the ownership of the space to the given user. The user is added as a member
+        first if they are not a member yet, and gets the space admin role.
+
+        Only the current space owner or a system administrator is allowed to change the owner.
+        Space admins and moderators are not allowed to do this.
+      parameters:
+        - in: path
+          name: id
+          description: The id of space
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: integer
+                  description: The id of the new space owner (must be an active user)
+                  example: 2
+        required: true
+      responses:
+        "200":
+          description: Success, the updated space record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Space"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: User id is required!
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                    example: You are not allowed to change the owner of this space!
+        "404":
+          description: Space or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Space not found!
   "/space/{id}/archive":
     patch:
       tags:

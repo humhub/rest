@@ -14,6 +14,7 @@ use humhub\modules\rest\components\UploadedImageHandler;
 use humhub\modules\rest\definitions\UserDefinitions;
 use humhub\modules\rest\models\ApiUser;
 use humhub\modules\rest\models\UserAuthForm;
+use humhub\modules\space\helpers\MembershipHelper;
 use humhub\modules\user\models\Password;
 use humhub\modules\user\models\Profile;
 use humhub\modules\user\models\User;
@@ -283,6 +284,8 @@ class UserController extends BaseController
             return $this->returnError(403, 'You are not allowed to soft delete this user!');
         }
 
+        $this->handleOwnedSpaces($user);
+
         if ($user->softDelete()) {
             return $this->returnSuccess('User successfully soft deleted!');
         }
@@ -300,6 +303,8 @@ class UserController extends BaseController
         if (!$this->canManageUser($user) || $user->isCurrentUser()) {
             return $this->returnError(403, 'You are not allowed to delete this user!');
         }
+
+        $this->handleOwnedSpaces($user);
 
         if ($user->delete()) {
             return $this->returnSuccess('User successfully deleted!');
@@ -335,6 +340,24 @@ class UserController extends BaseController
         }
 
         return $data;
+    }
+
+    /**
+     * Transfers the spaces owned by the given user to the current API user,
+     * unless the request explicitly asks to delete them (`deleteSpaces=1`).
+     * Must be called before the user deletion, otherwise the owned spaces are deleted.
+     */
+    private function handleOwnedSpaces(User $user): void
+    {
+        if (filter_var(Yii::$app->request->get('deleteSpaces', false), FILTER_VALIDATE_BOOLEAN)) {
+            return;
+        }
+
+        $newOwnerId = Yii::$app->user->id;
+        foreach (MembershipHelper::getOwnSpaces($user, false) as $space) {
+            $space->addMember($newOwnerId);
+            $space->setSpaceOwner($newOwnerId);
+        }
     }
 
     private function canManageUser(User $user): bool

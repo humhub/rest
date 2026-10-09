@@ -98,6 +98,7 @@ class Events
             ['pattern' => 'space/', 'route' => '/rest/space/space/create', 'verb' => 'POST'],
             ['pattern' => 'space/<id:\d+>', 'route' => '/rest/space/space/update', 'verb' => ['PUT', 'PATCH']],
             ['pattern' => 'space/<id:\d+>', 'route' => '/rest/space/space/delete', 'verb' => 'DELETE'],
+            ['pattern' => 'space/<id:\d+>/owner', 'route' => '/rest/space/space/change-owner', 'verb' => ['PUT', 'PATCH']],
 
             // Space: Archive Controller
             ['pattern' => 'space/<id:\d+>/archive', 'route' => '/rest/space/archive/archive', 'verb' => 'PATCH'],
