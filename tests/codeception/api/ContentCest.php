@@ -79,4 +79,16 @@ class ContentCest extends HumHubApiTestCest
         $I->seeForbiddenMessage('You cannot delete this content!');
     }
 
+    public function testDeletedContentIsNotAccessible(ApiTester $I)
+    {
+        $I->wantTo('see that a deleted content cannot be viewed');
+        $I->amAdmin();
+
+        $I->sendDelete('content/1');
+        $I->seeSuccessMessage('Content successfully deleted!');
+
+        $I->sendGet('content/1');
+        $I->seeNotFoundMessage('Content not found!');
+    }
+
 }

@@ -122,4 +122,22 @@ class PostCest extends HumHubApiTestCest
         $I->seeNotFoundMessage('Content record not found!');
     }
 
+    public function testDeletedPostIsNotAccessible(ApiTester $I)
+    {
+        $I->wantTo('see that a deleted post cannot be viewed or changed');
+        $I->amAdmin();
+
+        $I->sendDelete('post/1');
+        $I->seeSuccessMessage('Successfully deleted!');
+
+        $I->sendGet('post/1');
+        $I->seeNotFoundMessage('Requested content not found!');
+
+        $I->sendPut('post/1', ['data' => ['message' => 'Updated deleted post']]);
+        $I->seeNotFoundMessage('Request object not found!');
+
+        $I->sendDelete('post/1');
+        $I->seeNotFoundMessage('Content record not found!');
+    }
+
 }

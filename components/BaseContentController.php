@@ -51,9 +51,7 @@ abstract class BaseContentController extends BaseController
      */
     public function actionView($id)
     {
-        $class = $this->getContentActiveRecordClass();
-
-        $contentRecord = $class::findOne(['id' => $id]);
+        $contentRecord = $this->findContentRecord($id);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Requested content not found!');
         }
@@ -62,6 +60,27 @@ abstract class BaseContentController extends BaseController
         }
 
         return $this->returnContentDefinition($contentRecord);
+    }
+
+    /**
+     * Finds a content record by id, deleted content (in trash or pending purge) is ignored
+     *
+     * @param int|string $id
+     * @return ContentActiveRecord|null
+     */
+    protected function findContentRecord($id): ?ContentActiveRecord
+    {
+        $class = $this->getContentActiveRecordClass();
+
+        /* @var ContentActiveRecord|null $contentRecord */
+        $contentRecord = $class::findOne(['id' => $id]);
+        if ($contentRecord === null
+            || $contentRecord->content === null
+            || (int)$contentRecord->content->state === Content::STATE_DELETED) {
+            return null;
+        }
+
+        return $contentRecord;
     }
 
     /**
@@ -156,10 +175,7 @@ abstract class BaseContentController extends BaseController
 
     public function actionUpdate($id)
     {
-        $class = $this->getContentActiveRecordClass();
-
-        /* @var ContentActiveRecord $contentRecord */
-        $contentRecord = $class::findOne(['id' => $id]);
+        $contentRecord = $this->findContentRecord($id);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Request object not found!');
         }
@@ -182,9 +198,7 @@ abstract class BaseContentController extends BaseController
      */
     public function actionDelete($id)
     {
-        $class = $this->getContentActiveRecordClass();
-
-        $contentRecord = $class::findOne(['id' => $id]);
+        $contentRecord = $this->findContentRecord($id);
         if ($contentRecord === null) {
             return $this->returnError(404, 'Content record not found!');
         }
@@ -229,11 +243,9 @@ abstract class BaseContentController extends BaseController
 
     public function actionAttachFiles($id)
     {
-        /* @var ContentActiveRecord $class */
-        $class = $this->getContentActiveRecordClass();
-        $contentRecord = $class::findOne(['id' => $id]);
+        $contentRecord = $this->findContentRecord($id);
 
-        if ($contentRecord === null || $contentRecord->content === null) {
+        if ($contentRecord === null) {
             return $this->returnError(404, 'Content record not found!');
         }
         if (!$contentRecord->content->canEdit()) {
@@ -281,7 +293,7 @@ abstract class BaseContentController extends BaseController
     {
         $class = $this->getContentActiveRecordClass();
         $file = File::findOne(['id' => $fileId]);
-        $contentRecord = $class::findOne(['id' => $id]);
+        $contentRecord = $this->findContentRecord($id);
 
         if ($file == null || $contentRecord == null) {
             return $this->returnError(404, 'Could not find requested content record or file!');
