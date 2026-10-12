@@ -32,7 +32,7 @@ use yii\web\JsExpression;
             'dataProvider' => $bearerTokensProvider,
             'columns' => [
                 [
-                    'class' => SerialColumn::class
+                    'class' => SerialColumn::class,
                 ],
                 [
                     'attribute' => 'user.email',
@@ -41,7 +41,7 @@ use yii\web\JsExpression;
                 ],
                 [
                     'attribute' => 'token',
-                    'value' => fn() => str_repeat('*', 30)
+                    'value' => fn() => str_repeat('*', 30),
                 ],
                 'expiration:datetime',
                 [
@@ -55,6 +55,7 @@ use yii\web\JsExpression;
                             ->link(['revoke-access-token', 'id' => $id])
                             ->options(['data-method' => 'POST'])
                             ->icon('trash')
+                            ->options(['aria-label' => Yii::t('base', 'Delete')])
                             ->sm(),
                     ],
                 ],

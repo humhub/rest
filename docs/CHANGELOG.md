@@ -1,6 +1,41 @@
 Changelog
 =========
 
+0.12.5 (Unreleased)
+-------------------
+- Enh: Merge of the changes of version 0.11.7
+- Fix #253: Activity API no longer exposes activities of private spaces and content to non-members; Comment create returns 404 instead of 500 for unknown content; Like find-by-object returns 400 instead of 500 when the model parameter is missing
+
+0.12.4 (October 4, 2026)
+------------------------
+- Fix: Improved permission checks
+
+0.12.3 (September 8, 2026)
+--------------------------
+- Chg: Set the maximum HumHub version to 1.19 — from HumHub 1.20 on the HTTP API framework ships in core, and this module line would register its own rules next to it; use 0.13.x there
+- Fix: Impersonate token authentication crashed on HumHub 1.19 (`isImpersonated` was removed by the core impersonation refactor, core #8372)
+
+0.12.2 (July 16, 2026)
+----------------------
+- Chg: Removed the obsolete `twofa.beforeCheck` listener (`Module::ignoreTwofaCheck()`) — the event no longer exists since the twofa module moved to the core user gate system; token-authenticated API requests are not intercepted by the gate, so the REST API keeps working for users with 2FA enabled without any opt-out
+
+0.12.1 (July 8, 2026)
+---------------------
+- Fix #245: Update user images
+- Enh #246: Add aria-label attribute for icon-only buttons
+
+0.12.0 (June 4, 2026)
+---------------------
+- Enh: Raised minimum HumHub version to 1.19 (UserSource architecture)
+- Enh: Replaced legacy `authclient` / `authclient_id` response fields on `/user`
+  with `user_source` to match the new core schema. Requests using the
+  `authclient` field are still accepted as an alias for `user_source` for one
+  release.
+- Enh: `/user/get-by-authclient` now looks up external identities via the
+  `user_auth` table only — the legacy `user.auth_mode` / `user.authclient_id`
+  columns were dropped in core 1.19.
+- Enh: Automated code refactoring for HumHub 1.18 using Rector
+
 0.11.7 (October 9, 2026)
 ------------------------
 - Fix #252: Config page JS error caused by missing semicolons; Bearer token revocation now requires POST with a CSRF check; Adding a nonexistent user to a space returns 404; Partial PUT /space/<id> no longer fails with 422 on defaultStreamSort

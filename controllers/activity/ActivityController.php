@@ -9,7 +9,7 @@
 namespace humhub\modules\rest\controllers\activity;
 
 use humhub\modules\activity\models\Activity;
-use humhub\modules\content\models\Content;
+use humhub\modules\content\models\ContentContainer;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\ActivityDefinitions;
 use Yii;
@@ -21,9 +21,10 @@ class ActivityController extends BaseController
         $results = [];
 
         $query = Activity::find()
-            ->where(['!=', Content::tableName() . '.created_by', Yii::$app->user->id])
-            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
-            ->readable();
+            ->where(['!=', Activity::tableName() . '.created_by', Yii::$app->user->id])
+            ->orderBy([Activity::tableName() . '.created_at' => SORT_DESC])
+            ->visible()
+            ->subscribedContentContainers(Yii::$app->user->identity);
 
         $pagination = $this->handlePagination($query, 10);
         foreach ($query->all() as $activity) {
@@ -35,11 +36,12 @@ class ActivityController extends BaseController
     public function actionView($id)
     {
         $activity = Activity::find()
-            ->where([Content::tableName() . '.object_id' => $id])
-            ->readable()
+            ->where([Activity::tableName() . '.id' => $id])
+            ->visible()
+            ->subscribedContentContainers(Yii::$app->user->identity)
             ->one();
 
-        if (!$activity) {
+        if (!$activity instanceof Activity) {
             return $this->returnError(404, 'Activity not found');
         }
 
@@ -50,11 +52,16 @@ class ActivityController extends BaseController
     {
         $results = [];
 
+        $contentContainer = ContentContainer::findOne(['id' => $containerId]);
+        if ($contentContainer === null) {
+            return $this->returnError(404, 'Content container not found!');
+        }
+
         $query = Activity::find()
-            ->where([Content::tableName() . '.contentcontainer_id' => $containerId])
-            ->andWhere(['!=', Content::tableName() . '.created_by', Yii::$app->user->id])
-            ->orderBy([Content::tableName() . '.created_at' => SORT_DESC])
-            ->readable();
+            ->andWhere(['!=', Activity::tableName() . '.created_by', Yii::$app->user->id])
+            ->orderBy([Activity::tableName() . '.created_at' => SORT_DESC])
+            ->visible()
+            ->contentContainer($contentContainer, Yii::$app->user->identity);
 
         $pagination = $this->handlePagination($query, 10);
         foreach ($query->all() as $activity) {

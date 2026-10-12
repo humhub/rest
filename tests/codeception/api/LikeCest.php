@@ -35,6 +35,15 @@ class LikeCest extends HumHubApiTestCest
         $I->seeNotFoundMessage('Object model not found!');
     }
 
+    public function testFindByObjectWithoutModel(ApiTester $I)
+    {
+        $I->wantTo('see an error when the object model is missing');
+        $I->amAdmin();
+
+        $I->sendGet('like/find-by-object', ['pk' => 1]);
+        $I->seeBadMessage('Parameter model is required!');
+    }
+
     public function testView(ApiTester $I)
     {
         $I->wantTo('see a like');

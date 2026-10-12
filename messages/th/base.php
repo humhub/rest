@@ -3,6 +3,7 @@ return [
   '<strong>REST</strong> Configuration' => '',
   'Access Token for {user}' => '',
   'Access Tokens' => '',
+  'Add' => 'เพิ่ม',
   'Add Access Token' => '',
   'Allow Bearer Authentication' => '',
   'Allow HTTP Basic Authentication' => 'อนุญาตการตรวจสอบสิทธิ์พื้นฐานของ HTTP',

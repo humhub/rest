@@ -24,6 +24,15 @@ class CommentCest extends HumHubApiTestCest
         $I->seeNotFoundMessage('Comment not found!');
     }
 
+    public function testCreateForNonexistentContent(ApiTester $I)
+    {
+        $I->wantTo('see an error when commenting a nonexistent content');
+        $I->amAdmin();
+
+        $I->sendPost('comment?contentId=99999', ['message' => 'Test']);
+        $I->seeNotFoundMessage('Content not found!');
+    }
+
     public function testDelete(ApiTester $I)
     {
         $I->wantTo('delete a comment');
