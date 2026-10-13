@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.12.5 (Unreleased)
--------------------
+0.12.5 (October 13, 2026)
+-------------------------
 - Enh: Merge of the changes of version 0.11.7
 - Fix #253: Activity API no longer exposes activities of private spaces and content to non-members; Comment create returns 404 instead of 500 for unknown content; Like find-by-object returns 400 instead of 500 when the model parameter is missing
 
