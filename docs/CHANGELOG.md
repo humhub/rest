@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.12.6 (Unreleased)
+-------------------
+- Fix #257: Deleting content by container (e.g. `DELETE /tasks/container/{id}`) removed all readable records; Now only content which the current user is allowed to edit is deleted; Added the Meeting API to the manual
+
 0.12.5 (October 13, 2026)
 -------------------------
 - Enh: Merge of the changes of version 0.11.7
