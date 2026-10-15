@@ -34,6 +34,7 @@ Logged-in user's language will be used. Can be overwritten by `Accept-Language` 
 - [Tasks](https://marketplace.humhub.com/module/tasks/docs/swagger/task.html)
 - [Wiki](https://marketplace.humhub.com/module/wiki/docs/swagger/wiki.html)
 - [Mail](https://marketplace.humhub.com/module/mail/docs/swagger/mail.html)
+- [Meeting](https://marketplace.humhub.com/module/meeting/docs/swagger/meeting.html)
 - [Polls](https://marketplace.humhub.com/module/polls/docs/swagger/poll.html)
 - [Survey](https://marketplace.humhub.com/module/survey/docs/swagger/survey.html)
 

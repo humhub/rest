@@ -213,7 +213,7 @@ abstract class BaseContentController extends BaseController
     }
 
     /**
-     * Deletes all content records by given container
+     * Deletes all content records by given container which the current user is allowed to delete
      *
      * @param $containerId
      * @return array
@@ -232,6 +232,11 @@ abstract class BaseContentController extends BaseController
 
         $deletedRecordsCount = 0;
         foreach ($query->all() as $record) {
+            /** @var ContentActiveRecord $record */
+            if (!$record->content->canEdit()) {
+                // Skip content which the current user is not allowed to delete
+                continue;
+            }
             if (!$record->delete()) {
                 return $this->returnError(500, 'Internal error while delete content!');
             }
