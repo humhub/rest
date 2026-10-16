@@ -4,6 +4,7 @@ Changelog
 0.12.6 (Unreleased)
 -------------------
 - Fix #257: Deleting content by container (e.g. `DELETE /tasks/container/{id}`) removed all readable records; Now only content which the current user is allowed to edit is deleted; Added the Meeting API to the manual
+- Enh: Automated code refactoring for HumHub 1.19 using Rector
 
 0.12.5 (October 13, 2026)
 -------------------------
