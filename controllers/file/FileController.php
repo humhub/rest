@@ -47,7 +47,7 @@ class FileController extends BaseController
             return $this->returnError(
                 403,
                 'XSendfile is only supported by ' . LocalMountConfig::class . ' mounts. '
-                . get_class($dataMountConfig) . ' given.',
+                . $dataMountConfig::class . ' given.',
             );
         }
 
