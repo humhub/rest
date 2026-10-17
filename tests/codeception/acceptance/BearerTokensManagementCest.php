@@ -21,6 +21,7 @@ class BearerTokensManagementCest
         $I->amAdmin();
         $I->wantToTest('Add new access token');
         $I->amOnPage('/rest/admin/bearer-auth');
+        $I->waitForElementVisible('#restuserbearertoken-userids ~ span input');
         $I->selectUserFromPicker('#restuserbearertoken-userids', 'Peter Tester');
         $I->fillField('RestUserBearerToken[expiration]', Yii::$app->formatter->asDate($expiration, 'short'));
         $I->fillField('RestUserBearerToken[expirationTime]', Yii::$app->formatter->asTime($expiration, 'short'));
@@ -33,7 +34,7 @@ class BearerTokensManagementCest
         $I->amAdmin();
         $I->amOnPage('/rest/admin/bearer-auth');
         $I->wantToTest('Revoke access token');
-        $I->click('.fa-trash');
+        $I->click('a.btn-danger[href*="revoke-access-token"]');
         $I->waitForText('No results found.');
     }
 }

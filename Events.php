@@ -43,7 +43,7 @@ class Events
 {
     public static function onBeforeRequest($event)
     {
-        // The bare `/rest/...` URL space is reserved for the admin config page and an
+        // The bare `/rest/...` URL space is reserved for the admin config pages and an
         // explicit catch-all. These rules must be registered for EVERY request (not only
         // `api/` requests): otherwise a bare `/rest/<controller>/<action>` URL falls through
         // to Yii's default routing and resolves straight to a REST controller action — an
@@ -51,8 +51,8 @@ class Events
         // off-prefix guard, see the defence-in-depth check in BaseController::beforeAction()).
         Yii::$app->urlManager->addRules([
 
-            // API Config
-            ['pattern' => 'rest/admin/index', 'route' => 'rest/admin', 'verb' => ['POST', 'GET']],
+            // API Config (a regular web controller with admin access rules and CSRF validation)
+            ['pattern' => 'rest/admin/<action:[\w-]+>', 'route' => 'rest/admin/<action>', 'verb' => ['POST', 'GET']],
 
             // Catch all to ensure verbs
             ['pattern' => 'rest/<tmpParam:.*>', 'route' => 'rest/error/notfound'],
