@@ -28,24 +28,17 @@ paths:
         - in: query
           name: excludeFilters
           required: false
-          description: Filters to exclude notifications from result.
+          description: |
+            Notification categories to exclude from the result: the core categories `direct`, `social`,
+            `followers`, `content` and `admin`, or the id of a module with notifications of its own
+            (e.g. `calendar`, `tasks`). Unknown ids are ignored.
           style: form
           explode: false
           schema:
             type: array
             items:
               type: string
-              enum:
-                - admin
-                - calendar
-                - task
-                - task_reminder
-                - comments
-                - content_created
-                - like
-                - space_member
-                - followed
-                - mentioned
+              example: social
       responses:
         "200":
           description: Success
@@ -274,7 +267,7 @@ components:
           example: 32
         class:
           type: string
-          example: humhub\modules\content\notifications\ContentCreated
+          example: humhub\modules\content\notifications\ContentCreatedNotification
         output:
           type: string
           example: <strong>John Smith</strong> created post "Calvin Klein – Between love

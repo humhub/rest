@@ -9,8 +9,11 @@
 namespace humhub\modules\rest\controllers\notification;
 
 use humhub\modules\admin\permissions\ManageUsers;
-use humhub\modules\notification\models\forms\FilterForm;
+use humhub\modules\content\models\Content;
+use humhub\modules\notification\components\ActiveQueryNotification;
+use humhub\modules\notification\components\NotificationManager;
 use humhub\modules\notification\models\Notification;
+use humhub\modules\notification\services\NotificationListService;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\NotificationDefinitions;
 use humhub\modules\rest\notifications\CustomTextNotification;
@@ -29,29 +32,31 @@ class NotificationController extends BaseController
 
     public function actionIndex()
     {
-        $results = [];
+        $query = $this->createListQuery();
 
-        $filterForm = new FilterForm();
+        // notification category ids, e.g. `social` or a module id, as a list or comma-separated
         $excludeFilters = Yii::$app->request->get('excludeFilters', []);
-
-        if (! empty($excludeFilters)) {
-            $filterForm->categoryFilter = array_diff($filterForm->categoryFilter, $excludeFilters);
+        if (is_string($excludeFilters)) {
+            $excludeFilters = explode(',', $excludeFilters);
         }
-
-        $query = $filterForm->createQuery();
+        if (!empty($excludeFilters)) {
+            $classes = (new NotificationListService())->classesOfCategories(array_map('trim', (array)$excludeFilters));
+            if ($classes !== []) {
+                $query->andWhere(['NOT IN', 'notification.class', $classes]);
+            }
+        }
 
         $pagination = $this->handlePagination($query, 10);
-        foreach ($query->all() as $notification) {
-            $results[] = NotificationDefinitions::getNotification($notification);
-        }
+        $results = NotificationDefinitions::getNotifications($query->all());
+
         return $this->returnPagination($query, $pagination, $results);
     }
 
     public function actionView($id)
     {
         $notification = Notification::find()
-            ->where(['id' => $id])
-            ->andWhere(['user_id' => Yii::$app->user->id])
+            ->forUser(Yii::$app->user->id)
+            ->andWhere(['notification.id' => $id])
             ->one();
 
         if (! $notification) {
@@ -63,20 +68,17 @@ class NotificationController extends BaseController
 
     public function actionUnseen()
     {
-        $results = [];
-
-        $query = Notification::findUnseen();
+        $query = $this->createListQuery()->unseen();
 
         $pagination = $this->handlePagination($query, 10);
-        foreach ($query->all() as $notification) {
-            $results[] = NotificationDefinitions::getNotification($notification);
-        }
+        $results = NotificationDefinitions::getNotifications($query->all());
+
         return $this->returnPagination($query, $pagination, $results);
     }
 
     public function actionMarkAsSeen()
     {
-        Notification::updateAll(['seen' => 1], ['user_id' => Yii::$app->user->id]);
+        NotificationManager::markAllSeen(Yii::$app->user->getIdentity());
 
         return $this->returnSuccess('All notifications successfully marked as seen');
     }
@@ -107,14 +109,32 @@ class NotificationController extends BaseController
 
         $receiver = User::find()->where(['id' => $model->userId])->active()->one();
 
-        CustomTextNotification::instance()
-            ->from(Yii::$app->user->identity)
-            ->payload([
+        CustomTextNotification::send(
+            $receiver,
+            originator: Yii::$app->user->getIdentity(),
+            payload: [
                 'text' => $model->text,
                 'url' => $model->url,
-            ])
-            ->send($receiver);
+            ],
+        );
 
         return $this->returnSuccess('Notification successfully sent');
+    }
+
+    /**
+     * The caller's notifications as the web list shows them: one entry per group, newest
+     * first, without those about unpublished content.
+     */
+    private function createListQuery(): ActiveQueryNotification
+    {
+        return Notification::find()
+            ->forUser(Yii::$app->user->id)
+            ->listed()
+            ->grouped()
+            ->leftJoin('content', 'content.id = notification.content_id')
+            ->andWhere(['OR',
+                ['content.id' => null],
+                ['content.state' => Content::STATE_PUBLISHED],
+            ]);
     }
 }

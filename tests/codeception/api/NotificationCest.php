@@ -2,9 +2,11 @@
 
 namespace rest\api;
 
+use humhub\modules\notification\components\NotificationManager;
 use humhub\modules\notification\models\Notification;
 use humhub\modules\rest\definitions\NotificationDefinitions;
 use humhub\modules\rest\notifications\CustomTextNotification;
+use PHPUnit\Framework\Assert;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
 
@@ -63,16 +65,19 @@ class NotificationCest extends HumHubApiTestCest
 
         $I->sendPost('notification/send-custom', [
             'userId' => 2,
-            'text' => 'API custom notification',
+            'text' => 'API <b>custom</b> notification',
             'url' => 'https://example.com/custom',
         ]);
         $I->seeSuccessMessage('Notification successfully sent');
         $I->seeRecord(Notification::class, [
             'class' => CustomTextNotification::class,
             'user_id' => 2,
-            'originator_user_id' => 1,
-            'module' => 'rest',
+            'originator_id' => 1,
         ]);
+
+        $notification = NotificationManager::load(Notification::findOne(['class' => CustomTextNotification::class, 'user_id' => 2]));
+        Assert::assertSame('API &lt;b&gt;custom&lt;/b&gt; notification', $notification->asWeb());
+        Assert::assertSame('https://example.com/custom', $notification->getUrl());
     }
 
     public function testSendCustomValidation(ApiTester $I)

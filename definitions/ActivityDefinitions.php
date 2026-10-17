@@ -9,7 +9,7 @@
 namespace humhub\modules\rest\definitions;
 
 use humhub\modules\activity\models\Activity;
-use humhub\modules\activity\services\RenderService;
+use humhub\modules\activity\services\ActivityManager;
 use Yii;
 use yii\base\Exception;
 
@@ -39,7 +39,7 @@ class ActivityDefinitions
             'guid' => $activity->content->guid,
             'pinned' => (bool) $activity->content->pinned,
             'archived' => (bool) $activity->content->archived,
-            'output' => (new RenderService($activity))->getWeb(),
+            'output' => ActivityManager::load($activity)->asWeb(),
         ] : [];
     }
 }

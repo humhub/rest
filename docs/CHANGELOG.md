@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.13.0 (Unreleased)
+-------------------
+- Chg: Raised minimum HumHub version to 1.20 — the module builds on the HTTP API framework of core (`humhub\components\api\`)
+- Enh: The module's authentication methods (JWT, Bearer, query param, Basic, Impersonate) now apply to the API endpoints of core 1.20 as well (`/api/v2`), contributed through the core API framework; `/api/v1` stays token-only, browser-session authentication is a core opt-in per endpoint (see `docs/api-stack.md`)
+- Chg: The `/api/v2` documentation lives in core (`docs/api/`), not in this module — this module's Swagger sources cover its own `/api/v1` surface again; `build-all.sh` no longer builds a page for the shared-components file
+- Enh: Hardened the `/rest/...` URL space — the admin-page and catch-all rules are registered for every request, and a REST controller reached off the `api/v1/` prefix (e.g. through Yii's fallback routing) now fails with a 404 before authentication runs
+- Chg: Replies are validated to nest at most one level (core `Comment` model rule, surfaced through the validation envelope)
+- Chg: Notification endpoints use the rebuilt notification system of HumHub 1.20; entries are grouped like the web list and `excludeFilters` takes the new category ids (`direct`, `social`, … or a module id)
+- Chg: The `output` of an activity is its sentence only, without the removed web layout of core
+
 0.12.6 (October 16, 2026)
 -------------------------
 - Fix #257: Deleting content by container (e.g. `DELETE /tasks/container/{id}`) removed all readable records; Now only content which the current user is allowed to edit is deleted; Added the Meeting API to the manual

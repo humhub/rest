@@ -8,74 +8,51 @@
 
 namespace humhub\modules\rest\notifications;
 
-use humhub\helpers\Html;
 use humhub\modules\notification\components\BaseNotification;
-use yii\helpers\Json;
+use humhub\modules\notification\components\NotificationCategory;
 use yii\helpers\Url;
-use humhub\helpers\ArrayHelper;
 
+/**
+ * A free text sent to a user through `POST /api/v1/notification/send-custom`, with the
+ * text and the target URL in the payload.
+ */
 class CustomTextNotification extends BaseNotification
 {
     /**
      * @inheritdoc
      */
-    public $moduleId = 'rest';
+    public static function category(): NotificationCategory
+    {
+        return NotificationCategory::direct();
+    }
 
     /**
      * @inheritdoc
      */
-    public $requireSource = false;
-
-    /**
-     * Ensure custom payload survives queue serialization.
-     */
-    public function __serialize(): array
+    protected function getMessage(array $params): string
     {
-        return array_merge(parent::__serialize(), [
-            'payload' => $this->payload,
-        ]);
+        return (string)$params['text'];
     }
 
     /**
-     * Restore custom payload after queue deserialization.
+     * @inheritdoc
      */
-    public function __unserialize($unserializedArr): void
+    protected function getMessageParams(): array
     {
-        $payload = $unserializedArr['payload'] ?? null;
-        unset($unserializedArr['payload']);
-
-        parent::__unserialize($unserializedArr);
-
-        if ($payload !== null) {
-            $this->payload = $payload;
-            $this->record->payload = $payload;
-        }
+        return ['text' => (string)($this->payload['text'] ?? '')];
     }
 
-    public function getUrl()
+    /**
+     * @inheritdoc
+     */
+    public function getUrl(bool $scheme = false): ?string
     {
-        $url = $this->getPayloadValue('url');
+        $url = (string)($this->payload['url'] ?? '');
 
-        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
-            return $url;
+        if ($url === '' || str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url ?: null;
         }
 
         return Url::to($url, true);
-    }
-
-    public function html()
-    {
-        return Html::encode($this->getPayloadValue('text'));
-    }
-
-    private function getPayloadValue(string $key): string
-    {
-        $payload = $this->payload;
-
-        if (!is_array($payload) && !empty($this->record->payload)) {
-            $payload = Json::decode($this->record->payload);
-        }
-
-        return ArrayHelper::getValue($payload, $key, '');
     }
 }
