@@ -11,6 +11,10 @@ namespace humhub\modules\rest\components;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use humhub\modules\content\models\Content;
+use humhub\modules\oauth\components\ScopeFilter;
+use humhub\modules\oauth\components\TokenAuth;
+use humhub\modules\oauth\Module as OAuthModule;
+use humhub\modules\rest\components\auth\TokenAllowlistFilter;
 use humhub\modules\rest\components\auth\AuthMethods;
 use humhub\modules\rest\components\behaviors\LanguagePickerBehavior;
 use humhub\modules\rest\components\User as UserComponent;
@@ -44,6 +48,16 @@ abstract class BaseController extends Controller
      */
     public $access = ControllerAccess::class;
 
+    /**
+     * @var array<string, string|string[]> action id (or `*` for every other action) → the OAuth
+     *      scope a token of core's OAuth server needs, see core's `docs/develop/concept-oauth.md`.
+     *      Only a controller declaring scopes accepts those tokens (OAuth access tokens and
+     *      personal access tokens), and only on actions with an entry — `full` included. Scope
+     *      ids are registered by the declaring module (`<module>:…`).
+     * @since 0.13
+     */
+    protected array $scopes = [];
+
     public function behaviors()
     {
         return ArrayHelper::merge([
@@ -51,8 +65,21 @@ abstract class BaseController extends Controller
                 'class' => CompositeAuth::class,
                 // The same methods this module contributes to core's API controllers, see
                 // {@see AuthMethods}. `/api/v1` is token-only: browser-session
-                // authentication is a core opt-in, per controller.
-                'authMethods' => AuthMethods::collect(),
+                // authentication is a core opt-in, per controller. Core's OAuth tokens come
+                // first, on controllers that declare scopes only.
+                'authMethods' => array_merge(
+                    $this->scopes !== [] ? [['class' => TokenAuth::class]] : [],
+                    AuthMethods::collect(),
+                ),
+            ],
+            'scopeFilter' => [
+                'class' => ScopeFilter::class,
+                'scopes' => $this->scopes,
+                'allowFull' => true,
+                'requireDeclaredScope' => true,
+            ],
+            'tokenAllowlist' => [
+                'class' => TokenAllowlistFilter::class,
             ],
             'languagePicker' => [
                 'class' => LanguagePickerBehavior::class,
@@ -88,6 +115,9 @@ abstract class BaseController extends Controller
         Yii::$app->request->setBodyParams(null);
         Yii::$app->request->enableCsrfCookie = false;
         Yii::$app->request->parsers['application/json'] = JsonParser::class;
+
+        // Set by TokenAuth only; a grant left from an earlier request must not reach the filters.
+        OAuthModule::instance()->activeGrant = null;
 
         return parent::beforeAction($action);
     }
