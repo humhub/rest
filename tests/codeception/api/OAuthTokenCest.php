@@ -23,22 +23,36 @@ use Yii;
  */
 class OAuthTokenCest extends HumHubApiTestCest
 {
+    private array $restSettings = [];
+
     public function _before()
     {
+        $settings = Yii::$app->getModule('rest')->settings;
+        $this->restSettings = [
+            'enabledForAllUsers' => $settings->get('enabledForAllUsers'),
+            'enabledUsers' => $settings->get('enabledUsers'),
+        ];
+
         parent::_before();
 
         OAuthModule::instance()->getKeyStore()->generateIfMissing();
         OAuthModule::instance()->settings->set('allowPersonalAccessTokens', true);
 
-        // A copy of `GET auth/current` that declares `users:read`.
+        // A copy of `GET auth/current` that declares `users:read`, and of the undeclared `POST auth/impersonate`.
         Yii::$app->getModule('rest')->controllerMap['scoped-auth'] = ScopedAuthController::class;
         Yii::$app->urlManager->addRules([
             ['pattern' => Module::API_URL_PREFIX . 'scoped-auth/current', 'route' => 'rest/scoped-auth/current', 'verb' => ['GET']],
+            ['pattern' => Module::API_URL_PREFIX . 'scoped-auth/impersonate', 'route' => 'rest/scoped-auth/impersonate', 'verb' => ['POST']],
         ], false);
     }
 
     public function _after()
     {
+        $settings = Yii::$app->getModule('rest')->settings;
+        foreach ($this->restSettings as $name => $value) {
+            $value === null ? $settings->delete($name) : $settings->set($name, $value);
+        }
+
         OAuthModule::instance()->settings->delete('allowPersonalAccessTokens');
         OAuthModule::instance()->settings->delete('patScopes');
     }
@@ -86,6 +100,19 @@ class OAuthTokenCest extends HumHubApiTestCest
         $I->sendGet('scoped-auth/current');
         $I->seeResponseCodeIs(403);
         $I->seeResponseContainsJson(['error' => 'insufficient_scope', 'scope' => 'users:read']);
+    }
+
+    public function testUndeclaredActionOfScopedControllerRefusesFull(ApiTester $I)
+    {
+        OAuthModule::instance()->settings->set('patScopes', json_encode(['full']));
+
+        foreach ([$this->accessToken(), $this->pat(['full'])] as $token) {
+            $I->amBearerAuthenticated($token);
+            $I->sendPost('scoped-auth/impersonate', ['userId' => 2]);
+            $I->seeResponseCodeIs(403);
+            $I->seeResponseContainsJson(['error' => 'insufficient_scope']);
+            $I->dontSeeResponseJsonMatchesJsonPath('$.scope');
+        }
     }
 
     public function testTokenOfUserNotEnabledForTheApiIsRefused(ApiTester $I)

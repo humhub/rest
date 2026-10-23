@@ -12,6 +12,7 @@ use humhub\modules\rest\controllers\auth\AuthController;
 
 /**
  * `GET auth/current` with a declared scope — the module declares none yet, see OAuthTokenCest.
+ * `POST auth/impersonate` (inherited) stays undeclared.
  */
 class ScopedAuthController extends AuthController
 {
