@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.12.7 (Unreleased)
+-------------------
+- Fix: HTML-encode the display name of the token owner on the bearer token page
+
 0.12.6 (October 16, 2026)
 -------------------------
 - Fix #257: Deleting content by container (e.g. `DELETE /tasks/container/{id}`) removed all readable records; Now only content which the current user is allowed to edit is deleted; Added the Meeting API to the manual

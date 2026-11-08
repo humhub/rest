@@ -6,7 +6,7 @@
         "api",
         "rest"
     ],
-    "version": "0.12.6",
+    "version": "0.12.7",
     "homepage": "https://github.com/humhub/rest",
     "humhub": {
         "minVersion": "1.19",
