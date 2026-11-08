@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.12.7 (Unreleased)
--------------------
+0.12.7 (November 8, 2026)
+-------------------------
 - Fix: HTML-encode the display name of the token owner on the bearer token page
 
 0.12.6 (October 16, 2026)
