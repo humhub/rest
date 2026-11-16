@@ -3,6 +3,7 @@ Changelog
 
 0.13.0 (Unreleased)
 -------------------
+- Enh: A space created through the API gets a colour its white initials are readable on, from the core instead of `mistic100/randomcolor` (humhub/humhub#8757)
 - Chg: Raised minimum HumHub version to 1.20 — the module builds on the HTTP API framework of core (`humhub\components\api\`)
 - Enh: The module's authentication methods (JWT, Bearer, query param, Basic, Impersonate) now apply to the API endpoints of core 1.20 as well (`/api/v2`), contributed through the core API framework; `/api/v1` stays token-only, browser-session authentication is a core opt-in per endpoint (see `docs/api-stack.md`)
 - Chg: The `/api/v2` documentation lives in core (`docs/api/`), not in this module — this module's Swagger sources cover its own `/api/v1` surface again; `build-all.sh` no longer builds a page for the shared-components file

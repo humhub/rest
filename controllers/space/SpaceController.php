@@ -8,7 +8,7 @@
 
 namespace humhub\modules\rest\controllers\space;
 
-use Colors\RandomColor;
+use humhub\helpers\ScssHelper;
 use humhub\modules\admin\models\forms\SpaceSettingsForm;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
@@ -64,7 +64,7 @@ class SpaceController extends BaseController
         $space->scenario = Space::SCENARIO_CREATE;
         $space->visibility = $module->settings->get('defaultVisibility', Space::VISIBILITY_REGISTERED_ONLY);
         $space->join_policy = $module->settings->get('defaultJoinPolicy', Space::JOIN_POLICY_APPLICATION);
-        $space->color = RandomColor::one(['luminosity' => 'dark']);
+        $space->color = ScssHelper::getRandomColor();
 
         $space->load(Yii::$app->request->getBodyParams(), '');
         $space->validate();
