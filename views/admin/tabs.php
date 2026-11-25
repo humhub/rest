@@ -40,9 +40,9 @@ if (ConfigureForm::getInstance()->enableBearerAuth) {
 }
 
 ?>
-<div class="panel panel-default">
-    <div class="panel-heading"><?= Yii::t('RestModule.base', '<strong>REST</strong> Configuration'); ?></div>
-    <div class="panel-body">
+<div class="card content-card">
+    <div class="card-header"><div class="card-title"><?= Yii::t('RestModule.base', '<strong>REST</strong> Configuration'); ?></div></div>
+    <div class="card-body">
 
         <?= Tabs::widget([
             'renderTabContent' => false,

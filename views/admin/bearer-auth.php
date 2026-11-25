@@ -25,9 +25,9 @@ use yii\web\JsExpression;
 
 ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading"><?= Yii::t('RestModule.base','Access Tokens') ?></div>
-    <div class="panel-body">
+<div class="card content-card">
+    <div class="card-header"><div class="card-title"><?= Yii::t('RestModule.base','Access Tokens') ?></div></div>
+    <div class="card-body">
         <?= GridView::widget([
             'dataProvider' => $bearerTokensProvider,
             'columns' => [
@@ -65,9 +65,9 @@ use yii\web\JsExpression;
 </div>
 
 <?php if(!empty($bearerTokenModel->newToken)): ?>
-<div class="panel panel-default">
-    <div class="panel-heading"><?= Yii::t('RestModule.base','Bearer Token Created Successfully') ?></div>
-    <div class="panel-body">
+<div class="card content-card">
+    <div class="card-header"><div class="card-title"><?= Yii::t('RestModule.base','Bearer Token Created Successfully') ?></div></div>
+    <div class="card-body">
         <p class="form-heading">
             <?= Yii::t('RestModule.base', 'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.') ?>
         </p>
@@ -83,9 +83,9 @@ use yii\web\JsExpression;
 </div>
 <?php endif; ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading"><?= Yii::t('RestModule.base','Add Access Token') ?></div>
-    <div class="panel-body">
+<div class="card content-card">
+    <div class="card-header"><div class="card-title"><?= Yii::t('RestModule.base','Add Access Token') ?></div></div>
+    <div class="card-body">
         <?php $form = ActiveForm::begin(); ?>
         <div class="row">
             <div class="col-lg-6">
