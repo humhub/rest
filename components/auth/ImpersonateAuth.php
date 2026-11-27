@@ -9,6 +9,7 @@
 namespace humhub\modules\rest\components\auth;
 
 use humhub\modules\rest\models\ImpersonateAuthToken;
+use humhub\modules\user\components\User as UserComponent;
 use yii\db\Expression;
 use yii\filters\auth\HttpBearerAuth;
 use yii\helpers\StringHelper;
@@ -40,14 +41,10 @@ class ImpersonateAuth extends HttpBearerAuth
                 ->one();
 
             if ($accessToken && ($identity = $accessToken->user)) {
-                // Note: up to HumHub 1.18 this additionally set `Yii::$app->user->isImpersonated`,
-                // a flag of the `Impersonator` user-component behavior. HumHub 1.19 replaced that
-                // behavior with the session-bound `Impersonation` component
-                // (`Yii::$app->user->impersonation`, core #8372), so the flag no longer exists —
-                // and the API user component is deliberately session-less, so there is no session
-                // state to mark either. Applying 1.19's impersonation restrictions (hidden private
-                // content) to impersonate-token requests is a separate follow-up.
                 $user->login($identity);
+                if ($user instanceof UserComponent) {
+                    $this->markImpersonated($user);
+                }
             } else {
                 $identity = null;
             }
@@ -61,5 +58,21 @@ class ImpersonateAuth extends HttpBearerAuth
         }
 
         return null;
+    }
+
+    /**
+     * Marks the request as impersonated, so the impersonation restrictions of the core apply
+     * (e.g. hidden private content). The impersonation state of the core is bound to the session,
+     * which the session-less API user component does not have, see [[TokenImpersonation]].
+     */
+    private function markImpersonated(UserComponent $user): void
+    {
+        $impersonation = $user->getImpersonation();
+
+        $user->setImpersonation([
+            'class' => TokenImpersonation::class,
+            'allowPrivateContentAccess' => $impersonation->allowPrivateContentAccess,
+            'log' => $impersonation->log,
+        ]);
     }
 }

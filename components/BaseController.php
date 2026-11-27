@@ -102,12 +102,19 @@ abstract class BaseController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $appImpersonation = Yii::$app->getUser()->getImpersonation();
+
         Yii::$app->set('user', [
             'class' => UserComponent::class,
             'identityClass' => User::class,
             // Always session-less: token logins (`yii\web\User::login()`) must never write
             // into the browser session.
             'enableSession' => false,
+            // The configured impersonation restrictions apply to API requests as well
+            'impersonation' => [
+                'allowPrivateContentAccess' => $appImpersonation->allowPrivateContentAccess,
+                'log' => $appImpersonation->log,
+            ],
         ]);
 
         Yii::$app->response->format = 'json';

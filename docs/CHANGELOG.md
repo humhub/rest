@@ -13,6 +13,7 @@ Changelog
 - Chg: Notification endpoints use the rebuilt notification system of HumHub 1.20; entries are grouped like the web list and `excludeFilters` takes the new category ids (`direct`, `social`, … or a module id)
 - Chg: The `output` of an activity is its sentence only, without the removed web layout of core
 - Enh: v1 endpoints that declare a scope accept OAuth tokens and personal access tokens of the core OAuth server
+- Fix: Requests authenticated by an impersonate token count as an impersonation, so the impersonation settings of the core apply to them (e.g. `allowPrivateContentAccess => false` hides private content)
 
 0.12.8 (November 27, 2026)
 --------------------------

@@ -3,8 +3,10 @@
 namespace rest\api;
 
 use Codeception\Util\HttpCode;
+use humhub\modules\rest\models\ImpersonateAuthToken;
 use rest\ApiTester;
 use tests\codeception\_support\HumHubApiTestCest;
+use Yii;
 
 class AuthCest extends HumHubApiTestCest
 {
@@ -115,6 +117,37 @@ class AuthCest extends HumHubApiTestCest
         $I->amUser1();
         $I->sendPost('auth/impersonate', ['userId' => 2]);
         $I->canSeeResponseCodeIs(403);
+    }
+
+    public function testImpersonateTokenWithPrivateContentAccess(ApiTester $I)
+    {
+        $I->wantTo('see private content with an impersonate token by default');
+        $I->haveHttpHeader('Authorization', 'Impersonate ' . $this->createImpersonateToken(2));
+
+        $I->sendGet('post/11'); // Private post of User1 in Space 2
+        $I->seeResponseCodeIs(HttpCode::OK);
+    }
+
+    public function testImpersonateTokenWithoutPrivateContentAccess(ApiTester $I)
+    {
+        $I->wantTo('see that an impersonate token hides private content if configured');
+        Yii::$app->user->setImpersonation(['allowPrivateContentAccess' => false]);
+        $I->haveHttpHeader('Authorization', 'Impersonate ' . $this->createImpersonateToken(2));
+
+        $I->sendGet('post/11'); // Private post of User1 in Space 2
+        $I->seeForbiddenMessage('You cannot view this content!');
+
+        $I->sendGet('post/10'); // Public post of User1 in Space 2
+        $I->seeResponseCodeIs(HttpCode::OK);
+    }
+
+    private function createImpersonateToken(int $userId): string
+    {
+        $token = new ImpersonateAuthToken(['user_id' => $userId]);
+        $token->save();
+        $token->refresh();
+
+        return $token->token;
     }
 
 }
