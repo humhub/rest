@@ -20,6 +20,10 @@ class CommentController extends BaseController
             return $this->returnError(404, 'Content not found!');
         }
 
+        if (!$content->canView()) {
+            return $this->returnError(403, 'You cannot view this content!');
+        }
+
         if (!$this->getCommentModule()->canComment($content)) {
             throw new ForbiddenHttpException();
         }

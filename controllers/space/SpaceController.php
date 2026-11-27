@@ -12,6 +12,7 @@ use Colors\RandomColor;
 use humhub\modules\admin\models\forms\SpaceSettingsForm;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\rest\definitions\SpaceDefinitions;
+use humhub\modules\space\models\Membership;
 use humhub\modules\space\models\Space;
 use humhub\modules\space\permissions\CreatePrivateSpace;
 use humhub\modules\space\permissions\CreatePublicSpace;
@@ -153,7 +154,16 @@ class SpaceController extends BaseController
             return $this->returnError(400, 'User is not active!');
         }
 
-        $space->addMember($user->id);
+        $isSpaceAdmin = Membership::find()->where([
+            'space_id' => $space->id,
+            'user_id' => $user->id,
+            'status' => Membership::STATUS_MEMBER,
+            'group_id' => Space::USERGROUP_ADMIN,
+        ])->exists();
+        if (!$isSpaceAdmin) {
+            return $this->returnError(400, 'The new owner must be an administrator of the space!');
+        }
+
         $space->setSpaceOwner($user->id);
         $space->refresh();
 

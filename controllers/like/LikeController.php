@@ -30,6 +30,10 @@ class LikeController extends BaseController
             return $this->returnError(404, 'Object model not found!');
         }
 
+        if (!$object->content?->canView()) {
+            return $this->returnError(403, 'You cannot read this content!');
+        }
+
         $likeService = new LikeService($object);
 
         if (!$likeService->canLike()) {
@@ -42,6 +46,7 @@ class LikeController extends BaseController
 
         $pagination = $this->handlePagination($query);
 
+        $results = [];
         foreach ($query->all() as $like) {
             $results[] = LikeDefinitions::getLike($like);
         }

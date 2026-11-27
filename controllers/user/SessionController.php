@@ -12,6 +12,7 @@ use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\rest\components\BaseController;
 use humhub\modules\user\models\Session;
 use humhub\modules\user\models\User;
+use Yii;
 
 class SessionController extends BaseController
 {
@@ -30,6 +31,10 @@ class SessionController extends BaseController
         $user = User::findOne(['id' => $id]);
         if ($user === null) {
             return $this->returnError(404, 'User not found!');
+        }
+
+        if ($user->isSystemAdmin() && !Yii::$app->user->isAdmin()) {
+            return $this->returnError(403, 'You are not allowed to delete the sessions of this user!');
         }
 
         $count = Session::deleteAll(['user_id' => $user->id]);

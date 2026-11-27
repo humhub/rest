@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.12.8 (Unreleased)
+-------------------
+- Fix: `POST /comment` requires view access to the commented content
+- Fix: `GET /like/find-by-object` requires view access to the object; no longer returns an error 500 for objects without likes
+- Fix: `DELETE /user/session/all/{id}` denies user managers to log out a system administrator
+- Fix: `PUT /space/{id}/owner` only accepts an administrator of the space as new owner (same as the web UI); the user is no longer added as a member implicitly
+
 0.12.7 (November 8, 2026)
 -------------------------
 - Fix: HTML-encode the display name of the token owner on the bearer token page

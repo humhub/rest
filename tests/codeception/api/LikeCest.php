@@ -44,6 +44,31 @@ class LikeCest extends HumHubApiTestCest
         $I->seeBadMessage('Parameter model is required!');
     }
 
+    public function testFindByObjectWithoutLikes(ApiTester $I)
+    {
+        $I->wantTo('find likes of an object without likes');
+        $I->amAdmin();
+
+        // Public post of Admin in Space 1
+        $I->seePaginationGetResponse('like/find-by-object', [], [], [
+            'model' => Post::class,
+            'pk' => 7,
+        ]);
+    }
+
+    public function testFindByObjectWithoutViewPermission(ApiTester $I)
+    {
+        $I->wantTo('see that I cannot find likes of an object I cannot view');
+        $I->amUser1();
+
+        // Private profile post of Admin
+        $I->sendGet('like/find-by-object', [
+            'model' => Post::class,
+            'pk' => 1,
+        ]);
+        $I->seeForbiddenMessage('You cannot read this content!');
+    }
+
     public function testView(ApiTester $I)
     {
         $I->wantTo('see a like');
