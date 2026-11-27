@@ -143,6 +143,8 @@ class AuthCest extends HumHubApiTestCest
 
     private function createImpersonateToken(int $userId): string
     {
+        // One token per user, as in AuthController::actionImpersonate()
+        ImpersonateAuthToken::deleteAll(['user_id' => $userId]);
         $token = new ImpersonateAuthToken(['user_id' => $userId]);
         $token->save();
         $token->refresh();

@@ -44,6 +44,8 @@ class ImpersonateAuthTest extends HumHubDbTestCase
 
     private function authenticateByImpersonateToken(array $impersonationConfig): UserComponent
     {
+        // One token per user, as in AuthController::actionImpersonate()
+        ImpersonateAuthToken::deleteAll(['user_id' => 2]);
         $token = new ImpersonateAuthToken(['user_id' => 2]);
         $this->assertTrue($token->save());
         $token->refresh();
