@@ -72,7 +72,7 @@ use yii\web\JsExpression;
             <?= Yii::t('RestModule.base', 'This token is displayed only once for security reasons. Please copy and securely store it now. You will not be able to view it again after leaving this page. If you lose it, you will need to generate a new token.') ?>
         </p>
         <div class="mb-3">
-            <?= Html::label(Yii::t('RestModule.base', 'Access Token for {user}', ['user' => $bearerTokenModel->user->displayName])); ?>
+            <?= Html::label(Yii::t('RestModule.base', 'Access Token for {user}', ['user' => Html::encode($bearerTokenModel->user->displayName)])); ?>
             <?= Html::textInput(null, $bearerTokenModel->newToken, ['disabled' => true, 'class' => 'form-control']) ?>
             <div class="text-end form-text">
                 <div id="token" class="d-none"><?= $bearerTokenModel->newToken ?></div>

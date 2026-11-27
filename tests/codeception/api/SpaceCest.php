@@ -104,12 +104,23 @@ class SpaceCest extends HumHubApiTestCest
         $I->wantTo('change the owner of my space');
         $I->amUser1();
 
-        // User2 is not a member of Space 2 yet
+        // User2 is not a member of Space 2
+        $I->sendPut('space/2/owner', ['userId' => 3]);
+        $I->seeBadMessage('The new owner must be an administrator of the space!');
+        $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 2]);
+        $I->dontSeeRecord(Membership::class, ['space_id' => 2, 'user_id' => 3]);
+
+        // User2 is a member of Space 2, but not an administrator
+        Space::findOne(['id' => 2])->addMember(3, 1, true);
+        $I->sendPut('space/2/owner', ['userId' => 3]);
+        $I->seeBadMessage('The new owner must be an administrator of the space!');
+        $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 2]);
+
+        // User2 is an administrator of Space 2
+        Membership::updateAll(['group_id' => Space::USERGROUP_ADMIN], ['space_id' => 2, 'user_id' => 3]);
         $I->sendPut('space/2/owner', ['userId' => 3]);
         $I->seeSuccessResponseContainsJson(['id' => 2, 'owner' => ['id' => 3]]);
-
         $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 3]);
-        $I->seeRecord(Membership::class, ['space_id' => 2, 'user_id' => 3, 'group_id' => Space::USERGROUP_ADMIN]);
     }
 
     public function testChangeOwnerAsSystemAdmin(ApiTester $I)
@@ -117,9 +128,20 @@ class SpaceCest extends HumHubApiTestCest
         $I->wantTo('change the owner of a space as system admin');
         $I->amAdmin();
 
-        $I->sendPut('space/2/owner', ['userId' => 4]);
-        $I->seeSuccessResponseContainsJson(['id' => 2, 'owner' => ['id' => 4]]);
-        $I->seeRecord(Space::class, ['id' => 2, 'created_by' => 4]);
+        // User3 is not a member of Space 4
+        $I->sendPut('space/4/owner', ['userId' => 4]);
+        $I->seeBadMessage('The new owner must be an administrator of the space!');
+        $I->dontSeeRecord(Membership::class, ['space_id' => 4, 'user_id' => 4]);
+
+        // User2 is a member of Space 4, but not an administrator
+        $I->sendPut('space/4/owner', ['userId' => 3]);
+        $I->seeBadMessage('The new owner must be an administrator of the space!');
+        $I->seeRecord(Space::class, ['id' => 4, 'created_by' => 1]);
+
+        // User1 is an administrator of Space 4
+        $I->sendPut('space/4/owner', ['userId' => 2]);
+        $I->seeSuccessResponseContainsJson(['id' => 4, 'owner' => ['id' => 2]]);
+        $I->seeRecord(Space::class, ['id' => 4, 'created_by' => 2]);
     }
 
     public function testChangeOwnerAsSpaceAdmin(ApiTester $I)

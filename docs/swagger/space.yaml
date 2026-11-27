@@ -489,8 +489,8 @@ paths:
         - Space
       summary: Change the space owner
       description: |
-        Transfers the ownership of the space to the given user. The user is added as a member
-        first if they are not a member yet, and gets the space admin role.
+        Transfers the ownership of the space to the given user. The user must already be an
+        administrator of the space.
 
         Only the current space owner or a system administrator is allowed to change the owner.
         Space admins and moderators are not allowed to do this.
@@ -511,7 +511,7 @@ paths:
               properties:
                 userId:
                   type: integer
-                  description: The id of the new space owner (must be an active user)
+                  description: The id of the new space owner (must be an active user and an administrator of the space)
                   example: 2
         required: true
       responses:

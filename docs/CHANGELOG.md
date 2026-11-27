@@ -14,6 +14,17 @@ Changelog
 - Chg: The `output` of an activity is its sentence only, without the removed web layout of core
 - Enh: v1 endpoints that declare a scope accept OAuth tokens and personal access tokens of the core OAuth server
 
+0.12.8 (November 27, 2026)
+--------------------------
+- Fix: `POST /comment` requires view access to the commented content
+- Fix: `GET /like/find-by-object` requires view access to the object; no longer returns an error 500 for objects without likes
+- Fix: `DELETE /user/session/all/{id}` no longer allows user managers to log out a system administrator
+- Fix: `PUT /space/{id}/owner` only accepts an administrator of the space as the new owner (same as the web UI); the user is no longer added as a member implicitly
+
+0.12.7 (November 8, 2026)
+-------------------------
+- Fix: HTML-encode the display name of the token owner on the bearer token page
+
 0.12.6 (October 16, 2026)
 -------------------------
 - Fix #257: Deleting content by container (e.g. `DELETE /tasks/container/{id}`) removed all readable records; Now only content which the current user is allowed to edit is deleted; Added the Meeting API to the manual
